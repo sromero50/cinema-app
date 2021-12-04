@@ -1,15 +1,16 @@
 import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
-
-import { Home } from "./pages/home";
-import { Demo } from "./pages/demo";
-import { Single } from "./pages/single";
+import "../styles/home.scss";
+import { Home } from "./views/home";
+import { SelectedMovie } from "./views/selectedMovie";
 import injectContext from "./store/appContext";
-
+import Login from "./views/login";
+import SignUp from "./views/signup";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
-
+import SelectSeats from "./views/selectSeats";
+import Snacks from "./views/snacks";
 //create your first component
 const Layout = () => {
 	//the basename is used when your project is published in a subdirectory and not in the root of the domain
@@ -18,26 +19,20 @@ const Layout = () => {
 
 	return (
 		<div>
-			<BrowserRouter basename={basename}>
+			<Router basename={basename}>
 				<ScrollToTop>
 					<Navbar />
-					<Switch>
-						<Route exact path="/">
-							<Home />
-						</Route>
-						<Route exact path="/demo">
-							<Demo />
-						</Route>
-						<Route exact path="/single/:theid">
-							<Single />
-						</Route>
-						<Route>
-							<h1>Not found!</h1>
-						</Route>
-					</Switch>
+					<Routes>
+						<Route path="/home/" element={<Home />} />
+						<Route path="/movie/:title" element={<SelectedMovie />} />
+						<Route path="/selectseat/" element={<SelectSeats />} />
+						<Route path="/snacks/" element={<Snacks />} />
+						<Route path="/login/" element={<Login />} />
+						<Route path="/signup/" element={<SignUp />} />
+					</Routes>
 					<Footer />
 				</ScrollToTop>
-			</BrowserRouter>
+			</Router>
 		</div>
 	);
 };
