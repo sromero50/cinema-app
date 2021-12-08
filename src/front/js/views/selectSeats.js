@@ -212,7 +212,9 @@ const SelectSeats = props => {
 							<div className="col-sm-1 seatNotAvailable" />
 						</div>
 						<button className="btn btn-block btn-warning w-25 mt-3" type="submit">
-							Confirm
+							<a style={{ textDecoration: "none", color: "black" }} href="/snacks">
+								Confirm
+							</a>
 						</button>
 					</div>
 				</div>

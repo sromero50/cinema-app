@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Redirect } from "react-router-dom";
 import { Context } from "../store/appContext";
-import { Link } from "react-router-dom";
 const Login = () => {
 	const { store, actions } = useContext(Context);
 	const [form, setForm] = useState({ email: "", password: "" });
