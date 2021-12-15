@@ -17,10 +17,12 @@ const Popcorns = () => {
 						style={{ objectFit: "contain" }}
 					/>
 					<div className="bg-warning text-dark hoverSnack p-2">
-						<h2 id="Big size Popcorn" onClick={e => actions.addSnack(e.target.id)}>
-							Big size
-						</h2>
-						<h2>Price: $15</h2>
+						<button style={{ width: "100%", background: "none", border: "none" }}>
+							<h2 id="Big size Popcorn" onClick={e => actions.addSnack(e.target.id, 1)}>
+								Big size
+							</h2>
+							<h2>Price: $15</h2>
+						</button>
 					</div>
 				</div>
 			</div>
@@ -33,10 +35,12 @@ const Popcorns = () => {
 						style={{ objectFit: "contain" }}
 					/>
 					<div className="bg-warning text-dark hoverSnack p-2">
-						<h2 className="card-title" id="Small Size" onClick={e => setSmall(e.target.id)}>
-							Small size
-						</h2>
-						<h2 className="card-title">Price: $8</h2>
+						<button style={{ width: "100%", background: "none", border: "none" }}>
+							<h2 className="card-title" id="Small Size" onClick={e => actions.addSnack(e.target.id, 1)}>
+								Small size
+							</h2>
+							<h2 className="card-title">Price: $8</h2>
+						</button>
 					</div>
 				</div>
 			</div>

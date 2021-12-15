@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 const SelectSeats = props => {
+	const navigate = useNavigate();
 	const [quantity, setQuantity] = useState(0);
 	const [price, setPrice] = useState(20);
 	const [available, setAvailable] = useState(false);
 	const [seats, setSeats] = useState("");
-	const [listSeat, setListSeat] = useState([]);
-	const [filter, setFilter] = useState(false);
 
 	const rowA = [
 		{ seat: "1A", available: false },
@@ -56,6 +56,10 @@ const SelectSeats = props => {
 		console.log(formProps);
 		localStorage.setItem("total", price);
 	}
+
+	const sendData = () => {
+		navigate("/snacks", { state: { total: price } });
+	};
 
 	return (
 		<div className="container  border rounded border-dark bg-dark movie my-2 p-3">
@@ -211,7 +215,7 @@ const SelectSeats = props => {
 							<div className="col-sm-2">Not Available</div>
 							<div className="col-sm-1 seatNotAvailable" />
 						</div>
-						<button className="btn btn-block btn-warning w-25 mt-3" type="submit">
+						<button onClick={sendData} className="btn btn-block btn-warning mt-3" type="submit">
 							<a style={{ textDecoration: "none", color: "black" }} href="/snacks">
 								Confirm
 							</a>

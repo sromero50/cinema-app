@@ -4,7 +4,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			message: null,
 			movies: [],
 			snackList: [],
-			total: localStorage.getItem("total")
+			total: ""
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -27,14 +27,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log(error);
 				}
 			},
-			addSnack: snack => {
+			addSnack: (snack, quantity) => {
 				const store = getStore();
 				const snackList = store.snackList;
-				if (snack == "Big size Popcorn") {
-					let total = JSON.stringify(localStorage.getItem("total")) + "15";
-					localStorage.setItem("total", total);
+
+				const exist = store.snackList.find(x => x.snack === snack);
+				if (exist) {
+					setStore({
+						snackList: store.snackList.map(
+							x => (x.snack === snack ? { ...exist, quantity: exist.quantity + 1 } : x)
+						)
+					});
+				} else {
+					setStore({ snackList: [...store.snackList, { snack: snack, quantity: quantity }] });
 				}
-				setStore({ snackList: [...snackList, { snack: snack, quantity: 1 }] });
 			}
 		}
 	};

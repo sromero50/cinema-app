@@ -1,8 +1,26 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../store/appContext";
-const InfoBuy = () => {
+const InfoBuy = props => {
 	const { store, actions } = useContext(Context);
-	const [price, setPrice] = useState(localStorage.getItem("total"));
+	const [total, setTotal] = useState(props.total);
+
+	useEffect(
+		() => {
+			store.snackList.map(item => {
+				let big = "";
+				let small = "";
+				let coke = "";
+				let water = "";
+
+				if (item.snack === "Big size Popcorn") {
+					big = item.quantity * 15;
+					return setTotal(total + big);
+				}
+			});
+		},
+		[total]
+	);
+
 	return (
 		<>
 			<div className="border border-dark rounded movie p-3">
@@ -16,7 +34,7 @@ const InfoBuy = () => {
 						</h2>
 					);
 				})}
-				<h2>Total: ${price} </h2>
+				<h2>Total: ${props.total} </h2>
 			</div>
 			<button className="btn btn-block btn-warning w-100 mt-3 fw-bold" type="submit">
 				Confirm
