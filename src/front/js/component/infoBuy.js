@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 const InfoBuy = props => {
 	const navigate = useNavigate();
 	const { store, actions } = useContext(Context);
-	const [total, setTotal] = useState(props.total);
-	const [priceTicket, setPriceTicket] = useState(props.total);
+	const [total, setTotal] = useState();
+	const [priceTicket, setPriceTicket] = useState(props.tickets);
 	const [snackPrice, setSnackPrice] = useState(store.total);
 
 	useEffect(
@@ -15,8 +15,15 @@ const InfoBuy = props => {
 		[store.total]
 	);
 
+	useEffect(
+		() => {
+			setTotal(priceTicket + snackPrice);
+		},
+		[snackPrice]
+	);
+
 	const sendData = () => {
-		navigate("/checkout", { state: { total: snackPrice + priceTicket } });
+		navigate("/checkout", { state: { total: total, ticket: priceTicket, snacks: snackPrice } });
 	};
 
 	return (
@@ -44,7 +51,8 @@ const InfoBuy = props => {
 						</h2>
 					);
 				})}
-				<h2>Total: ${snackPrice + priceTicket} </h2>
+				<h2>Tickets: ${priceTicket} </h2>
+				<h2>Total: ${total} </h2>
 			</div>
 			<button onClick={sendData} className="btn btn-block btn-warning w-100 mt-3 fw-bold" type="submit">
 				Confirm

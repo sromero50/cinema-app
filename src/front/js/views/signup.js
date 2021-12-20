@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Redirect } from "react-router-dom";
+import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext";
-import { Link } from "react-router-dom";
 const SignUp = () => {
 	const { store, actions } = useContext(Context);
 	const [form, setForm] = useState({
@@ -13,7 +11,6 @@ const SignUp = () => {
 		phone: "",
 		birthDate: ""
 	});
-	const [hide, setHide] = useState(false);
 
 	const handleSubmit = event => {
 		event.preventDefault();
@@ -38,7 +35,13 @@ const SignUp = () => {
 									<h4>Name</h4>
 								</label>
 								<div className="form-input mb-3">
-									<input type="text" className="form-control" placeholder="Name" />
+									<input
+										onChange={handleChange}
+										name="name"
+										type="text"
+										className="form-control"
+										placeholder="Name"
+									/>
 								</div>
 							</div>
 							<div className="col-md">
@@ -46,7 +49,13 @@ const SignUp = () => {
 									<h4>Surname</h4>
 								</label>
 								<div className="form-input mb-3">
-									<input type="text" className="form-control" placeholder="Surname" />
+									<input
+										onChange={handleChange}
+										name="surname"
+										type="text"
+										className="form-control"
+										placeholder="Surname"
+									/>
 								</div>
 							</div>
 						</div>
@@ -57,7 +66,13 @@ const SignUp = () => {
 							<span className="input-group-text">
 								<i className="fa fa-envelope fa-sm" />
 							</span>
-							<input type="text" className="form-control" placeholder="Email address" />
+							<input
+								onChange={handleChange}
+								name="email"
+								type="text"
+								className="form-control"
+								placeholder="Email address"
+							/>
 						</div>
 						<div className="row">
 							<div className="col-md">
