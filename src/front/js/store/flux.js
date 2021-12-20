@@ -4,7 +4,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			message: null,
 			movies: [],
 			snackList: [],
-			total: ""
+			total: 0
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -27,9 +27,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log(error);
 				}
 			},
-			addSnack: (snack, quantity) => {
+			addSnackToList: (snack, quantity, price) => {
 				const store = getStore();
-				const snackList = store.snackList;
 
 				const exist = store.snackList.find(x => x.snack === snack);
 				if (exist) {
@@ -39,8 +38,44 @@ const getState = ({ getStore, getActions, setStore }) => {
 						)
 					});
 				} else {
-					setStore({ snackList: [...store.snackList, { snack: snack, quantity: quantity }] });
+					setStore({ snackList: [...store.snackList, { snack: snack, quantity: quantity, price: price }] });
 				}
+
+				let itemPrice = store.snackList.reduce((a, c) => a + c.price * c.quantity, 0);
+
+				setStore({ total: itemPrice });
+			},
+			addSnack: snack => {
+				const store = getStore();
+				const exist = store.snackList.find(x => x.snack === snack);
+				if (exist) {
+					setStore({
+						snackList: store.snackList.map(
+							x => (x.snack === snack ? { ...exist, quantity: exist.quantity + 1 } : x)
+						)
+					});
+				}
+				let itemPrice = store.snackList.reduce((a, c) => a + c.price * c.quantity, 0);
+
+				setStore({ total: itemPrice });
+			},
+			deleteSnack: snack => {
+				const store = getStore();
+				const exist = store.snackList.find(x => x.snack === snack);
+				if (exist.quantity < 2) {
+					const index = store.snackList.findIndex(key => key.snack === snack);
+					const newList = store.snackList.splice(index, 1);
+				}
+				if (exist) {
+					setStore({
+						snackList: store.snackList.map(
+							x => (x.snack === snack ? { ...exist, quantity: exist.quantity - 1 } : x)
+						)
+					});
+				}
+				let itemPrice = store.snackList.reduce((a, c) => a + c.price * c.quantity, 0);
+
+				setStore({ total: itemPrice });
 			}
 		}
 	};

@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import { Context } from "../store/appContext";
 const SelectSeats = props => {
+	const { store, actions } = useContext(Context);
 	const navigate = useNavigate();
 	const [quantity, setQuantity] = useState(0);
 	const [price, setPrice] = useState(20);

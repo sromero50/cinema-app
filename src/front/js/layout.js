@@ -11,6 +11,7 @@ import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import SelectSeats from "./views/selectSeats";
 import Snacks from "./views/snacks";
+import Checkout from "./views/checkout";
 //create your first component
 const Layout = () => {
 	//the basename is used when your project is published in a subdirectory and not in the root of the domain
@@ -27,6 +28,7 @@ const Layout = () => {
 						<Route path="/movie/:title" element={<SelectedMovie />} />
 						<Route path="/selectseat/" element={<SelectSeats />} />
 						<Route path="/snacks/" element={<Snacks />} />
+						<Route path="/checkout/" element={<Checkout />} />
 						<Route path="/login/" element={<Login />} />
 						<Route path="/signup/" element={<SignUp />} />
 					</Routes>

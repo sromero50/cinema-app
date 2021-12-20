@@ -1,25 +1,23 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../store/appContext";
+import { useNavigate } from "react-router-dom";
 const InfoBuy = props => {
+	const navigate = useNavigate();
 	const { store, actions } = useContext(Context);
 	const [total, setTotal] = useState(props.total);
+	const [priceTicket, setPriceTicket] = useState(props.total);
+	const [snackPrice, setSnackPrice] = useState(store.total);
 
 	useEffect(
 		() => {
-			store.snackList.map(item => {
-				let big = "";
-				let small = "";
-				let coke = "";
-				let water = "";
-
-				if (item.snack === "Big size Popcorn") {
-					big = item.quantity * 15;
-					return setTotal(total + big);
-				}
-			});
+			setSnackPrice(store.total);
 		},
-		[total]
+		[store.total]
 	);
+
+	const sendData = () => {
+		navigate("/checkout", { state: { total: snackPrice + priceTicket } });
+	};
 
 	return (
 		<>
@@ -30,13 +28,25 @@ const InfoBuy = props => {
 				{store.snackList.map(product => {
 					return (
 						<h2 key={product.id}>
-							{product.snack}: {product.quantity}
+							{product.snack}: {product.quantity}{" "}
+							<button
+								style={{ color: "white", background: "none", border: "none" }}
+								onClick={() => actions.addSnack(product.snack)}
+								className="fas fa-plus"
+							/>{" "}
+							<button
+								style={{ color: "white", background: "none", border: "none" }}
+								onClick={() => {
+									actions.deleteSnack(product.snack);
+								}}
+								className="fas fa-minus"
+							/>
 						</h2>
 					);
 				})}
-				<h2>Total: ${props.total} </h2>
+				<h2>Total: ${snackPrice + priceTicket} </h2>
 			</div>
-			<button className="btn btn-block btn-warning w-100 mt-3 fw-bold" type="submit">
+			<button onClick={sendData} className="btn btn-block btn-warning w-100 mt-3 fw-bold" type="submit">
 				Confirm
 			</button>
 		</>
