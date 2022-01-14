@@ -21,11 +21,60 @@ const SelectSeats = props => {
 		{ seat: "8A", available: false }
 	];
 	const rowB = ["1B", "2B", "3B", "4B", "5B", "6B", "7B", "8B"];
-	const rowC = ["1C", "2C", "3C", "4C", "5C", "6C", "7C", "8C"];
+	const rowC = ["1B", "2B", "3B", "4B", "5B", "6B", "7B", "8B"];
 	const rowD = ["1D", "2D", "3D", "4D", "5D", "6D", "7D", "8D"];
 	const rowE = ["1E", "2E", "3E", "4E", "5E", "6E", "7E", "8E"];
 
 	const pepe = [{ "1A": true }, { "2E": true }];
+
+	const test = [
+		"1A",
+		"2A",
+		"3A",
+		"4A",
+		"5A",
+		"6A",
+		"7A",
+		"8A",
+		"1B",
+		"2B",
+		"3B",
+		"4B",
+		"5B",
+		"6B",
+		"7B",
+		"8B",
+		"1C",
+		"2C",
+		"3C",
+		"4C",
+		"5C",
+		"6C",
+		"7C",
+		"8C",
+		"1D",
+		"2D",
+		"3D",
+		"4D",
+		"5D",
+		"6D",
+		"7D",
+		"8D",
+		"1E",
+		"2E",
+		"3E",
+		"4E",
+		"5E",
+		"6E",
+		"7E",
+		"8E"
+	];
+
+	const result = test
+		.map((x, i) => {
+			return i % 8 === 0 ? test.slice(i, i + 8) : null;
+		})
+		.filter(x => x != null);
 
 	useEffect(
 		() => {
@@ -91,8 +140,27 @@ const SelectSeats = props => {
 							<div className="col-sm-6 screen">A</div>
 						</div>
 						<div className="row d-flex justify-content-center">
-							<div className="col-sm-2 ">A</div>
-							{rowA.map(seat => {
+							<div>
+								{result.map((result, index) => {
+									return (
+										<section key={index}>
+											{result.map(item => (
+												<span key={item}>
+													<input
+														className="inputAsiento col-sm-1"
+														id={item}
+														type="checkbox"
+														name={item}
+														value={item}
+														onChange={handleQuantity}
+													/>
+												</span>
+											))}
+										</section>
+									);
+								})}
+							</div>
+							{/* {rowA.map(seat => {
 								return (
 									<>
 										{seat.available == true ? (
@@ -118,84 +186,7 @@ const SelectSeats = props => {
 										)}
 									</>
 								);
-							})}
-							<div className="col-sm-2">A</div>
-						</div>
-						<div className="row d-flex justify-content-center">
-							<div className="col-sm-2">B</div>
-							{rowB.map(seat => {
-								return (
-									<>
-										<input
-											className="inputAsiento col-sm-1 fw-bold"
-											id={seat}
-											type="checkbox"
-											name={seat}
-											value={seat}
-											disabled={available == false ? false : true}
-											onChange={handleQuantity}
-										/>
-									</>
-								);
-							})}
-							<div className="col-sm-2">B</div>
-						</div>
-						<div className="row d-flex justify-content-center">
-							<div className="col-sm-2">C</div>
-							{rowC.map(seat => {
-								return (
-									<>
-										<input
-											className="inputAsiento col-sm-1 fw-bold"
-											id={seat}
-											type="checkbox"
-											name={seat}
-											value={seat}
-											disabled={available == false ? false : true}
-											onChange={handleQuantity}
-										/>
-									</>
-								);
-							})}
-							<div className="col-sm-2">C</div>
-						</div>
-						<div className="row d-flex justify-content-center">
-							<div className="col-sm-2">D</div>
-							{rowD.map(seat => {
-								return (
-									<>
-										<input
-											className="inputAsiento col-sm-1 fw-bold"
-											id={seat}
-											type="checkbox"
-											name={seat}
-											value={seat}
-											disabled={available == false ? false : true}
-											onChange={handleQuantity}
-										/>
-									</>
-								);
-							})}
-							<div className="col-sm-2">D</div>
-						</div>
-						<div className="row d-flex justify-content-center">
-							<div className="col-sm-2">E</div>
-							{rowE.map(seat => {
-								return (
-									<>
-										<input
-											className="inputAsiento col-sm-1 fw-bold"
-											id={seat}
-											type="checkbox"
-											name={seat}
-											value={seat}
-											disabled={available == false ? false : true}
-											onChange={handleQuantity}
-										/>
-									</>
-								);
-							})}
-							<div className="col-sm-2">E</div>
+							})} */}
 						</div>
 						<div className="row d-flex justify-content-center text-light">
 							<div className="col-sm-2" />
