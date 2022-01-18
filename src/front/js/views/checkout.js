@@ -17,7 +17,7 @@ const Checkout = () => {
 
 	const handleSubmit = event => {
 		event.preventDefault();
-		actions.loginUser(form.email, form.password);
+		actions.loginUser(form.email, form.surname, form.name);
 	};
 
 	const handleChange = event => {
@@ -25,6 +25,103 @@ const Checkout = () => {
 		const value = event.target.value;
 		setForm({ ...form, [name]: value });
 	};
+
+	const cardForm = mp.cardForm({
+		amount: "100.5",
+		autoMount: true,
+		form: {
+			id: "form-checkout",
+			cardholderName: {
+				id: "form-checkout__cardholderName",
+				placeholder: "Titular de la tarjeta"
+			},
+			cardholderEmail: {
+				id: "form-checkout__cardholderEmail",
+				placeholder: "E-mail"
+			},
+			cardNumber: {
+				id: "form-checkout__cardNumber",
+				placeholder: "Número de la tarjeta"
+			},
+			cardExpirationDate: {
+				id: "form-checkout__cardExpirationDate",
+				placeholder: "Data de vencimiento (MM/YYYY)"
+			},
+			securityCode: {
+				id: "form-checkout__securityCode",
+				placeholder: "Código de seguridad"
+			},
+			installments: {
+				id: "form-checkout__installments",
+				placeholder: "Cuotas"
+			},
+			identificationType: {
+				id: "form-checkout__identificationType",
+				placeholder: "Tipo de documento"
+			},
+			identificationNumber: {
+				id: "form-checkout__identificationNumber",
+				placeholder: "Número de documento"
+			},
+			issuer: {
+				id: "form-checkout__issuer",
+				placeholder: "Banco emisor"
+			}
+		},
+		callbacks: {
+			onFormMounted: error => {
+				if (error) return console.warn("Form Mounted handling error: ", error);
+				console.log("Form mounted");
+			},
+			onSubmit: event => {
+				event.preventDefault();
+
+				const {
+					paymentMethodId: payment_method_id,
+					issuerId: issuer_id,
+					cardholderEmail: email,
+					amount,
+					token,
+					installments,
+					identificationNumber,
+					identificationType
+				} = cardForm.getCardFormData();
+
+				fetch("/process_payment", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({
+						token,
+						issuer_id,
+						payment_method_id,
+						transaction_amount: Number(total),
+						installments: Number(installments),
+						description: "Descripción del producto",
+						payer: {
+							email,
+							identification: {
+								type: identificationType,
+								number: identificationNumber
+							}
+						}
+					})
+				});
+			},
+			onFetching: resource => {
+				console.log("Fetching resource: ", resource);
+
+				// Animate progress bar
+				const progressBar = document.querySelector(".progress-bar");
+				progressBar.removeAttribute("value");
+
+				return () => {
+					progressBar.setAttribute("value", "0");
+				};
+			}
+		}
+	});
 
 	return (
 		<div className="container  border rounded border-dark bg-dark movie my-2 p-3">
@@ -59,6 +156,62 @@ const Checkout = () => {
 							</span>
 							<input type="text" className="form-control" placeholder="Email address" />
 						</div>
+						<form id="form-checkout">
+							<input
+								type="text"
+								name="cardNumber"
+								id="form-checkout__cardNumber"
+								placeholder="Card Number"
+							/>
+							<input
+								type="text"
+								name="cardExpirationDate"
+								id="form-checkout__cardExpirationDate"
+								placeholder="Expiration date"
+							/>
+							<input
+								type="text"
+								name="cardholderName"
+								id="form-checkout__cardholderName"
+								placeholder="Card Holder Name"
+							/>
+							<input
+								type="email"
+								name="cardholderEmail"
+								id="form-checkout__cardholderEmail"
+								placeholder="Card Holder Email"
+							/>
+							<input
+								type="text"
+								name="securityCode"
+								id="form-checkout__securityCode"
+								placeholder="Security code"
+							/>
+							<select name="issuer" id="form-checkout__issuer">
+								<option value="CapitanOne">Capital One</option>
+								<option value="BBVA">BBVA</option>
+								<option value="bankOfAmerica">Bank of America</option>
+								<option value="Chase">Chase</option>
+							</select>
+							<select name="identificationType" id="form-checkout__identificationType">
+								<option value="DNI">DNI</option>
+							</select>
+							<input
+								type="text"
+								name="identificationNumber"
+								id="form-checkout__identificationNumber"
+								placeholder="Identification Number"
+							/>
+							<select name="installments" id="form-checkout__installments">
+								<option value="one">One payment</option>
+							</select>
+							<button type="submit" id="form-checkout__submit">
+								Confirm
+							</button>
+							<progress value="0" className="progress-bar">
+								Loading...
+							</progress>
+						</form>
 					</div>
 				</div>
 				<div className="col-md-5 text-light text-start p-3 m-auto bg-dark">

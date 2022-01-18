@@ -77,7 +77,7 @@
 	},
 	"dependencies": {
 		"bootstrap": "^5.1.1",
-		"mercadopago": "^1.5.9",
+		"mercadopago": "^1.5.11",
 		"prop-types": "^15.6.1",
 		"react": "^16.8.4",
 		"react-dom": "^16.8.4",
