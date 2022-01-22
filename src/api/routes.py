@@ -2,17 +2,299 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User
+from api.models import Administrator, Cinema, Movie, Schedule, Ticket, db, User
 from api.utils import generate_sitemap, APIException
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
 
 api = Blueprint('api', __name__)
 
 
-@api.route('/hello', methods=['POST', 'GET'])
-def handle_hello():
+@api.route("/login", methods=["POST"])
+def login():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
 
-    response_body = {
-        "message": "Hello! I'm a message that came from the backend"
-    }
+    user = User.query.filter_by(email=email, password=password).first()
+    admin   = Administrator.query.filter_by(email=email, password=password).first()
 
-    return jsonify(response_body), 200
+    if user is None:
+        if admin is None:
+            return jsonify({"msg": "Wrong email or password"}), 401
+
+    if user:
+        access_token = create_access_token(identity=user.id)
+        return jsonify({ "token": access_token, "user_id": user.id, "email": user.email,"rol":"user", "name":user.name  })
+    if admin: 
+         access_token = create_access_token(identity=admin.id)
+         return jsonify({ "token": access_token, "admin_id": admin.id, "email": admin.email,"rol":"admin" })
+
+@api.route('/movie', methods=['GET'])
+def get_movie():
+    movie = Movie.query.all()
+    all_movies = list(map(lambda x: x.serialize(), movie))
+
+    return jsonify(all_movies), 200
+
+@api.route('/schedule', methods=['GET'])
+def get_schedule():
+    schedule = Schedule.query.all()
+    all_schedules = list(map(lambda x: x.serialize(), schedule))
+
+    return jsonify(all_schedules), 200
+
+@api.route('/cinema', methods=['GET'])
+def get_cinema():
+    cinema = Cinema.query.all()
+    all_cinemas = list(map(lambda x: x.serialize(), cinema))
+
+    return jsonify(all_cinemas), 200
+
+@api.route('/ticket', methods=['GET'])
+def get_ticket():
+    ticket = Ticket.query.all()
+    all_tickets = list(map(lambda x: x.serialize(), ticket))
+
+    return jsonify(all_tickets), 200
+
+@api.route("/user/<email>", methods=["GET"])
+@jwt_required()
+def get_user(email):
+    logged_user = get_jwt_identity()
+    actual_user = User.query.filter_by(id=logged_user, email=email).first()
+    user = actual_user.serialize()
+    return user, 200
+
+
+@api.route('/movie', methods=['POST'])
+@jwt_required()
+def add_new_movie():
+    body = request.get_json()
+    if body is None:
+        raise APIException("You need to specify the request body as a json object", status_code=400)
+    if 'name' not in body:
+        raise APIException('You need to specify the name', status_code=400)
+    if 'synopsis' not in body:
+        raise APIException('You need to specify synopsis', status_code=400)
+    if 'genre' not in body:
+        raise APIException('You need to specify genre', status_code=400)
+    if 'release_date' not in body:
+        raise APIException('You need to specify release_date', status_code=400)
+    if 'duration' not in body:
+        raise APIException('You need to specify duration', status_code=400)
+    if 'director' not in body:
+        raise APIException('You need to specify director', status_code=400)
+
+    movie = Movie(name=body['name'], synopsis=body['synopsis'], genre=body['genre'], release_date=body['release_date'], duration=body['duration'], director=body['director'])
+    db.session.add(movie)
+    db.session.commit()
+    movie = Movie.query.all()
+    all_movies = list(map(lambda x: x.serialize(), movie))
+
+    return jsonify(all_movies), 200
+
+@api.route('/cinema', methods=['POST'])
+@jwt_required()
+def add_new_cinema():
+    body = request.get_json()
+    if body is None:
+        raise APIException("You need to specify the request body as a json object", status_code=400)
+    if 'location' not in body:
+        raise APIException('You need to specify the location', status_code=400)
+    if 'latitud' not in body:
+        raise APIException('You need to specify the latitud', status_code=400)
+    if 'longitud' not in body:
+        raise APIException('You need to specify the longitud', status_code=400)
+    if 'id_movie' not in body:
+        raise APIException('You need to specify the id_movie', status_code=400)
+
+                               
+    cinema = Cinema(location=body['location'],latitud=body['latitud'],longitud=body['longitud'],id_movie=body['id_movie'],)
+    db.session.add(cinema)
+    db.session.commit()
+
+    cinema = Cinema.query.all()
+    all_cinemas = list(map(lambda x: x.serialize(), cinema))
+
+    return jsonify(all_cinemas), 200
+
+@api.route('/schedule', methods=['POST'])
+@jwt_required()
+def add_new_schedule():
+    body = request.get_json()
+    if body is None:
+        raise APIException("You need to specify the request body as a json object", status_code=400)
+    if 'id_movie' not in body:
+        raise APIException('You need to specify the id_movie', status_code=400)
+    if 'id_cinema' not in body:
+        raise APIException('You need to specify the id_cinema', status_code=400)
+    if 'date' not in body:
+        raise APIException('You need to specify the date', status_code=400)
+    if 'hour' not in body:
+        raise APIException('You need to specify the hour', status_code=400) 
+                                         
+    schedule = Schedule(id_movie=body['id_movie'], id_cinema=body['id_cinema'], date=body['date'], hour=body['hour'])
+    db.session.add(schedule)
+    db.session.commit()
+
+    schedule = Schedule.query.all()
+    all_schedules = list(map(lambda x: x.serialize(), schedule))
+
+    return jsonify(all_schedules), 200
+
+@api.route('/user/signup', methods=['POST'])
+def add_new_usuario():
+    body = request.get_json()
+    if body is None:
+        raise APIException("You need to specify the request body as a json object", status_code=400)
+    if 'name' not in body:
+        raise APIException('You need to specify the name', status_code=400)
+    if 'surname' not in body:
+        raise APIException('You need to specify the surname', status_code=400)
+    if 'email' not in body:
+        raise APIException('You need to specify the email', status_code=400)
+    if 'password' not in body:
+        raise APIException('You need to specify the password', status_code=400)
+    if 'date_of_birth' not in body:
+        raise APIException('You need to specify the date_of_birth', status_code=400)
+    if 'phone' not in body:
+        raise APIException('You need to specify the phone', status_code=400)
+
+
+    user = User(name=body['name'], surname=body['surname'], email=body['email'], password=body['password'], date_of_birth=body['date_of_birth'], phone=body['phone'])
+    db.session.add(user)
+    db.session.commit()
+
+    user = User.query.all()
+    all_users = list(map(lambda x: x.serialize(), user))
+    return jsonify(all_users), 200
+
+@api.route('/ticket', methods=['POST'])
+@jwt_required()
+def add_new_ticket():
+    body = request.get_json()
+    if body is None:
+        raise APIException("You need to specify the request body as a json object", status_code=400)
+    if 'id_movie' not in body:
+        raise APIException('You need to specify the id_movie', status_code=400)
+    if 'hour' not in body:
+        raise APIException('You need to specify the hour', status_code=400)
+    if 'date' not in body:
+        raise APIException('You need to specify the date', status_code=400)
+    if 'cinema' not in body:
+        raise APIException('You need to specify the cinema', status_code=400)
+    if 'id_user' not in body:
+        raise APIException('You need to specify the id_user', status_code=400)  
+    if 'code' not in body:
+        raise APIException('You need to specify the code', status_code=400)  
+    if 'seat' not in body:
+        raise APIException('You need to specify the seat', status_code=400)  
+
+
+    ticket = Ticket(id_movie=body['id_movie'], hour=body['hour'], date=body['date'], cinema=body['cinema'], id_user=body['id_user'], code=body['code'], seat=body['seat'])
+    db.session.add(ticket)
+    db.session.commit()
+
+    ticket = Ticket.query.all()
+    all_tickets = list(map(lambda x: x.serialize(), ticket))
+    return jsonify(all_tickets), 200
+
+
+@api.route('/movie/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_movie(id):
+    movie = Movie.query.filter_by(id=id).first()
+
+    if movie is None:
+        raise APIException('movie not found', status_code=404)
+    db.session.delete(movie)
+    db.session.commit()
+
+    movie = Movie.query.all()
+    all_movies = list(map(lambda x: x.serialize(), movie))
+    return jsonify(all_movies), 200
+
+@api.route('/cinema/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_cinema(id):
+    cinema = Cinema.query.get(id)
+
+    if cinema is None:
+        raise APIException('cinema not found', status_code=404)
+    db.session.delete(cinema)
+    db.session.commit()
+    cinema = Cinema.query.all()
+    all_cinemas = list(map(lambda x: x.serialize(), cinema))
+    return jsonify(all_cinemas), 200
+
+@api.route('/schedule/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_schedule(id):
+    schedule = Schedule.query.get(id)
+
+    if schedule is None:
+        raise APIException('schedule not found', status_code=404)
+    db.session.delete(schedule)
+    db.session.commit()
+
+    schedule = Schedule.query.all()
+    all_schedules = list(map(lambda x: x.serialize(), schedule))
+    return jsonify(all_schedules), 200
+
+@api.route('/movie/<int:id>', methods=['PUT'])
+@jwt_required()
+def modify_movie(id):
+    body = request.get_json()
+    movie = Movie.query.filter_by(id=id).first()
+    if movie is None:
+        raise APIException('movie not found', status_code=404)
+    
+    movie.name = body["name"]
+    movie.synopsis = body["synopsis"]
+    movie.genre = body["genre"]
+    movie.release_date = body["release_date"]
+    movie.duration = body["duration"]
+    movie.director = body["director"]
+    
+    db.session.commit()
+    movie = Movie.query.all()
+    all_movies = list(map(lambda x: x.serialize(), movie))
+    return jsonify(all_movies), 200   
+
+@api.route('/cinema/<int:id>', methods=['PUT'])
+@jwt_required()
+def modify_cinema(id):
+    body = request.get_json()
+    cinema = Cinema.query.get(id)
+    if cinema is None:
+        raise APIException('cinema not found', status_code=404)
+    
+    cinema.location = body["location"]
+    cinema.latitud = body["latitud"]
+    cinema.longitud = body["longitud"]
+    cinema.longitud = body["longitud"]
+
+    db.session.commit()
+    cinema = Cinema.query.all()
+    all_cinemas = list(map(lambda x: x.serialize(), cinema))
+    return jsonify(all_cinemas), 200
+
+
+@api.route('/schedule/<int:id>', methods=['PUT'])
+@jwt_required()
+def modify_schedule(id):
+    body = request.get_json()
+    schedule = Schedule.query.get(id)
+    if schedule is None:
+        raise APIException('schedule not found', status_code=404)
+    
+    schedule.id_movie = body["id_movie"]
+    schedule.id_cinema = body["id_cinema"]
+    schedule.date = body["date"]
+    schedule.hour = body["hour"]
+
+    db.session.commit()
+    schedule = Schedule.query.all()
+    all_schedules = list(map(lambda x: x.serialize(), schedule))
+    return jsonify(all_schedules), 200
