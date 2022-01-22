@@ -20,7 +20,10 @@ app.url_map.strict_slashes = False
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////tmp/test.db"
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:abc@localhost/example"
+db_url = os.getenv("DATABASE_URL")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:password@localhost/cinema"
+
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 MIGRATE = Migrate(app, db)

@@ -17,6 +17,7 @@ flask-cors = "*"
 gunicorn = "*"
 cloudinary = "*"
 flask-admin = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.9"

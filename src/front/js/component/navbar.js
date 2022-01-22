@@ -14,7 +14,7 @@ export const Navbar = () => {
 					aria-label="Toggle navigation">
 					<span className="navbar-toggler-icon" />
 				</button>
-				<a className="navbar-brand" href="/home/">
+				<a className="navbar-brand" href="/">
 					Cinema
 					<i className="fas fa-film mx-2 fa-md" />
 				</a>
