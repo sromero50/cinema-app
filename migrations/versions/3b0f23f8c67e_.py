@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: f96b36bc6211
+Revision ID: 3b0f23f8c67e
 Revises: 
-Create Date: 2022-01-22 00:46:56.502130
+Create Date: 2022-01-22 04:06:58.997880
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'f96b36bc6211'
+revision = '3b0f23f8c67e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -27,6 +27,7 @@ def upgrade():
     )
     op.create_table('movie',
     sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('poster', sa.String(length=300), nullable=False),
     sa.Column('name', sa.String(length=120), nullable=False),
     sa.Column('synopsis', sa.String(length=400), nullable=False),
     sa.Column('genre', sa.String(length=40), nullable=False),
@@ -42,7 +43,7 @@ def upgrade():
     sa.Column('password', sa.String(length=80), nullable=False),
     sa.Column('name', sa.String(length=80), nullable=False),
     sa.Column('surname', sa.String(length=80), nullable=False),
-    sa.Column('date_of_birth', sa.String(length=80), nullable=False),
+    sa.Column('date_of_birth', sa.String(length=200), nullable=False),
     sa.Column('phone', sa.Integer(), nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id'),

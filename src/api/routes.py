@@ -7,6 +7,10 @@ from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
+from flask_wtf import FlaskForm
+from wtforms import StringField
+from wtforms.validators import DataRequired
+import mercadopago
 
 api = Blueprint('api', __name__)
 
@@ -86,7 +90,8 @@ def add_new_movie():
     if 'director' not in body:
         raise APIException('You need to specify director', status_code=400)
 
-    movie = Movie(name=body['name'], synopsis=body['synopsis'], genre=body['genre'], release_date=body['release_date'], duration=body['duration'], director=body['director'])
+
+    movie = Movie(name=body['name'], synopsis=body['synopsis'], genre=body['genre'], release_date=body['release_date'], duration=body['duration'], director=body['director'], poster=body['poster'])
     db.session.add(movie)
     db.session.commit()
     movie = Movie.query.all()
@@ -256,6 +261,7 @@ def modify_movie(id):
     movie.release_date = body["release_date"]
     movie.duration = body["duration"]
     movie.director = body["director"]
+    movie.poster = body["poster"]
     
     db.session.commit()
     movie = Movie.query.all()
@@ -298,3 +304,41 @@ def modify_schedule(id):
     schedule = Schedule.query.all()
     all_schedules = list(map(lambda x: x.serialize(), schedule))
     return jsonify(all_schedules), 200
+
+@api.route('/process_payment', methods=['POST'])
+def payment():
+    sdk = mercadopago.SDK("TEST-6655467624551056-011721-4581fa3c812a1cd38e4bce45db812055-232518002")
+
+    token = request.json.get("token", None)
+    issuer_id = request.json.get("issuer_id", None)
+    payment_method_id = request.json.get("payment_method_id", None)
+    transaction_amount = request.json.get("transaction_amount", None)
+    installments = request.json.get("installments", None)
+    description = request.json.get("description", None)
+    payer = request.json.get("payer", None)
+    email = payer.get("email", None)
+    identification = payer.get("identification")
+    type = identification.get("type")
+    number = identification.get("number")
+    first_name = payer.get("first_name")
+    # print(token,issuer_id,payment_method_id,transaction_amount,installments,description,email, type, number, first_name)
+    payment_data = {
+        "transaction_amount": float(transaction_amount),
+        "token": token,
+        "description": description,
+        "installments": int(installments),
+        "payment_method_id": payment_method_id,
+        "payer": {
+            "email": email,
+            "identification": {
+                "type": type, 
+                "number": number
+            },
+            "first_name": first_name
+        }
+    }
+
+    payment_response = sdk.payment().create(payment_data)
+    payment = payment_response["response"]
+    print(payment.get("status"), payment.get("status_detail"))
+    return jsonify(payment), 200

@@ -8,7 +8,7 @@ class User(db.Model):
     password = db.Column(db.String(80), unique=False, nullable=False)
     name = db.Column(db.String(80), unique=False, nullable=False)
     surname = db.Column(db.String(80), unique=False, nullable=False)
-    date_of_birth = db.Column(db.String(80), unique=False, nullable=False)
+    date_of_birth = db.Column(db.String(200), unique=False, nullable=False)
     phone = db.Column(db.Integer, unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
     ticket = db.relationship("Ticket", backref="user")
@@ -45,6 +45,7 @@ class Movie(db.Model):
     schedule = db.relationship("Schedule", backref="movie")
     cinema = db.relationship("Cinema", backref="movie")
     id = db.Column(db.Integer, primary_key=True)
+    poster = db.Column(db.String(300), unique=False, nullable=False)
     name = db.Column(db.String(120), unique=True, nullable=False)
     synopsis = db.Column(db.String(400), unique=False, nullable=False)
     genre = db.Column(db.String(40), unique=False, nullable=False)
@@ -64,7 +65,8 @@ class Movie(db.Model):
             "synopsis": self.synopsis,
             "release_date": self.release_date,
             "duration": self.duration,
-            "director": self.director
+            "director": self.director,
+            "poster": self.poster
 
                        
         }

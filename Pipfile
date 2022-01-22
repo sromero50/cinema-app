@@ -19,6 +19,8 @@ cloudinary = "*"
 flask-admin = "*"
 psycopg2 = "*"
 flask-jwt-extended = "*"
+mercadopago = "*"
+flask-wtf = "*"
 
 [requires]
 python_version = "3.9"
