@@ -1,16 +1,16 @@
 """empty message
 
-Revision ID: 3b0f23f8c67e
+Revision ID: fca26ecc81b7
 Revises: 
-Create Date: 2022-01-22 04:06:58.997880
+Create Date: 2022-01-24 03:28:39.041392
 
 """
 from alembic import op
 import sqlalchemy as sa
-
+import sqlalchemy_utils
 
 # revision identifiers, used by Alembic.
-revision = '3b0f23f8c67e'
+revision = 'fca26ecc81b7'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -69,21 +69,22 @@ def upgrade():
     sa.Column('cinema', sa.String(length=80), nullable=False),
     sa.Column('id_user', sa.Integer(), nullable=True),
     sa.Column('code', sa.String(length=80), nullable=False),
-    sa.Column('seat', sa.String(length=80), nullable=False),
+    sa.Column('seat', sqlalchemy_utils.types.scalar_list.ScalarListType(), nullable=True),
     sa.ForeignKeyConstraint(['id_movie'], ['movie.id'], ),
     sa.ForeignKeyConstraint(['id_user'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('code'),
-    sa.UniqueConstraint('seat')
+    sa.UniqueConstraint('code')
     )
     op.create_table('schedule',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('id_movie', sa.Integer(), nullable=True),
     sa.Column('id_cinema', sa.Integer(), nullable=True),
+    sa.Column('seats', sa.Integer(), nullable=True),
     sa.Column('date', sa.String(length=80), nullable=False),
     sa.Column('hour', sa.String(length=80), nullable=False),
     sa.ForeignKeyConstraint(['id_cinema'], ['cinema.id'], ),
     sa.ForeignKeyConstraint(['id_movie'], ['movie.id'], ),
+    sa.ForeignKeyConstraint(['seats'], ['ticket.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

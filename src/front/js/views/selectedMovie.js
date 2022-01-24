@@ -1,14 +1,29 @@
-import React, { useContext, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useContext, useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import PropTypes from "prop-types";
 export const SelectedMovie = props => {
-	const [showtime, setShowtime] = useState(false);
 	const { store, actions } = useContext(Context);
-	const [date, setDate] = useState("");
-	const params = useParams();
 
-	const dates = [...new Set(store.schedules.map(schedule => schedule.date))];
+	const [showtime, setShowtime] = useState(false);
+	const [cinema, setCinema] = useState("");
+	const [date, setDate] = useState("");
+	const [hour, setHour] = useState("");
+	const [idMovie, setIdMovie] = useState("");
+	const params = useParams();
+	const navigate = useNavigate();
+
+	const dataTicket = (cinema, date, hour) => {
+		navigate("/selectseat", { state: { cinema: cinema, date: date, hour: hour, movie: params.title } });
+	};
+
+	useEffect(() => {
+		store.movies.map(movie => {
+			if (movie.name === params.title) {
+				return setIdMovie(movie.id);
+			}
+		});
+	});
 
 	return (
 		<div className="container bg-dark my-2 border rounded border-dark selectedMovie">
@@ -41,19 +56,37 @@ export const SelectedMovie = props => {
 					);
 				})}
 				<div className="row text-light p-2 border border-dark user-select-none">
+					<div>
+						<select
+							className="text-center form-select my-1 col-md"
+							onChange={e => setCinema(e.target.value)}
+							aria-label="Default select example">
+							<option defaultValue>Cinema</option>
+							{store.cinemas.map(cinema => {
+								return (
+									<option key={cinema.id} value={cinema.id}>
+										{cinema.location}
+									</option>
+								);
+							})}
+						</select>
+					</div>
 					<div className="row text-center mt-4 ">
 						<div className="col-sm">
 							<div>
-								{/* separar en componente */}
 								{store.dates.map(date => {
 									return (
+										// <div className="col-md"></div>
 										<button
 											key={date}
 											className="border rounded border-warning btn btn-warning mx-2 py-2 col-md-2"
 											onClick={e => {
-												setShowtime(!showtime);
+												setShowtime(true);
+												if (showtime == true) {
+													setShowtime(false);
+													setShowtime(true);
+												}
 												setDate(e.target.value);
-												console.log(e.target.value);
 											}}
 											value={date}>
 											{date}
@@ -61,113 +94,47 @@ export const SelectedMovie = props => {
 									);
 								})}
 							</div>
-							{store.schedules.map(schedule => {
-								return <>{showtime && schedule.date == date ? <> {schedule.hour} </> : null}</>;
-							})}
-
-							{/* {store.schedules.map(schedule => {
-								return (
-									<>
-										{showtime && (
+							<div className="m-auto text-center">
+								<ul className="text-center list-group list-group-horizontal-sm">
+									{store.schedules.map(schedule => {
+										return (
 											<>
-												{
-													(schedule.date = date ? (
-														<div className="text-centerp-3">
-															<h5 className="bg-dark text-light text-start ms-3 mt-3">
-																2D
-															</h5>
-															<ul className="text-center list-group list-group-horizontal-sm">
-																<li className="list-group-item text-light bg-dark border border-dark">
-																	<input
-																		className="inputReserva"
-																		id={schedule.hour}
-																		type="checkbox"
-																		name={schedule.hour}
-																		value={schedule.hour}
-																		// onClick={e =>
-																		// 	setForm(e.target.value)
-																		// }
-																	/>
-																	<label
-																		className="labelReserva bg-dark list-group-item text-light border rounded border-secondary mx-2"
-																		htmlFor={schedule.hour}>
-																		{schedule.hour}
-																	</label>
-																</li>
-															</ul>
-														</div>
-													) : null)
-												}
+												{cinema == schedule.id_cinema ? (
+													<>
+														{showtime && schedule.date == date ? (
+															<>
+																{schedule.id_movie == idMovie ? (
+																	<li className="list-group-item text-light bg-dark border border-dark col-md">
+																		<input
+																			className="inputReserva"
+																			id={schedule.hour}
+																			type="checkbox"
+																			name={schedule.hour}
+																			value={schedule.hour}
+																			onClick={e => setHour(e.target.value)}
+																		/>
+																		<label
+																			className="labelReserva bg-dark list-group-item text-light border rounded border-secondary mx-2 col-md"
+																			htmlFor={schedule.hour}>
+																			{schedule.hour}
+																		</label>
+																	</li>
+																) : null}
+															</>
+														) : null}
+													</>
+												) : null}
 											</>
-										)}
-									</>
-								);
-							})} */}
-
-							<button className="my-2 btn btn-warning btn-block w-50">
-								<a href="/selectseat" style={{ textDecoration: "none", color: "black" }}>
-									Buy
-								</a>
+										);
+									})}
+								</ul>
+							</div>
+							<button
+								onClick={() => dataTicket(cinema, date, hour)}
+								className="my-2 btn btn-warning btn-block w-50">
+								<a style={{ textDecoration: "none", color: "black" }}>Buy</a>
 							</button>
 						</div>
-
-						{/* <div className="col-sm">
-							<div
-								className="border rounded border-warning mx-2 py-2"
-								onClick={() => setShowtime(!showtime)}>
-								fecha
-							</div>
-							{showtime && (
-								<div className="text-centerp-3">
-									<h5 className="bg-dark text-light text-start ms-3 mt-3">2D</h5>
-									<ul className="text-center list-group list-group-horizontal-sm">
-										<li className="list-group-item text-light bg-dark border border-dark">
-											<input
-												className="inputReserva"
-												id="horario"
-												type="checkbox"
-												name="horario"
-												value="horario"
-												// onClick={e =>
-												// 	setForm(e.target.value)
-												// }
-											/>
-											<label
-												className="labelReserva bg-dark list-group-item text-light border rounded border-secondary mx-2"
-												htmlFor="horario">
-												Horario
-											</label>
-										</li>
-										<li className="bg-dark list-group-item text-light border rounded border-secondary mx-2">
-											Horario
-										</li>
-										<li className="bg-dark list-group-item text-light border rounded border-secondary mx-2">
-											Horario
-										</li>
-										<li className="bg-dark list-group-item text-light border rounded border-secondary mx-2">
-											Horario
-										</li>
-										<li className="bg-dark list-group-item text-light border rounded border-secondary mx-2">
-											Horario
-										</li>
-										<li className="bg-dark list-group-item text-light border rounded border-secondary mx-2">
-											Horario
-										</li>
-									</ul>
-									<h5 className="bg-dark text-light text-start ms-3 mt-3">3D</h5>
-									<ul className="text-center list-group list-group-horizontal-sm">
-										<li className="bg-dark list-group-item text-light border rounded border-secondary mx-2 my-2">
-											Horario
-										</li>
-									</ul>
-								</div>
-							)}
-							<button className="my-2 btn btn-warning btn-block w-50">
-								<a href="/selectseat" style={{ textDecoration: "none", color: "black" }}>
-									Buy
-								</a>
-							</button>
-						</div> */}
 					</div>
 				</div>
 			</div>

@@ -1,5 +1,10 @@
 .poster{
     box-shadow: rgba(0, 0, 0, 0.521) 0px 19px 38px, rgba(0, 0, 0, 0.486) 0px 15px 12px;
+    height: 60vh;
+}
+
+.posterMini{
+    box-shadow: rgba(0, 0, 0, 0.521) 0px 19px 38px, rgba(0, 0, 0, 0.486) 0px 15px 12px;
 }
 
 .bg-warning, .btn-warning{
@@ -30,43 +35,12 @@
    height:60px;
 }
 
-.labelReserva {
-    height: 45px;
-    display: block;
-    box-sizing: border-box !important;
-    color:white !important;
-    
-}
-
-.inputReserva[type=checkbox] {
-    display: none;
-}
-
-.inputReserva:checked + .labelReserva {
-    border: solid 1px rgb(253, 196, 7) !important;
-    color: rgb(253, 196, 7) !important;
-}
-
-
-.labelAsiento {
-    background-color: rgb(223, 223, 223);
-    height: 20px;
-    width: 8px;
-    margin: 3px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    display: block;
-    color:black !important;
-    
-}
-
-
-.inputAsiento[type=checkbox] {
+.labelSeat {
     -webkit-appearance: none;
     -moz-appearance: none;
     background-color: rgb(223, 223, 223);
-    height: 20px;
-    width: 25px;
+    height: 25px;
+    width: 27px;
     margin: 3px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -74,34 +48,35 @@
     -webkit-box-shadow: none !important;
     -moz-box-shadow: none !important;
     box-shadow: none !important;
+    
+}
+
+.inputSeat[type=checkbox] {
+    display: none;
   }
 
-.inputAsiento[type=checkbox]:checked {
-    background-color: rgb(244, 255, 96);
-    text-align: center;
-    line-height: 15px;
-  }
+.inputSeat:checked + .labelSeat {
+    background-color: rgb(244, 255, 96) !important;
+    color: black !important;
+}
 
-  .inputSeatDisable[type=checkbox] {
+
+.labelSeatDisable{
     -webkit-appearance: none;
     -moz-appearance: none;
     background-color: rgb(255, 96, 96);
-    height: 20px;
-    width: 25px;
+    height: 25px;
+    width: 27px;
     margin: 3px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    display: block;
     color:black !important;
     -webkit-box-shadow: none !important;
     -moz-box-shadow: none !important;
     box-shadow: none !important;
   }
 
-// .inputReserva:checked + .labelAsiento {
-//     background-color: rgb(244, 255, 96) !important;
-//     color: black !important;
-// }
+
 .seat{
     background-color: rgb(223, 223, 223);
     height: 20px;

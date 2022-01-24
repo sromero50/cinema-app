@@ -21,6 +21,7 @@ psycopg2 = "*"
 flask-jwt-extended = "*"
 mercadopago = "*"
 flask-wtf = "*"
+sqlalchemy-utils = "*"
 
 [requires]
 python_version = "3.9"

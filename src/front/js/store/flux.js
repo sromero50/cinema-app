@@ -6,6 +6,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			dates: [],
 			schedules: [],
 			cinemas: [],
+			tickets: [],
 			snackList: [],
 			total: 0
 		},
@@ -16,7 +17,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					// const response = await fetch("https://mcuapi.herokuapp.com/api/v1/movies");
 					const response = await fetch("http://192.168.1.76:3001/api/movie");
 					const responseBody = await response.json();
-					console.log(responseBody);
+
 					setStore({ movies: responseBody });
 				} catch (error) {
 					console.log(error);
@@ -28,7 +29,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					// const response = await fetch("https://mcuapi.herokuapp.com/api/v1/Scheduless");
 					const response = await fetch("http://192.168.1.76:3001/api/schedule");
 					const responseBody = await response.json();
-					console.log(responseBody);
+
 					setStore({ schedules: responseBody });
 					setStore({ dates: [...new Set(store.schedules.map(schedule => schedule.date))] });
 				} catch (error) {
@@ -41,8 +42,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 					// const response = await fetch("https://mcuapi.herokuapp.com/api/v1/movies");
 					const response = await fetch("http://192.168.1.76:3001/api/cinema");
 					const responseBody = await response.json();
-					console.log(responseBody);
+
 					setStore({ cinemas: responseBody });
+				} catch (error) {
+					console.log(error);
+				}
+			},
+			getTickets: async () => {
+				const store = getStore();
+				try {
+					// const response = await fetch("https://mcuapi.herokuapp.com/api/v1/movies");
+					const response = await fetch("http://192.168.1.76:3001/api/ticket");
+					const responseBody = await response.json();
+
+					setStore({ tickets: responseBody });
 				} catch (error) {
 					console.log(error);
 				}

@@ -176,7 +176,7 @@ def add_new_usuario():
     return jsonify(all_users), 200
 
 @api.route('/ticket', methods=['POST'])
-@jwt_required()
+# @jwt_required()
 def add_new_ticket():
     body = request.get_json()
     if body is None:

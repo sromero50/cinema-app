@@ -1,74 +1,88 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Context } from "../store/appContext";
+import react from "react/cjs/react.development";
 const SelectSeats = props => {
 	const { store, actions } = useContext(Context);
+
 	const navigate = useNavigate();
+	const location = useLocation();
+
 	const [quantity, setQuantity] = useState(0);
 	const [price, setPrice] = useState(20);
-	const [available, setAvailable] = useState(false);
-	const [seats, setSeats] = useState("");
+	const [idMovie, setIdMovie] = useState("");
 
-	const rowA = [
-		{ seat: "1A", available: false },
+	const [seats, setSeats] = useState([]);
+
+	let array = [];
+	let prueba = store.schedules.map(item => {
+		if (item.hour == location.state.hour && item.id_movie == idMovie && item.id_cinema == location.state.cinema) {
+			let remove = item.ticket.replace('"', "");
+			remove = remove.replace(new RegExp("'", "g"), "");
+			remove = remove.split(",");
+			array = remove;
+		}
+	});
+
+	useEffect(() => {
+		store.movies.map(movie => {
+			if (movie.name === location.state.movie) {
+				return setIdMovie(movie.id);
+			}
+		});
+	});
+
+	const test = [
+		{ seat: "1A", available: true },
 		{ seat: "2A", available: true },
 		{ seat: "3A", available: true },
 		{ seat: "4A", available: true },
 		{ seat: "5A", available: true },
 		{ seat: "6A", available: true },
 		{ seat: "7A", available: true },
-		{ seat: "8A", available: false }
+		{ seat: "8A", available: true },
+		{ seat: "1B", available: true },
+		{ seat: "2B", available: true },
+		{ seat: "3B", available: true },
+		{ seat: "4B", available: true },
+		{ seat: "5B", available: true },
+		{ seat: "6B", available: true },
+		{ seat: "7B", available: true },
+		{ seat: "8B", available: true },
+		{ seat: "1C", available: true },
+		{ seat: "2C", available: true },
+		{ seat: "3C", available: true },
+		{ seat: "4C", available: true },
+		{ seat: "5C", available: true },
+		{ seat: "6C", available: true },
+		{ seat: "7C", available: true },
+		{ seat: "8C", available: true },
+		{ seat: "1D", available: true },
+		{ seat: "2D", available: true },
+		{ seat: "3D", available: true },
+		{ seat: "4D", available: true },
+		{ seat: "5D", available: true },
+		{ seat: "6D", available: true },
+		{ seat: "7D", available: true },
+		{ seat: "8D", available: true },
+		{ seat: "1E", available: true },
+		{ seat: "2E", available: true },
+		{ seat: "3E", available: true },
+		{ seat: "4E", available: true },
+		{ seat: "5E", available: true },
+		{ seat: "6E", available: true },
+		{ seat: "7E", available: true },
+		{ seat: "8E", available: true }
 	];
-	const rowB = ["1B", "2B", "3B", "4B", "5B", "6B", "7B", "8B"];
-	const rowC = ["1B", "2B", "3B", "4B", "5B", "6B", "7B", "8B"];
-	const rowD = ["1D", "2D", "3D", "4D", "5D", "6D", "7D", "8D"];
-	const rowE = ["1E", "2E", "3E", "4E", "5E", "6E", "7E", "8E"];
 
-	const pepe = [{ "1A": true }, { "2E": true }];
-
-	const test = [
-		"1A",
-		"2A",
-		"3A",
-		"4A",
-		"5A",
-		"6A",
-		"7A",
-		"8A",
-		"1B",
-		"2B",
-		"3B",
-		"4B",
-		"5B",
-		"6B",
-		"7B",
-		"8B",
-		"1C",
-		"2C",
-		"3C",
-		"4C",
-		"5C",
-		"6C",
-		"7C",
-		"8C",
-		"1D",
-		"2D",
-		"3D",
-		"4D",
-		"5D",
-		"6D",
-		"7D",
-		"8D",
-		"1E",
-		"2E",
-		"3E",
-		"4E",
-		"5E",
-		"6E",
-		"7E",
-		"8E"
-	];
+	array.forEach(occupied => {
+		test.forEach(a => {
+			if (occupied == a.seat) {
+				a.available = false;
+			}
+		});
+	});
 
 	const result = test
 		.map((x, i) => {
@@ -94,9 +108,13 @@ const SelectSeats = props => {
 	const handleQuantity = e => {
 		if (e.target.checked == true) {
 			setQuantity(quantity + 1);
-			setSeats(e.target.value);
+			setSeats([...seats, e.target.value]);
+			console.log(seats);
 		} else if (e.target.checked == false) {
 			setQuantity(quantity - 1);
+			const newList = seats.filter(item => item !== e.target.value);
+			setSeats(newList);
+			console.log(seats);
 		}
 	};
 
@@ -125,11 +143,37 @@ const SelectSeats = props => {
 					</div>
 				</div>
 				<div className="col-xl-6 text-light">
-					<div className="border border-dark rounded movie my-2 p-4">
-						<h2>Movie: {props.movie} </h2>
-						<h2>Time: {props.time} </h2>
-						<h2>Cinema: </h2>
-						<h2>Total: ${price} </h2>
+					<div className="border border-dark rounded movie my-2 mx-1 p-4 row">
+						<div className="col-md-7">
+							<h2>Movie: {location.state.movie} </h2>
+							<h2>Time: {location.state.hour} </h2>
+							<h2>Date: {location.state.date}</h2>
+							<h2>
+								Cinema:{" "}
+								{store.cinemas.map(cinema => {
+									return (
+										<React.Fragment key={cinema.id}>
+											{location.state.cinema == cinema.id ? cinema.location : null}
+										</React.Fragment>
+									);
+								})}
+							</h2>
+							<h2>Total: ${price} </h2>
+						</div>
+						<div className="col-sm-3 m-auto">
+							{store.movies.map(poster => {
+								return (
+									<React.Fragment key={poster.id}>
+										{location.state.movie == poster.name ? (
+											<img
+												className="img-fluid posterMini border rounded border-dark"
+												src={poster.poster}
+											/>
+										) : null}
+									</React.Fragment>
+								);
+							})}
+						</div>
 					</div>
 				</div>
 			</div>
@@ -145,60 +189,33 @@ const SelectSeats = props => {
 									return (
 										<section key={index}>
 											{result.map(item => (
-												<span key={item}>
+												<span key={item.seat}>
 													<input
-														className="inputAsiento col-sm-1"
-														id={item}
+														className={
+															item.available ? "inputSeat col-sm-1" : "inputSeat col-sm-1"
+														}
+														id={item.seat}
 														type="checkbox"
-														name={item}
-														value={item}
+														name={item.seat}
+														disabled={item.available == true ? false : true}
+														value={item.seat}
 														onChange={handleQuantity}
 													/>
+													<label
+														className={
+															item.available == true
+																? "labelSeat col"
+																: "labelSeatDisable col"
+														}
+														htmlFor={item.seat}>
+														{item.seat}
+													</label>
 												</span>
 											))}
 										</section>
 									);
 								})}
 							</div>
-							{/* {rowA.map(seat => {
-								return (
-									<>
-										{seat.available == true ? (
-											<input
-												className="inputAsiento col-sm-1 fw-bold"
-												id={seat.seat}
-												type="checkbox"
-												name={seat.seat}
-												value={seat.seat}
-												disabled={available == false ? false : true}
-												onChange={handleQuantity}
-											/>
-										) : (
-											<input
-												className="inputSeatDisable col-sm-1 fw-bold"
-												id={seat.seat}
-												type="checkbox"
-												name={seat.seat}
-												value={seat.seat}
-												disabled={true}
-												onChange={handleQuantity}
-											/>
-										)}
-									</>
-								);
-							})} */}
-						</div>
-						<div className="row d-flex justify-content-center text-light">
-							<div className="col-sm-2" />
-							<div className="col-sm-1 number">1</div>
-							<div className="col-sm-1 number">2</div>
-							<div className="col-sm-1 number">3</div>
-							<div className="col-sm-1 number">4</div>
-							<div className="col-sm-1 number">5</div>
-							<div className="col-sm-1 number">6</div>
-							<div className="col-sm-1 number">7</div>
-							<div className="col-sm-1 number">8</div>
-							<div className="col-sm-2" />
 						</div>
 						<div className="row d-flex justify-content-center mt-5 p-2 border-top border-secondary">
 							<div className="col-sm-2">Your selection</div>
