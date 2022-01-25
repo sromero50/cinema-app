@@ -42,14 +42,16 @@ export const SelectedMovie = props => {
 									</div>
 									<div className="col-sm">
 										<div className="mt-4 text-light">
-											<h2 className="text-center movie bg-warning my-1 border rounded border-dark text-dark p-2">
+											<h2 className="text-center movie bg-warning my-1 border rounded border-dark text-dark p-2 fw-bold">
 												{movie.name}
 											</h2>
-											<h3 className="my-5">Synopsis: {movie.synopsis}</h3>
-											<h3 className="my-5">Genre: {movie.genre}</h3>
-											<h3 className="my-5">Release Date: {movie.release_date}</h3>
-											<h6 className="my-5">Duration: {movie.duration} mins</h6>
-											<h6 className="my-5">Director: {movie.director}</h6>
+											<div className="movie p-2 border rounded border-dark my-3">
+												<h3 className="my-2">Synopsis: {movie.synopsis}</h3>
+												<h3 className="my-5">Genre: {movie.genre}</h3>
+												<h3 className="my-5">Release Date: {movie.release_date}</h3>
+												<h6 className="my-5">Duration: {movie.duration} mins</h6>
+												<h6 className="my-5">Director: {movie.director}</h6>
+											</div>
 										</div>
 									</div>
 								</>
@@ -61,7 +63,7 @@ export const SelectedMovie = props => {
 					<div>
 						<select
 							style={{ fontSize: "25px" }}
-							className="text-center form-select my-1 col-md fw-bold"
+							className="text-center form-select my-1 col-md fw-bold bg-warning text-dark border border-dark movie"
 							onChange={e => setCinema(e.target.value)}
 							aria-label="Default select example">
 							<option defaultValue>Cinema</option>
@@ -83,11 +85,10 @@ export const SelectedMovie = props => {
 							<div>
 								{store.dates.map(date => {
 									return (
-										// <div className="col-md"></div>
 										<button
 											style={{ fontSize: "20px" }}
 											key={date}
-											className="border rounded border-warning btn btn-warning mx-2 col-md-2 fw-bold"
+											className="border movie rounded border-warning btn btn-warning mx-2 col-md-2 fw-bold"
 											onClick={e => {
 												setShowtime(true);
 												if (showtime == true) {
@@ -122,7 +123,7 @@ export const SelectedMovie = props => {
 																			onClick={e => setHour(e.target.value)}
 																		/>
 																		<label
-																			className="labelHour fw-bold bg-dark list-group-item text-light border rounded border-secondary mx-2 col-md"
+																			className="labelHour fw-bold m-auto bg-dark list-group-item text-light border rounded border-dark movie mx-1 col-md"
 																			htmlFor={schedule.hour}>
 																			{schedule.hour}
 																		</label>
@@ -140,7 +141,7 @@ export const SelectedMovie = props => {
 							<button
 								style={{ fontSize: "20px" }}
 								onClick={() => dataTicket(cinema, date, hour)}
-								className="my-2 btn btn-warning col-md-4 fw-bold">
+								className="my-2 movie btn btn-warning col-md-4 fw-bold">
 								<a style={{ textDecoration: "none", color: "black" }}>Select</a>
 							</button>
 						</div>

@@ -50,7 +50,8 @@ module.exports = {
       Dropdown: "exports-loader?Dropdown!bootstrap/js/dist/dropdown"
     }),
     new HtmlWebpackPlugin({
-        template: 'template.html'
+        template: 'template.html',
+        favicon: 'favicon.ico'
     }),
     new Dotenv({ safe: true, systemvars: true })
   ]

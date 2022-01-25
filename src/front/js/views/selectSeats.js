@@ -2,8 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Context } from "../store/appContext";
-import react from "react/cjs/react.development";
-import InfoBuy from "../component/infoBuy";
+import GoLogin from "../component/goLogin";
 
 const SelectSeats = props => {
 	const { store, actions } = useContext(Context);
@@ -143,109 +142,117 @@ const SelectSeats = props => {
 	};
 
 	return (
-		<div className="container  border rounded border-dark bg-dark movie my-2 p-3">
-			<div className="bg-dark border rounded border-dark row">
-				<div className="col-md-5 text-light">
-					<div className=" border border-dark rounded movie my-2 mx-1 p-4" style={{ height: "95%" }}>
-						<i className="fas fa-ticket-alt fa-4x my-2 text-warning" />
-						<h2 className="my-2">Ticket price: $20</h2>
-						<div className="row">
-							<h2 className="col-md my-1">Seats: {seats.map(item => item + " ")} </h2>
-						</div>
-					</div>
-				</div>
-				<div className="col-md-7 text-light">
-					<div className="border border-dark rounded movie my-2 mx-1 p-4 row">
-						<div className="col-md-7">
-							<h2>Movie: {location.state.movie} </h2>
-							<h2>Time: {location.state.hour} </h2>
-							<h2>Date: {location.state.date}</h2>
-							<h2>
-								Cinema:{" "}
-								{store.cinemas.map(cinema => {
-									return (
-										<React.Fragment key={cinema.id}>
-											{location.state.cinema == cinema.id ? cinema.location : null}
-										</React.Fragment>
-									);
-								})}
-							</h2>
-							<h2>Total: ${price} </h2>
-						</div>
-						<div className="col-md-4 m-auto">
-							{store.movies.map(poster => {
-								return (
-									<React.Fragment key={poster.id}>
-										{location.state.movie == poster.name ? (
-											<img
-												className="img-fluid posterMini border rounded border-dark"
-												src={poster.poster}
-											/>
-										) : null}
-									</React.Fragment>
-								);
-							})}
-						</div>
-					</div>
-				</div>
-			</div>
-			<form onSubmit={handleSubmit}>
-				<div className="bg-dark text-light text-center movie border rounded border-dark mt-1 mb-2 p-4 d-flex justify-content-center user-select-none">
-					<div className="container">
-						<div className="row mt-2 mb-4 divScreen d-flex justify-content-center">
-							<div className="col-sm-6 screen">A</div>
-						</div>
-						<div className="row d-flex justify-content-center">
-							<div>
-								{result.map((result, index) => {
-									return (
-										<section key={index}>
-											{result.map(item => (
-												<span key={item.seat}>
-													<input
-														className={
-															item.available ? "inputSeat col-sm-1" : "inputSeat col-sm-1"
-														}
-														id={item.seat}
-														type="checkbox"
-														name={item.seat}
-														disabled={item.available == true ? false : true}
-														value={item.seat}
-														onChange={handleQuantity}
-													/>
-													<label
-														className={
-															item.available == true
-																? "labelSeat col"
-																: "labelSeatDisable col"
-														}
-														htmlFor={item.seat}>
-														{item.seat}
-													</label>
-												</span>
-											))}
-										</section>
-									);
-								})}
+		<>
+			{store.login ? (
+				<div className="container  border rounded border-dark bg-dark movie my-2 p-3">
+					<div className="bg-dark border rounded border-dark row">
+						<div className="col-md-5 text-light">
+							<div className=" border border-dark rounded movie my-2 mx-1 p-4" style={{ height: "95%" }}>
+								<i className="fas fa-ticket-alt fa-4x my-2 text-warning" />
+								<h2 className="my-2">Ticket price: $20</h2>
+								<div className="row">
+									<h2 className="col-md my-1">Seats: {seats.map(item => item + " ")} </h2>
+								</div>
 							</div>
 						</div>
-						<div className="row d-flex justify-content-center mt-5 p-2 border-top border-secondary">
-							<div className="col-sm-2">Your selection</div>
-							<div className="col-sm-1 seatSelected" />
-							<div className="col-sm-2">Available</div>
-							<div className="col-sm-1 seat" />
-							<div className="col-sm-2">Not Available</div>
-							<div className="col-sm-1 seatNotAvailable" />
+						<div className="col-md-7 text-light">
+							<div className="border border-dark rounded movie my-2 mx-1 p-4 row">
+								<div className="col-md-7">
+									<h2>Movie: {location.state.movie} </h2>
+									<h2>Time: {location.state.hour} </h2>
+									<h2>Date: {location.state.date}</h2>
+									<h2>
+										Cinema:{" "}
+										{store.cinemas.map(cinema => {
+											return (
+												<React.Fragment key={cinema.id}>
+													{location.state.cinema == cinema.id ? cinema.location : null}
+												</React.Fragment>
+											);
+										})}
+									</h2>
+									<h2>Total: ${price} </h2>
+								</div>
+								<div className="col-md-4 m-auto">
+									{store.movies.map(poster => {
+										return (
+											<React.Fragment key={poster.id}>
+												{location.state.movie == poster.name ? (
+													<img
+														className="img-fluid posterMini border rounded border-dark"
+														src={poster.poster}
+													/>
+												) : null}
+											</React.Fragment>
+										);
+									})}
+								</div>
+							</div>
 						</div>
-						<button onClick={sendData} className="btn btn-block btn-warning mt-3" type="submit">
-							<a style={{ textDecoration: "none", color: "black" }} href="/snacks">
-								Confirm
-							</a>
-						</button>
 					</div>
+					<form onSubmit={handleSubmit}>
+						<div className="bg-dark text-light text-center movie border rounded border-dark mt-1 mb-2 p-4 d-flex justify-content-center user-select-none">
+							<div className="container">
+								<div className="row mt-2 mb-4 divScreen d-flex justify-content-center">
+									<div className="col-sm-6 screen">A</div>
+								</div>
+								<div className="row d-flex justify-content-center">
+									<div>
+										{result.map((result, index) => {
+											return (
+												<section key={index}>
+													{result.map(item => (
+														<span key={item.seat}>
+															<input
+																className={
+																	item.available
+																		? "inputSeat col-sm-1"
+																		: "inputSeat col-sm-1"
+																}
+																id={item.seat}
+																type="checkbox"
+																name={item.seat}
+																disabled={item.available == true ? false : true}
+																value={item.seat}
+																onChange={handleQuantity}
+															/>
+															<label
+																className={
+																	item.available == true
+																		? "labelSeat col"
+																		: "labelSeatDisable col"
+																}
+																htmlFor={item.seat}>
+																{item.seat}
+															</label>
+														</span>
+													))}
+												</section>
+											);
+										})}
+									</div>
+								</div>
+								<div className="row d-flex justify-content-center mt-5 p-2 border-top border-secondary">
+									<div className="col-sm-2">Your selection</div>
+									<div className="col-sm-1 seatSelected" />
+									<div className="col-sm-2">Available</div>
+									<div className="col-sm-1 seat" />
+									<div className="col-sm-2">Not Available</div>
+									<div className="col-sm-1 seatNotAvailable" />
+								</div>
+								<button onClick={sendData} className="btn btn-block btn-warning mt-3" type="submit">
+									<a style={{ textDecoration: "none", color: "black" }} href="/snacks">
+										Confirm
+									</a>
+								</button>
+							</div>
+						</div>
+					</form>
 				</div>
-			</form>
-		</div>
+			) : (
+				<GoLogin />
+			)}
+		</>
 	);
 };
 

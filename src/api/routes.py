@@ -1,7 +1,7 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
-from flask import Flask, request, jsonify, url_for, Blueprint
+from flask import Flask, request, jsonify, url_for, Blueprint, current_app
 from api.models import Administrator, Cinema, Movie, Schedule, Ticket, db, User
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
@@ -11,28 +11,85 @@ from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.validators import DataRequired
 import mercadopago
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from flask_mail import Message
 
 api = Blueprint('api', __name__)
 
+s = URLSafeTimedSerializer('cinema')
 
-@api.route("/login", methods=["POST"])
+@api.route("/user/login", methods=["POST"])
 def login():
     email = request.json.get("email", None)
     password = request.json.get("password", None)
-
     user = User.query.filter_by(email=email, password=password).first()
+    
     admin   = Administrator.query.filter_by(email=email, password=password).first()
-
     if user is None:
         if admin is None:
             return jsonify({"msg": "Wrong email or password"}), 401
 
-    if user:
+    if user.is_active == True:
         access_token = create_access_token(identity=user.id)
         return jsonify({ "token": access_token, "user_id": user.id, "email": user.email,"rol":"user", "name":user.name  })
-    if admin: 
-         access_token = create_access_token(identity=admin.id)
-         return jsonify({ "token": access_token, "admin_id": admin.id, "email": admin.email,"rol":"admin" })
+    else:
+        return jsonify({"msg": "account not verified"})
+
+    # if admin: 
+    #      access_token = create_access_token(identity=admin.id)
+    #      return jsonify({ "token": access_token, "admin_id": admin.id, "email": admin.email,"rol":"admin" })
+
+@api.route('/user/signup', methods=['POST'])
+def add_new_usuario():
+    body = request.get_json()
+    if body is None:
+        raise APIException("You need to specify the request body as a json object", status_code=400)
+    if 'name' not in body:
+        raise APIException('You need to specify the name', status_code=400)
+    if 'surname' not in body:
+        raise APIException('You need to specify the surname', status_code=400)
+    if 'email' not in body:
+        raise APIException('You need to specify the email', status_code=400)
+    if 'password' not in body:
+        raise APIException('You need to specify the password', status_code=400)
+    if 'date_of_birth' not in body:
+        raise APIException('You need to specify the date_of_birth', status_code=400)
+    if 'phone' not in body:
+        raise APIException('You need to specify the phone', status_code=400)
+
+
+
+    user = User(name=body['name'], surname=body['surname'], email=body['email'], password=body['password'], date_of_birth=body['date_of_birth'], phone=body['phone'], is_active=body['is_active'])
+    db.session.add(user)
+    db.session.commit()
+
+    
+    tokenUser = s.dumps(body['email'], salt='emailconfirm')
+    link = f"http://localhost:3000/verified/{tokenUser}"
+    msg = Message()
+    msg.subject = "Verify your account"
+    msg.recipients = body['email'].split()
+    msg.sender = "cinemaapp2022@gmail.com"
+    msg.html = f'<h3>Verify your account clicking <a href={link}>here</a></h3>'
+    current_app.mail.send(msg)
+
+    users = User.query.all()
+    all_users = list(map(lambda x: x.serialize(), users))
+    return jsonify(all_users), 200
+
+@api.route("/verify", methods=['PUT'])
+def verify_account(): 
+    token = request.json.get("token", None)
+    user = s.loads(token, salt='emailconfirm')
+    email = user
+    user = User.query.filter_by(email=email).first()
+
+    if user:
+        user.is_active = True
+        db.session.commit()
+    
+
+    return jsonify({ "msg": "account verified"  }), 200
 
 @api.route('/movie', methods=['GET'])
 def get_movie():
@@ -148,32 +205,6 @@ def add_new_schedule():
 
     return jsonify(all_schedules), 200
 
-@api.route('/user/signup', methods=['POST'])
-def add_new_usuario():
-    body = request.get_json()
-    if body is None:
-        raise APIException("You need to specify the request body as a json object", status_code=400)
-    if 'name' not in body:
-        raise APIException('You need to specify the name', status_code=400)
-    if 'surname' not in body:
-        raise APIException('You need to specify the surname', status_code=400)
-    if 'email' not in body:
-        raise APIException('You need to specify the email', status_code=400)
-    if 'password' not in body:
-        raise APIException('You need to specify the password', status_code=400)
-    if 'date_of_birth' not in body:
-        raise APIException('You need to specify the date_of_birth', status_code=400)
-    if 'phone' not in body:
-        raise APIException('You need to specify the phone', status_code=400)
-
-
-    user = User(name=body['name'], surname=body['surname'], email=body['email'], password=body['password'], date_of_birth=body['date_of_birth'], phone=body['phone'])
-    db.session.add(user)
-    db.session.commit()
-
-    user = User.query.all()
-    all_users = list(map(lambda x: x.serialize(), user))
-    return jsonify(all_users), 200
 
 @api.route('/ticket', methods=['POST'])
 # @jwt_required()

@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Context } from "../store/appContext";
 
 export const Navbar = () => {
+	const { store, actions } = useContext(Context);
+
 	return (
 		<nav className="navbar navbar-expand-lg navbar-dark bg-dark ">
 			<div className="container">
@@ -16,7 +19,7 @@ export const Navbar = () => {
 				</button>
 				<a className="navbar-brand" href="/">
 					Cinema
-					<i className="fas fa-film mx-2 fa-md" />
+					<i className="fas fa-film mx-2 fa-md text-warning" />
 				</a>
 				<div className="collapse navbar-collapse" id="navbarTogglerDemo03">
 					<ul className="navbar-nav m-auto mb-2 mb-lg-0">
@@ -25,11 +28,11 @@ export const Navbar = () => {
 								Movies
 							</a>
 						</li>
-						<li className="nav-item">
+						{/* <li className="nav-item">
 							<a className="nav-link" href="#">
 								Food & Drinks
 							</a>
-						</li>
+						</li> */}
 						<li className="nav-item">
 							<a className="nav-link" href="/cinemas">
 								Our Cinemas
@@ -42,11 +45,28 @@ export const Navbar = () => {
 								<i className="fas fa-search fa-lg" />
 							</a>
 						</li>
-						<li className="nav-item">
-							<a className="nav-link" href="/login">
-								<i className="fas fa-user-circle fa-lg" />
-							</a>
-						</li>
+						{store.login && (
+							<>
+								<li className="nav-item">
+									<a className="nav-link" href="/profile">
+										{store.info.map(item => item.name)}{" "}
+										<i className="fas fa-user-circle fa-lg text-warning" />
+									</a>
+								</li>
+								<li className="nav-item" onClick={() => actions.logout()}>
+									<a className="nav-link text-danger" href="/">
+										<i className="fas fa-sign-in-alt" />
+									</a>
+								</li>
+							</>
+						)}
+						{!store.login && (
+							<li className="nav-item">
+								<a className="nav-link" href="/login">
+									<i className="fas fa-user-circle fa-lg" />
+								</a>
+							</li>
+						)}
 					</ul>
 				</div>
 			</div>

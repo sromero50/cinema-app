@@ -37,6 +37,11 @@
 
 .labelHour{
     font-size: 25px;
+    transition: 0.8s;
+}
+
+.labelHour:hover{
+    background-color: #00000079 !important;
 }
 
 .inputHour[type=checkbox]{

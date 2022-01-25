@@ -8,13 +8,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 			cinemas: [],
 			tickets: [],
 			snackList: [],
-			total: 0
+			signup: false,
+			reload: false,
+			user: localStorage.getItem("user"),
+			login: JSON.parse(localStorage.getItem("login")),
+			info: [JSON.parse(localStorage.getItem("info"))],
+			total: 0,
+			error: ""
 		},
 		actions: {
 			getMovies: async () => {
 				const store = getStore();
 				try {
-					// const response = await fetch("https://mcuapi.herokuapp.com/api/v1/movies");
 					const response = await fetch("http://192.168.1.76:3001/api/movie");
 					const responseBody = await response.json();
 
@@ -26,7 +31,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getSchedules: async () => {
 				const store = getStore();
 				try {
-					// const response = await fetch("https://mcuapi.herokuapp.com/api/v1/Scheduless");
 					const response = await fetch("http://192.168.1.76:3001/api/schedule");
 					const responseBody = await response.json();
 
@@ -39,7 +43,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getCinemas: async () => {
 				const store = getStore();
 				try {
-					// const response = await fetch("https://mcuapi.herokuapp.com/api/v1/movies");
 					const response = await fetch("http://192.168.1.76:3001/api/cinema");
 					const responseBody = await response.json();
 
@@ -51,7 +54,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getTickets: async () => {
 				const store = getStore();
 				try {
-					// const response = await fetch("https://mcuapi.herokuapp.com/api/v1/movies");
 					const response = await fetch("http://192.168.1.76:3001/api/ticket");
 					const responseBody = await response.json();
 
@@ -109,6 +111,103 @@ const getState = ({ getStore, getActions, setStore }) => {
 				let itemPrice = store.snackList.reduce((a, c) => a + c.price * c.quantity, 0);
 
 				setStore({ total: itemPrice });
+			},
+			signup: async (name, surname, email, password, date_of_birth, phone) => {
+				const store = getStore();
+				try {
+					var myHeaders = new Headers();
+					myHeaders.append("Content-Type", "application/json");
+
+					var raw = JSON.stringify({
+						name: name,
+						surname: surname,
+						email: email,
+						password: password,
+						date_of_birth: date_of_birth,
+						phone: phone,
+						is_active: false
+					});
+
+					var requestOptions = {
+						method: "POST",
+						headers: myHeaders,
+						body: raw,
+						redirect: "follow"
+					};
+					const response = await fetch("http://192.168.1.76:3001/api/user/signup", requestOptions);
+					const responseBody = await response.json();
+					if (responseBody) {
+						setStore({ signup: true });
+					}
+				} catch (error) {
+					console.log("error", error);
+
+					setStore({ error: error });
+				}
+			},
+			login: async (email, password) => {
+				const store = getStore();
+				var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+
+				var raw = JSON.stringify({
+					email: email,
+					password: password
+				});
+
+				var requestOptions = {
+					method: "POST",
+					headers: myHeaders,
+					body: raw,
+					redirect: "follow"
+				};
+
+				const response = await fetch("http://192.168.1.76:3001/api/user/login", requestOptions);
+				const responseBody = await response.json();
+
+				if (responseBody.token) {
+					localStorage.setItem("user", responseBody.token);
+					localStorage.setItem("login", true);
+					localStorage.setItem("info", JSON.stringify(responseBody));
+					setStore({ info: [responseBody] });
+					setStore({ user: true });
+					setStore({ login: true });
+				} else {
+					console.log(responseBody.msg);
+					setStore({ error: responseBody.msg });
+				}
+			},
+			logout: () => {
+				const store = getStore();
+				setStore({ user: localStorage.removeItem("user") });
+				setStore({ login: localStorage.removeItem("login") });
+				setStore({ info: localStorage.removeItem("info") });
+			},
+			verify: async token => {
+				const store = getStore();
+				try {
+					var myHeaders = new Headers();
+					myHeaders.append("Content-Type", "application/json");
+
+					var raw = JSON.stringify({
+						token: token
+					});
+
+					var requestOptions = {
+						method: "PUT",
+						headers: myHeaders,
+						body: raw,
+						redirect: "follow"
+					};
+					const response = await fetch("http://192.168.1.76:3001/api/verify", requestOptions);
+					const responseBody = await response.json();
+
+					if (responseBody.msg == "account verified") {
+						setStore({ reload: true });
+					}
+				} catch (error) {
+					console.log(error);
+				}
 			}
 		}
 	};
