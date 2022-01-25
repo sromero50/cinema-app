@@ -11,7 +11,7 @@ const MovieCard = () => {
 					<div key={movies.id} className="col">
 						<a href={"/movie/" + movies.name}>
 							<div className="card border border-rounded border-dark movie">
-								<img src={movies.poster} className="img-fluid" alt="..." />
+								<img src={movies.poster} className="img-fluid" alt={movies.name} />
 							</div>
 						</a>
 						<h4 className="text-center text-light">{movies.name} </h4>

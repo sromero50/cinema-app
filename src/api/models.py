@@ -53,6 +53,7 @@ class Movie(db.Model):
     release_date = db.Column(db.String(120), unique=False, nullable=False)
     duration = db.Column(db.Integer, unique=False, nullable=False)
     director = db.Column(db.String(120), unique=False, nullable=False)
+    released = db.Column(db.Boolean(), unique=False, nullable=True)
     ticket = db.relationship("Ticket", backref="movie")
 
     def __repr__(self):
@@ -67,7 +68,8 @@ class Movie(db.Model):
             "release_date": self.release_date,
             "duration": self.duration,
             "director": self.director,
-            "poster": self.poster
+            "poster": self.poster,
+            "released": self.released
 
                        
         }
@@ -109,7 +111,7 @@ class Schedule(db.Model):
     def serialize(self):
         ticket = ','.join(str(e) for e in self.schedule)
         
-        print(ticket)
+      
         return {
             "id": self.id,
             "id_movie": self.id_movie,

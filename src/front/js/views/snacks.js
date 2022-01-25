@@ -15,7 +15,14 @@ const Snacks = () => {
 					<Drinks />
 				</div>
 				<div className="col-sm-5 text-light text-start p-4 my-4 m-auto card bg-dark">
-					<InfoBuy tickets={tickets} />
+					<InfoBuy
+						snacksCheckout={false}
+						tickets={tickets}
+						movie={location.state.movie}
+						date={location.state.date}
+						hour={location.state.hour}
+						cinema={location.state.cinema}
+					/>
 				</div>
 			</div>
 		</div>

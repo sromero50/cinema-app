@@ -4,8 +4,11 @@ import { useNavigate } from "react-router-dom";
 const InfoBuy = props => {
 	const navigate = useNavigate();
 	const { store, actions } = useContext(Context);
+
+	const { tickets, movie, hour, date, cinema } = props;
+
 	const [total, setTotal] = useState();
-	const [priceTicket, setPriceTicket] = useState(props.tickets);
+	const [priceTicket, setPriceTicket] = useState(tickets);
 	const [snackPrice, setSnackPrice] = useState(store.total);
 
 	useEffect(
@@ -23,15 +26,33 @@ const InfoBuy = props => {
 	);
 
 	const sendData = () => {
-		navigate("/checkout", { state: { total: total, ticket: priceTicket, snacks: snackPrice } });
+		navigate("/checkout", {
+			state: {
+				total: total,
+				ticket: priceTicket,
+				snacks: snackPrice,
+				cinema: cinema,
+				date: date,
+				hour: hour,
+				movie: movie
+			}
+		});
 	};
 
 	return (
 		<>
 			<div className="border border-dark rounded movie p-3">
-				<h2>Movie: </h2>
-				<h2>Time: </h2>
-				<h2>Cinema: </h2>
+				<h2>Movie: {movie}</h2>
+				<h2>Time: {hour}</h2>
+				<h2>Date: {date}</h2>
+				<h2>
+					Cinema:{" "}
+					{store.cinemas.map(item => {
+						return (
+							<React.Fragment key={item.id}>{cinema == item.id ? item.location : null}</React.Fragment>
+						);
+					})}
+				</h2>
 				{store.snackList.map(product => {
 					return (
 						<h2 key={product.id}>

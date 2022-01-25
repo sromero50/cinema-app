@@ -127,7 +127,15 @@ const SelectSeats = props => {
 	}
 
 	const sendData = () => {
-		navigate("/snacks", { state: { total: price } });
+		navigate("/snacks", {
+			state: {
+				total: price,
+				cinema: location.state.cinema,
+				date: location.state.date,
+				hour: location.state.hour,
+				movie: location.state.movie
+			}
+		});
 	};
 
 	return (
