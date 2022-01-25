@@ -152,3 +152,24 @@ class Ticket(db.Model):
 
            
         }
+
+class TicketSnack(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    id_user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    id_ticket = db.Column(db.Integer, db.ForeignKey('ticket.id'))
+    snack = db.Column(db.String(80), unique=False, nullable=False)
+    quantity = db.Column(db.String(80), unique=False, nullable=False)
+    
+
+    def __repr__(self):
+        return '%r' % self.snack
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "id_user": self.id_user,
+            "id_ticket": self.id_ticket,
+            "snack": self.snack,
+            "quantity": self.quantity
+
+        }

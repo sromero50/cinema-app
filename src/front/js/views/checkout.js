@@ -10,12 +10,8 @@ const Checkout = () => {
 	const [priceTicket, setPriceTicket] = useState(location.state.ticket);
 	const [snackPrice, setSnackPrice] = useState(location.state.snacks);
 
-	const [form, setForm] = useState({
-		email: "",
-		name: "",
-		surname: ""
-	});
-
+	console.log(location);
+	console.log(store.snackList);
 	const payment = () => {
 		const mp = new MercadoPago("TEST-e284583c-2ce3-46bf-b432-2da8a2ccdd91");
 		const cardForm = mp.cardForm({
@@ -200,28 +196,45 @@ const Checkout = () => {
 						</div>
 					</div>
 					<div className="col-md text-light mt-2 mx-1 bg-dark">
-						<div className="border border-dark text-dark bg-warning rounded movie p-3">
-							<h2 className="my-2">Movie: {location.state.movie}</h2>
-							<h2 className="my-2">Time: {location.state.hour} </h2>
-							<h2 className="my-2">Date: {location.state.date}</h2>
-							<h2 className="my-2">
-								Cinema:{" "}
-								{store.cinemas.map(cinema => {
+						<div className="row border border-dark rounded movie my-2 mx-1 p-4 ">
+							<div className="col-md-7">
+								<h2 className="my-2">Movie: {location.state.movie}</h2>
+								<h2 className="my-2">Time: {location.state.hour} </h2>
+								<h2 className="my-2">Date: {location.state.date}</h2>
+								<h2 className="my-2">
+									Cinema:{" "}
+									{store.cinemas.map(cinema => {
+										return (
+											<React.Fragment key={cinema.id}>
+												{location.state.cinema == cinema.id ? cinema.location : null}
+											</React.Fragment>
+										);
+									})}
+								</h2>
+								<h2 className="my-2">Tickets: ${priceTicket} </h2>
+								<h2 className="my-2">Snacks: ${snackPrice} </h2>
+								<h2 className="my-2">Total: ${total} </h2>
+							</div>
+							<div className="col-md-5 m-auto">
+								{store.movies.map(poster => {
 									return (
-										<React.Fragment key={cinema.id}>
-											{location.state.cinema == cinema.id ? cinema.location : null}
+										<React.Fragment key={poster.id}>
+											{location.state.movie == poster.name ? (
+												<img
+													className="img-fluid posterMini border rounded border-dark"
+													src={poster.poster}
+												/>
+											) : null}
 										</React.Fragment>
 									);
 								})}
-							</h2>
-							<h2 className="my-2">Tickets: ${priceTicket} </h2>
-							<h2 className="my-2">Snacks: ${snackPrice} </h2>
-							<h2 className="my-2">Total: ${total} </h2>
+							</div>
 						</div>
+
 						<button
 							onClick={payment}
 							id="form-checkout__submit"
-							className="btn btn-block btn-warning w-100 mt-3 fw-bold"
+							className="btn movie col-md-12 btn-warning w-100 mt-3 fw-bold"
 							type="submit">
 							Confirm
 						</button>

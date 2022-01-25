@@ -42,12 +42,14 @@ export const SelectedMovie = props => {
 									</div>
 									<div className="col-sm">
 										<div className="mt-4 text-light">
-											<h2 className="text-center">{movie.name}</h2>
-											<h4>Synopsis: {movie.synopsis}</h4>
-											<h3>Genre: {movie.genre}</h3>
-											<h3>Release Date: {movie.release_date}</h3>
-											<h6>Duration: {movie.duration} mins</h6>
-											<h6>Director: {movie.director}</h6>
+											<h2 className="text-center movie bg-warning my-1 border rounded border-dark text-dark p-2">
+												{movie.name}
+											</h2>
+											<h3 className="my-5">Synopsis: {movie.synopsis}</h3>
+											<h3 className="my-5">Genre: {movie.genre}</h3>
+											<h3 className="my-5">Release Date: {movie.release_date}</h3>
+											<h6 className="my-5">Duration: {movie.duration} mins</h6>
+											<h6 className="my-5">Director: {movie.director}</h6>
 										</div>
 									</div>
 								</>
@@ -55,16 +57,21 @@ export const SelectedMovie = props => {
 						</div>
 					);
 				})}
-				<div className="row text-light p-2 border border-dark user-select-none">
+				<div className="row text-light p-2 border border-dark user-select-none mt-3">
 					<div>
 						<select
-							className="text-center form-select my-1 col-md"
+							style={{ fontSize: "25px" }}
+							className="text-center form-select my-1 col-md fw-bold"
 							onChange={e => setCinema(e.target.value)}
 							aria-label="Default select example">
 							<option defaultValue>Cinema</option>
 							{store.cinemas.map(cinema => {
 								return (
-									<option key={cinema.id} value={cinema.id}>
+									<option
+										style={{ fontSize: "25px" }}
+										className="fw-bold"
+										key={cinema.id}
+										value={cinema.id}>
 										{cinema.location}
 									</option>
 								);
@@ -78,8 +85,9 @@ export const SelectedMovie = props => {
 									return (
 										// <div className="col-md"></div>
 										<button
+											style={{ fontSize: "20px" }}
 											key={date}
-											className="border rounded border-warning btn btn-warning mx-2 py-2 col-md-2"
+											className="border rounded border-warning btn btn-warning mx-2 col-md-2 fw-bold"
 											onClick={e => {
 												setShowtime(true);
 												if (showtime == true) {
@@ -95,7 +103,7 @@ export const SelectedMovie = props => {
 								})}
 							</div>
 							<div className="m-auto text-center">
-								<ul className="text-center list-group list-group-horizontal-sm">
+								<ul className="text-center list-group list-group-horizontal-sm my-2">
 									{store.schedules.map(schedule => {
 										return (
 											<>
@@ -106,7 +114,7 @@ export const SelectedMovie = props => {
 																{schedule.id_movie == idMovie ? (
 																	<li className="list-group-item text-light bg-dark border border-dark col-md">
 																		<input
-																			className="inputReserva"
+																			className="inputHour"
 																			id={schedule.hour}
 																			type="checkbox"
 																			name={schedule.hour}
@@ -114,7 +122,7 @@ export const SelectedMovie = props => {
 																			onClick={e => setHour(e.target.value)}
 																		/>
 																		<label
-																			className="labelReserva bg-dark list-group-item text-light border rounded border-secondary mx-2 col-md"
+																			className="labelHour fw-bold bg-dark list-group-item text-light border rounded border-secondary mx-2 col-md"
 																			htmlFor={schedule.hour}>
 																			{schedule.hour}
 																		</label>
@@ -130,9 +138,10 @@ export const SelectedMovie = props => {
 								</ul>
 							</div>
 							<button
+								style={{ fontSize: "20px" }}
 								onClick={() => dataTicket(cinema, date, hour)}
-								className="my-2 btn btn-warning btn-block w-50">
-								<a style={{ textDecoration: "none", color: "black" }}>Buy</a>
+								className="my-2 btn btn-warning col-md-4 fw-bold">
+								<a style={{ textDecoration: "none", color: "black" }}>Select</a>
 							</button>
 						</div>
 					</div>

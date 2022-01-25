@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Context } from "../store/appContext";
 import react from "react/cjs/react.development";
+import InfoBuy from "../component/infoBuy";
+
 const SelectSeats = props => {
 	const { store, actions } = useContext(Context);
 
@@ -133,7 +135,9 @@ const SelectSeats = props => {
 				cinema: location.state.cinema,
 				date: location.state.date,
 				hour: location.state.hour,
-				movie: location.state.movie
+				movie: location.state.movie,
+				total: price,
+				seats: seats
 			}
 		});
 	};
@@ -141,16 +145,16 @@ const SelectSeats = props => {
 	return (
 		<div className="container  border rounded border-dark bg-dark movie my-2 p-3">
 			<div className="bg-dark border rounded border-dark row">
-				<div className="col-xl-6 text-light">
-					<div className=" border border-dark rounded movie mt-2 p-4">
-						<i className="fas fa-ticket-alt fa-4x my-2" />
+				<div className="col-md-5 text-light">
+					<div className=" border border-dark rounded movie my-2 mx-1 p-4" style={{ height: "95%" }}>
+						<i className="fas fa-ticket-alt fa-4x my-2 text-warning" />
 						<h2 className="my-2">Ticket price: $20</h2>
 						<div className="row">
-							<h2 className="col-md my-1">Quantity: {quantity} </h2>
+							<h2 className="col-md my-1">Seats: {seats.map(item => item + " ")} </h2>
 						</div>
 					</div>
 				</div>
-				<div className="col-xl-6 text-light">
+				<div className="col-md-7 text-light">
 					<div className="border border-dark rounded movie my-2 mx-1 p-4 row">
 						<div className="col-md-7">
 							<h2>Movie: {location.state.movie} </h2>
@@ -168,7 +172,7 @@ const SelectSeats = props => {
 							</h2>
 							<h2>Total: ${price} </h2>
 						</div>
-						<div className="col-sm-3 m-auto">
+						<div className="col-md-4 m-auto">
 							{store.movies.map(poster => {
 								return (
 									<React.Fragment key={poster.id}>
@@ -188,7 +192,7 @@ const SelectSeats = props => {
 			<form onSubmit={handleSubmit}>
 				<div className="bg-dark text-light text-center movie border rounded border-dark mt-1 mb-2 p-4 d-flex justify-content-center user-select-none">
 					<div className="container">
-						<div className="row mt-2 mb-4 prueba d-flex justify-content-center">
+						<div className="row mt-2 mb-4 divScreen d-flex justify-content-center">
 							<div className="col-sm-6 screen">A</div>
 						</div>
 						<div className="row d-flex justify-content-center">

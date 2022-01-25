@@ -35,6 +35,20 @@
    height:60px;
 }
 
+.labelHour{
+    font-size: 25px;
+}
+
+.inputHour[type=checkbox]{
+    display: none;
+}
+
+.inputHour:checked + .labelHour {
+    background-color: #f8cc44 !important;
+    color: black !important;
+    transition: 0.5s;
+}
+
 .labelSeat {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -76,6 +90,16 @@
     box-shadow: none !important;
   }
 
+
+.seat{
+    background-color: rgb(223, 223, 223);
+    height: 20px;
+    width: 8px;
+    margin: 3px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
 .number{
   
     height: 20px;
@@ -85,6 +109,24 @@
 }
   
 
+.seatSelected{
+    background-color: rgb(244, 255, 96);
+    height: 20px;
+    width: 8px;
+    margin: 3px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.seatNotAvailable{
+    background-color: rgb(255, 96, 96);
+    height: 20px;
+    width: 8px;
+    margin: 3px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
 .screen{
     background-color: whitesmoke;
     height: 40px;
@@ -92,7 +134,7 @@
     box-shadow: 0 3px 10px rgba(255, 255, 255, 0.75);
 }
 
-.prueba{
+.divScreen{
     perspective: 800px;
 }
 
