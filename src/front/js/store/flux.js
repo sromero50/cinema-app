@@ -278,14 +278,58 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				const response = await fetch("http://192.168.1.76:3001/api/snack", requestOptions);
 				const responseBody = await response.json();
+			},
+			recoverPassword: async email => {
+				try {
+					var myHeaders = new Headers();
+					myHeaders.append("Content-Type", "application/json");
 
-				console.log(responseBody);
-				// if (responseBody) {
-				// 	setStore({ reload: true });
-				// } else {
-				// 	console.log(responseBody);
-				// 	setStore({ error: responseBody });
-				// }
+					var raw = JSON.stringify({
+						email: email
+					});
+
+					var requestOptions = {
+						method: "POST",
+						headers: myHeaders,
+						body: raw,
+						redirect: "follow"
+					};
+					const response = await fetch("http://192.168.1.76:3001/api/recover", requestOptions);
+					const responseBody = await response.json();
+
+					if (responseBody.msg == "email sent") {
+						alert("email sent");
+					}
+				} catch (error) {
+					console.log(error);
+				}
+			},
+			resetPassword: async (token, new_password) => {
+				const store = getStore();
+				try {
+					var myHeaders = new Headers();
+					myHeaders.append("Content-Type", "application/json");
+
+					var raw = JSON.stringify({
+						token: token,
+						new_password: new_password
+					});
+
+					var requestOptions = {
+						method: "PUT",
+						headers: myHeaders,
+						body: raw,
+						redirect: "follow"
+					};
+					const response = await fetch("http://192.168.1.76:3001/api/resetpassword", requestOptions);
+					const responseBody = await response.json();
+
+					if (responseBody.msg == "password changed") {
+						setStore({ reload: true });
+					}
+				} catch (error) {
+					console.log(error);
+				}
 			}
 		}
 	};

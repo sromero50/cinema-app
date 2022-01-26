@@ -15,6 +15,9 @@ import Checkout from "./views/checkout";
 import Cinemas from "./views/cinemas";
 import Verified from "./views/verified";
 import Confirmation from "./views/confirmation";
+import NotFound from "./views/notFound";
+import RecoverPassword from "./views/recoverPassword";
+import ResetPassword from "./views/resetPassword";
 //create your first component
 const Layout = () => {
 	//the basename is used when your project is published in a subdirectory and not in the root of the domain
@@ -36,7 +39,10 @@ const Layout = () => {
 						<Route path="/login/" element={<Login />} />
 						<Route path="/verified/:token" element={<Verified />} />
 						<Route path="/signup/" element={<SignUp />} />
-						<Route path="cinemas" element={<Cinemas />} />
+						<Route path="/recoverpassword/" element={<RecoverPassword />} />
+						<Route path="/resetpassword/:token" element={<ResetPassword />} />
+						<Route element={<NotFound />} />
+						<Route path="/cinemas/" element={<Cinemas />} />
 					</Routes>
 					<Footer />
 				</ScrollToTop>

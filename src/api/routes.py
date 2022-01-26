@@ -40,6 +40,42 @@ def login():
     #      access_token = create_access_token(identity=admin.id)
     #      return jsonify({ "token": access_token, "admin_id": admin.id, "email": admin.email,"rol":"admin" })
 
+@api.route("/recover", methods=['POST'])
+def recover_password():
+    email = request.json.get("email", None)
+
+    user = User.query.filter_by(email=email).first()
+
+    if user is None:
+         return jsonify({"msg": "wrong email"}), 401
+    
+    if user:
+        tokenUser = s.dumps([email], salt='emailconfirm')
+        link = f"http://localhost:3000/resetpassword/{tokenUser}"
+        msg = Message()
+        msg.subject = "Recover your password"
+        msg.recipients = [email]
+        msg.sender = "cinemaapp2022@gmail.com"
+        msg.html = f'<h3>To recover your password click <a href={link}>here</a></h3>'
+        current_app.mail.send(msg)
+        return jsonify({ "msg": "email sent"  }), 200
+
+@api.route("/resetpassword", methods=['PUT'])
+def reset_password(): 
+    token = request.json.get("token", None)
+    new_password = request.json.get("new_password", None)
+    user = s.loads(token, salt='emailconfirm')
+    email = user[0]
+
+    user = User.query.filter_by(email=email).first()
+
+
+    if user:
+        user.password = new_password
+        db.session.commit()
+        return jsonify({ "msg": "password changed"  }), 200
+
+
 @api.route('/user/signup', methods=['POST'])
 def add_new_usuario():
     body = request.get_json()
