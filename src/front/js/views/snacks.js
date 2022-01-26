@@ -20,13 +20,13 @@ const Snacks = () => {
 						</div>
 						<div className="col-md mx-1 text-light text-start p-2 my-2 m-auto bg-dark">
 							<InfoBuy
-								snacksCheckout={false}
 								tickets={tickets}
 								movie={location.state.movie}
 								date={location.state.date}
 								hour={location.state.hour}
 								cinema={location.state.cinema}
 								seats={location.state.seats}
+								type={location.state.type}
 							/>
 						</div>
 					</div>

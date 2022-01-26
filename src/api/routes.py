@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint, current_app
-from api.models import Administrator, Cinema, Movie, Schedule, Ticket, db, User
+from api.models import Administrator, Cinema, Movie, Schedule, Ticket, db, User, Snack
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -208,7 +208,7 @@ def add_new_schedule():
 
 
 @api.route('/ticket', methods=['POST'])
-# @jwt_required()
+@jwt_required()
 def add_new_ticket():
     body = request.get_json()
     if body is None:
@@ -228,8 +228,10 @@ def add_new_ticket():
     if 'seat' not in body:
         raise APIException('You need to specify the seat', status_code=400)  
 
-
-    ticket = Ticket(id_movie=body['id_movie'], hour=body['hour'], date=body['date'], cinema=body['cinema'], id_user=body['id_user'], code=body['code'], seat=body['seat'])
+    seats = body['seat']
+    seats = ','.join([str(elem) for elem in seats])
+    
+    ticket = Ticket(id_movie=body['id_movie'], type=body["type"], hour=body['hour'], date=body['date'], cinema=body['cinema'], id_user=body['id_user'], code=body['code'], seat=seats, id_schedule = body['id_schedule'])
     db.session.add(ticket)
     db.session.commit()
 
@@ -237,6 +239,28 @@ def add_new_ticket():
     all_tickets = list(map(lambda x: x.serialize(), ticket))
     return jsonify(all_tickets), 200
 
+@api.route('/snack', methods=['POST'])
+@jwt_required()
+def add_snack():
+    body = request.get_json()
+    if body is None:
+        raise APIException("You need to specify the request body as a json object", status_code=400)
+    if 'id_user' not in body:
+        raise APIException('You need to specify the id_user', status_code=400)
+    if 'id_ticket' not in body:
+        raise APIException('You need to specify the id_ticket', status_code=400)
+    if 'snack' not in body:
+        raise APIException('You need to specify the snack', status_code=400)
+    if 'quantity' not in body:
+        raise APIException('You need to specify the quantity', status_code=400)
+    
+    snack = Snack(id_user=body['id_user'], id_ticket=body["id_ticket"], snack=body['snack'], quantity=body['quantity'])
+    db.session.add(snack)
+    db.session.commit()
+
+    snacks = Snack.query.all()
+    all_snacks = list(map(lambda x: x.serialize(), snacks))
+    return jsonify(all_snacks), 200
 
 @api.route('/movie/<int:id>', methods=['DELETE'])
 @jwt_required()
@@ -353,7 +377,7 @@ def payment():
     type = identification.get("type")
     number = identification.get("number")
     first_name = payer.get("first_name")
-    # print(token,issuer_id,payment_method_id,transaction_amount,installments,description,email, type, number, first_name)
+  
     payment_data = {
         "transaction_amount": float(transaction_amount),
         "token": token,
@@ -372,5 +396,4 @@ def payment():
 
     payment_response = sdk.payment().create(payment_data)
     payment = payment_response["response"]
-    print(payment.get("status"), payment.get("status_detail"))
     return jsonify(payment), 200

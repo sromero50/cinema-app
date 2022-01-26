@@ -5,7 +5,7 @@ const InfoBuy = props => {
 	const navigate = useNavigate();
 	const { store, actions } = useContext(Context);
 
-	const { tickets, movie, hour, date, cinema, price, seats } = props;
+	const { tickets, movie, hour, date, cinema, price, seats, type } = props;
 
 	const [total, setTotal] = useState();
 	const [priceTicket, setPriceTicket] = useState(tickets);
@@ -36,7 +36,8 @@ const InfoBuy = props => {
 				hour: hour,
 				movie: movie,
 				seats: seats,
-				snackList: store.snackList
+				snackList: store.snackList,
+				type: type
 			}
 		});
 	};

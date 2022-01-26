@@ -28,7 +28,8 @@ const Login = () => {
 					cinema: location.state.cinema,
 					date: location.state.date,
 					hour: location.state.hour,
-					movie: location.state.movie
+					movie: location.state.movie,
+					type: location.state.type
 				}
 			});
 		} else {

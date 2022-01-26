@@ -3,12 +3,35 @@ import InfoBuy from "../component/infoBuy";
 import { useLocation } from "react-router-dom";
 import { Context } from "../store/appContext";
 import InputForm from "../component/inputForm";
+import { Navigate } from "react-router-dom";
 const Checkout = () => {
 	const location = useLocation();
 	const [total, setTotal] = useState(location.state.total);
 	const { store, actions } = useContext(Context);
 	const [priceTicket, setPriceTicket] = useState(location.state.ticket);
 	const [snackPrice, setSnackPrice] = useState(location.state.snacks);
+
+	const [status, setStatus] = useState();
+
+	const [id_movie, setId_movie] = useState();
+	const [id_schedule, setId_schedule] = useState();
+	const [id_user, setId_user] = useState();
+
+	const user = JSON.parse(localStorage.getItem("info"));
+
+	useEffect(() => {
+		store.schedules.map(id => {
+			if (
+				id.hour == location.state.hour &&
+				id.date === location.state.date &&
+				parseInt(location.state.cinema) === id.id_cinema
+			) {
+				setId_movie(id.id_movie);
+				setId_schedule(id.id);
+				setId_user(user.user_id);
+			}
+		});
+	});
 
 	const payment = () => {
 		const mp = new MercadoPago(process.env.frontMercado);
@@ -59,7 +82,7 @@ const Checkout = () => {
 					if (error) return console.warn("Form Mounted handling error: ", error);
 					console.log("Form mounted");
 				},
-				onSubmit: event => {
+				onSubmit: async event => {
 					event.preventDefault();
 
 					const {
@@ -73,37 +96,61 @@ const Checkout = () => {
 						identificationType
 					} = cardForm.getCardFormData();
 
-					fetch("http://192.168.1.76:3001/api/process_payment", {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json"
-						},
-						body: JSON.stringify({
-							token,
-							issuer_id,
-							payment_method_id,
-							transaction_amount: Number(amount),
-							installments: Number(installments),
-							description: "Cinema " + location.state.movie,
-							payer: {
-								email,
-								identification: {
-									type: identificationType,
-									number: identificationNumber
-								}
+					var myHeaders = new Headers();
+					myHeaders.append("Content-Type", "application/json");
+
+					var raw = JSON.stringify({
+						token,
+						issuer_id,
+						payment_method_id,
+						transaction_amount: Number(amount),
+						installments: Number(installments),
+						description: "Cinema " + location.state.movie,
+						payer: {
+							email,
+							identification: {
+								type: identificationType,
+								number: identificationNumber
 							}
-						})
-					})
-						.then(response => response.json())
-						.then(result => console.log(result.status_detail))
-						.catch(error => console.log("error", error));
+						}
+					});
+					var requestOptions = {
+						method: "POST",
+						headers: myHeaders,
+						body: raw
+					};
+					const response = await fetch("http://192.168.1.76:3001/api/process_payment", requestOptions);
+					const responseBody = await response.json();
+					setStatus(responseBody.status_detail);
 				}
 			}
 		});
 	};
+
 	useEffect(() => {
 		payment();
 	}, []);
+
+	useEffect(
+		() => {
+			if (status === "accredited") {
+				actions.purchaseTicket(
+					id_movie,
+					id_schedule,
+					location.state.type,
+					location.state.hour,
+					location.state.date,
+					location.state.cinema,
+					id_user,
+					location.state.seats,
+					location.state.snackList
+				);
+			} else if (status !== "accredited" && status !== undefined) {
+				alert(status);
+			}
+		},
+		[status]
+	);
 
 	return (
 		<>
@@ -233,6 +280,7 @@ const Checkout = () => {
 
 								<button
 									onClick={payment}
+									// onClick={() => setStatus("accredited")}
 									id="form-checkout__submit"
 									className="btn movie col-md-12 btn-warning w-100 mt-3 fw-bold"
 									type="submit">
@@ -243,6 +291,7 @@ const Checkout = () => {
 					</form>
 				</div>
 			)}
+			{store.reload && <Navigate to="/confirmation/" />}
 		</>
 	);
 };

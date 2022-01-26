@@ -14,6 +14,7 @@ import Snacks from "./views/snacks";
 import Checkout from "./views/checkout";
 import Cinemas from "./views/cinemas";
 import Verified from "./views/verified";
+import Confirmation from "./views/confirmation";
 //create your first component
 const Layout = () => {
 	//the basename is used when your project is published in a subdirectory and not in the root of the domain
@@ -31,6 +32,7 @@ const Layout = () => {
 						<Route path="/selectseat/" element={<SelectSeats />} />
 						<Route path="/snacks/" element={<Snacks />} />
 						<Route path="/checkout/" element={<Checkout />} />
+						<Route path="/confirmation/" element={<Confirmation />} />
 						<Route path="/login/" element={<Login />} />
 						<Route path="/verified/:token" element={<Verified />} />
 						<Route path="/signup/" element={<SignUp />} />

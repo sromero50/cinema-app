@@ -210,6 +210,82 @@ const getState = ({ getStore, getActions, setStore }) => {
 				} catch (error) {
 					console.log(error);
 				}
+			},
+			purchaseTicket: async (id_movie, id_schedule, type, hour, date, cinema, id_user, seat, snack) => {
+				const actions = getActions();
+				const store = getStore();
+				var myHeaders = new Headers();
+				myHeaders.append("Authorization", "Bearer " + localStorage.getItem("user"));
+				myHeaders.append("Content-Type", "application/json");
+
+				var code = Math.floor(Math.random() * 90000) + 10000;
+
+				var raw = JSON.stringify({
+					id_movie: id_movie,
+					id_schedule: id_schedule,
+					type: type,
+					hour: hour,
+					date: date,
+					cinema: cinema,
+					id_user: id_user,
+					code: code,
+					seat: seat
+				});
+
+				var requestOptions = {
+					method: "POST",
+					headers: myHeaders,
+					body: raw,
+					redirect: "follow"
+				};
+
+				const response = await fetch("http://192.168.1.76:3001/api/ticket", requestOptions);
+				const responseBody = await response.json();
+
+				if (responseBody) {
+					responseBody.map(item => {
+						if (item.id_user === id_user) {
+							snack.map(snack => {
+								actions.purchaseSnacks(snack.snack, snack.quantity, id_user, item.id);
+							});
+						}
+					});
+					setStore({ reload: true });
+				} else {
+					console.log(responseBody);
+					setStore({ error: responseBody });
+				}
+			},
+			purchaseSnacks: async (snack, quantity, id_user, id_ticket) => {
+				const store = getStore();
+				var myHeaders = new Headers();
+				myHeaders.append("Authorization", "Bearer " + localStorage.getItem("user"));
+				myHeaders.append("Content-Type", "application/json");
+
+				var raw = JSON.stringify({
+					snack: snack,
+					quantity: quantity,
+					id_user: id_user,
+					id_ticket: id_ticket
+				});
+
+				var requestOptions = {
+					method: "POST",
+					headers: myHeaders,
+					body: raw,
+					redirect: "follow"
+				};
+
+				const response = await fetch("http://192.168.1.76:3001/api/snack", requestOptions);
+				const responseBody = await response.json();
+
+				console.log(responseBody);
+				// if (responseBody) {
+				// 	setStore({ reload: true });
+				// } else {
+				// 	console.log(responseBody);
+				// 	setStore({ error: responseBody });
+				// }
 			}
 		}
 	};

@@ -15,9 +15,9 @@ export const SelectedMovie = props => {
 	const navigate = useNavigate();
 
 	const dataTicket = (cinema, date, hour) => {
-		navigate("/selectseat", { state: { cinema: cinema, date: date, hour: hour, movie: params.title } });
+		navigate("/selectseat", { state: { cinema: cinema, date: date, hour: hour, movie: params.title, type: type } });
 	};
-
+	console.log(type);
 	useEffect(() => {
 		store.movies.map(movie => {
 			if (movie.name === params.title) {

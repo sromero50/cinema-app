@@ -149,6 +149,7 @@ class Ticket(db.Model):
         return {
             "id": self.id,
             "id_movie": self.id_movie,
+            "id_schedule": self.id_schedule,
             "hour": self.hour,
             "date": self.date,
             "cinema": self.cinema,
@@ -169,7 +170,7 @@ class Snack(db.Model):
 
 
     def __repr__(self):
-        return '%r' % self.snack
+        return '<Snack %r>' % self.id
 
     def serialize(self):
         return {

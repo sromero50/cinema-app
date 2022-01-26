@@ -18,20 +18,20 @@ const SelectSeats = props => {
 
 	let array = [];
 
-	if (typeof store.tickets === "array") {
-		let prueba = store.schedules.map(item => {
-			if (
-				item.hour == location.state.hour &&
-				item.id_movie == idMovie &&
-				item.id_cinema == location.state.cinema
-			) {
-				let remove = item.ticket.replace('"', "");
-				remove = remove.replace(new RegExp("'", "g"), "");
-				remove = remove.split(",");
-				array = remove;
-			}
-		});
-	}
+	let prueba = store.schedules.map(item => {
+		if (
+			item.hour == location.state.hour &&
+			item.id_movie == idMovie &&
+			item.id_cinema == location.state.cinema &&
+			location.state.type == item.type
+		) {
+			console.log(item.seats);
+			let remove = item.seats.replace(new RegExp("'", "g"), "");
+			remove = remove.split(",");
+			console.log(remove);
+			array = remove;
+		}
+	});
 
 	useEffect(() => {
 		store.movies.map(movie => {
@@ -143,7 +143,8 @@ const SelectSeats = props => {
 				hour: location.state.hour,
 				movie: location.state.movie,
 				total: price,
-				seats: seats
+				seats: seats,
+				type: location.state.type
 			}
 		});
 	};
