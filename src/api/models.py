@@ -78,8 +78,10 @@ class Cinema(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     location = db.Column(db.String(120), unique=True, nullable=False)
-    latitud = db.Column(db.Float(53), unique=True, nullable=False)
-    longitud = db.Column(db.Float(53), unique=True, nullable=False)
+    address = db.Column(db.String(120), unique=True, nullable=False)
+    image = db.Column(db.String(300), unique=False, nullable=True)
+    latitude = db.Column(db.Float(53), unique=True, nullable=False)
+    longitude = db.Column(db.Float(53), unique=True, nullable=False)
     schedule = db.relationship("Schedule", backref="cinema")
     id_movie = db.Column(db.Integer, db.ForeignKey('movie.id'))
 
@@ -89,10 +91,12 @@ class Cinema(db.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "image": self.image,
             "location": self.location,
+            "address": self.address,
             "id_movie": self.id_movie,
-            "latitud": self.latitud,
-            "longitud": self.longitud
+            "latitude": self.latitude,
+            "longitude": self.longitude
            
         }
 
@@ -101,24 +105,26 @@ class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_movie = db.Column(db.Integer, db.ForeignKey('movie.id'))
     id_cinema = db.Column(db.Integer, db.ForeignKey('cinema.id'))
+    type = db.Column(db.String(80), unique=False, nullable=False)
     date = db.Column(db.String(80), unique=False, nullable=False)
     hour = db.Column(db.String(80), unique=False, nullable=False)
-    schedule = db.relationship("Ticket", backref="schedule")
+    seats = db.relationship("Ticket", backref="schedule")
 
     def __repr__(self):
         return '<Schedule %r>' % self.hour
 
     def serialize(self):
-        ticket = ','.join(str(e) for e in self.schedule)
+        seats = ','.join(str(e) for e in self.seats)
         
       
         return {
             "id": self.id,
             "id_movie": self.id_movie,
+            "type": self.type,
             "id_cinema": self.id_cinema,
             "date": self.date,
             "hour": self.hour,
-            "ticket": ticket
+            "seats": seats
 
            
         }
@@ -127,13 +133,14 @@ class Ticket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_movie = db.Column(db.Integer, db.ForeignKey('movie.id'))
     id_schedule = db.Column(db.Integer, db.ForeignKey('schedule.id'))
+    type = db.Column(db.String(80), unique=False, nullable=False)
     hour = db.Column(db.String(80), unique=False, nullable=False)
     date = db.Column(db.String(80), unique=False, nullable=False)
     cinema = db.Column(db.String(80), unique=False, nullable=False)
     id_user = db.Column(db.Integer, db.ForeignKey('user.id'))
     code = db.Column(db.String(80), unique=True, nullable=False)
     seat = db.Column(db.String(200), unique=True, nullable=False)
-    
+    ticket = db.relationship("Snack", backref="ticket")
 
     def __repr__(self):
         return '%r' % self.seat
@@ -153,13 +160,13 @@ class Ticket(db.Model):
            
         }
 
-class TicketSnack(db.Model):
+class Snack(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_user = db.Column(db.Integer, db.ForeignKey('user.id'))
     id_ticket = db.Column(db.Integer, db.ForeignKey('ticket.id'))
     snack = db.Column(db.String(80), unique=False, nullable=False)
     quantity = db.Column(db.String(80), unique=False, nullable=False)
-    
+
 
     def __repr__(self):
         return '%r' % self.snack

@@ -13,6 +13,7 @@ from wtforms.validators import DataRequired
 import mercadopago
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from flask_mail import Message
+import os
 
 api = Blueprint('api', __name__)
 
@@ -338,7 +339,7 @@ def modify_schedule(id):
 
 @api.route('/process_payment', methods=['POST'])
 def payment():
-    sdk = mercadopago.SDK("TEST-6655467624551056-011721-4581fa3c812a1cd38e4bce45db812055-232518002")
+    sdk = mercadopago.SDK(os.getenv("backMercado"))
 
     token = request.json.get("token", None)
     issuer_id = request.json.get("issuer_id", None)

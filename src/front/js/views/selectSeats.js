@@ -17,14 +17,21 @@ const SelectSeats = props => {
 	const [seats, setSeats] = useState([]);
 
 	let array = [];
-	let prueba = store.schedules.map(item => {
-		if (item.hour == location.state.hour && item.id_movie == idMovie && item.id_cinema == location.state.cinema) {
-			let remove = item.ticket.replace('"', "");
-			remove = remove.replace(new RegExp("'", "g"), "");
-			remove = remove.split(",");
-			array = remove;
-		}
-	});
+
+	if (typeof store.tickets === "array") {
+		let prueba = store.schedules.map(item => {
+			if (
+				item.hour == location.state.hour &&
+				item.id_movie == idMovie &&
+				item.id_cinema == location.state.cinema
+			) {
+				let remove = item.ticket.replace('"', "");
+				remove = remove.replace(new RegExp("'", "g"), "");
+				remove = remove.split(",");
+				array = remove;
+			}
+		});
+	}
 
 	useEffect(() => {
 		store.movies.map(movie => {

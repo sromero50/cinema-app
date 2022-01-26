@@ -11,7 +11,7 @@ const Checkout = () => {
 	const [snackPrice, setSnackPrice] = useState(location.state.snacks);
 
 	const payment = () => {
-		const mp = new MercadoPago("TEST-e284583c-2ce3-46bf-b432-2da8a2ccdd91");
+		const mp = new MercadoPago(process.env.frontMercado);
 		const cardForm = mp.cardForm({
 			amount: total.toString(),
 			autoMount: true,

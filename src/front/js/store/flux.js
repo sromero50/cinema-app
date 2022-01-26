@@ -8,6 +8,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			cinemas: [],
 			tickets: [],
 			snackList: [],
+			format: [],
 			signup: false,
 			reload: false,
 			user: localStorage.getItem("user"),
@@ -36,6 +37,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					setStore({ schedules: responseBody });
 					setStore({ dates: [...new Set(store.schedules.map(schedule => schedule.date))] });
+					setStore({ format: [...new Set(store.schedules.map(format => format.type))] });
 				} catch (error) {
 					console.log(error);
 				}

@@ -76,6 +76,7 @@
 		]
 	},
 	"dependencies": {
+		"@react-google-maps/api": "^2.7.0",
 		"bootstrap": "^5.1.1",
 		"mercadopago": "^1.5.11",
 		"prop-types": "^15.6.1",

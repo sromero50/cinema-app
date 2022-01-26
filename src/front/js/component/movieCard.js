@@ -39,7 +39,7 @@ const MovieCard = props => {
 												<img src={movies.poster} className="img-fluid" alt={movies.name} />
 											</div>
 										</a>
-										<h4 className="text-center text-light">{movies.name} </h4>
+										<h4 className="text-center text-light mt-3">{movies.name} </h4>
 									</div>
 								) : null}
 							</>
