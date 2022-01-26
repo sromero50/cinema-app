@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Context } from "../store/appContext";
-
+import SearchBar from "./searchBarj";
 export const Navbar = () => {
 	const { store, actions } = useContext(Context);
 
@@ -40,6 +40,7 @@ export const Navbar = () => {
 						</li>
 					</ul>
 					<ul className="navbar-nav m-start mb-2 mb-lg-0">
+						<SearchBar placeholder="Search" data={store.movies} />
 						<li className="nav-item">
 							<a className="nav-link" href="#">
 								<i className="fas fa-search fa-lg" />

@@ -248,8 +248,13 @@ const SelectSeats = props => {
 									<div className="col-sm-2">Not Available</div>
 									<div className="col-sm-1 seatNotAvailable" />
 								</div>
-								<button onClick={sendData} className="btn btn-block btn-warning mt-3" type="submit">
-									<a style={{ textDecoration: "none", color: "black" }} href="/snacks">
+								<button
+									onClick={sendData}
+									className="btn btn-block btn-warning mt-3 col-md-6"
+									type="submit">
+									<a
+										style={{ textDecoration: "none", color: "black", fontSize: "20px" }}
+										href="/snacks">
 										Confirm
 									</a>
 								</button>
