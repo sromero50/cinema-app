@@ -46,10 +46,10 @@ const InfoBuy = props => {
 		<>
 			<div className="border border-dark rounded movie my-2 mx-1 p-4 row">
 				<div className="col-md-7">
-					<h2>Movie: {movie}</h2>
-					<h2>Time: {hour}</h2>
-					<h2>Date: {date}</h2>
-					<h2>
+					<h3 className="border rounded border-warning p-2 movie">Movie: {movie}</h3>
+					<h3 className="border rounded border-warning p-2 movie">Time: {hour}</h3>
+					<h3 className="border rounded border-warning p-2 movie">Date: {date}</h3>
+					<h3 className="border rounded border-warning p-2 movie">
 						Cinema:{" "}
 						{store.cinemas.map(item => {
 							return (
@@ -58,10 +58,10 @@ const InfoBuy = props => {
 								</React.Fragment>
 							);
 						})}
-					</h2>
+					</h3>
 					{store.snackList.map(product => {
 						return (
-							<h2 key={product.id}>
+							<h3 key={product.id} className="border rounded border-warning p-2 movie">
 								{product.snack}: {product.quantity}{" "}
 								<button
 									style={{ color: "white", background: "none", border: "none" }}
@@ -75,11 +75,11 @@ const InfoBuy = props => {
 									}}
 									className="fas fa-minus"
 								/>
-							</h2>
+							</h3>
 						);
 					})}
-					<h2>Tickets: ${priceTicket} </h2>
-					<h2>Total: ${total} </h2>
+					<h3 className="border rounded border-warning p-2 movie">Tickets: ${priceTicket} </h3>
+					<h2 className="border rounded border-warning p-2 movie">Total: ${total} </h2>
 				</div>
 				<div className="col-md-5 m-auto">
 					{store.movies.map(poster => {
@@ -98,7 +98,7 @@ const InfoBuy = props => {
 			</div>
 			<button
 				onClick={sendData}
-				className="btn movie btn-warning col-sm-12 border w-100 rounded border-warning mt-3 fw-bold"
+				className="btn movie hoverButton btn-warning col-sm-12 border w-100 rounded border-warning mt-3 fw-bold"
 				type="submit">
 				Confirm
 			</button>

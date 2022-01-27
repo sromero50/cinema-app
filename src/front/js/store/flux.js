@@ -35,8 +35,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch("http://192.168.1.76:3001/api/schedule");
 					const responseBody = await response.json();
 
-					setStore({ schedules: responseBody });
-					setStore({ dates: [...new Set(store.schedules.map(schedule => schedule.date))] });
+					const scheduleOrder = responseBody.sort((a, b) => parseFloat(a.hour) - parseFloat(b.hour));
+					setStore({ schedules: scheduleOrder });
+					let dates = [...new Set(store.schedules.map(schedule => schedule.date))];
+					dates = dates.sort((a, b) => parseFloat(a) - parseFloat(b));
+					setStore({ dates: dates });
 					setStore({ format: [...new Set(store.schedules.map(format => format.type))] });
 				} catch (error) {
 					console.log(error);
@@ -241,9 +244,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				const response = await fetch("http://192.168.1.76:3001/api/ticket", requestOptions);
 				const responseBody = await response.json();
-
-				if (responseBody) {
-					responseBody.map(item => {
+				const snacks = responseBody;
+				if (snacks) {
+					snacks.map(item => {
 						if (item.id_user === id_user) {
 							snack.map(snack => {
 								actions.purchaseSnacks(snack.snack, snack.quantity, id_user, item.id);

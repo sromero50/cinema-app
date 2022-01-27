@@ -11,7 +11,7 @@ const SelectSeats = props => {
 	const location = useLocation();
 
 	const [quantity, setQuantity] = useState(0);
-	const [price, setPrice] = useState(20);
+	const [price, setPrice] = useState(location.state.type == "2D" ? 20 : 30);
 	const [idMovie, setIdMovie] = useState("");
 
 	const [seats, setSeats] = useState([]);
@@ -108,7 +108,7 @@ const SelectSeats = props => {
 			} else if (quantity < 0) {
 				setQuantity(0);
 			}
-			setPrice(20 * quantity);
+			setPrice((location.state.type == "2D" ? 20 : 30) * quantity);
 		},
 		[quantity]
 	);
@@ -135,18 +135,22 @@ const SelectSeats = props => {
 	}
 
 	const sendData = () => {
-		navigate("/snacks", {
-			state: {
-				total: price,
-				cinema: location.state.cinema,
-				date: location.state.date,
-				hour: location.state.hour,
-				movie: location.state.movie,
-				total: price,
-				seats: seats,
-				type: location.state.type
-			}
-		});
+		if (seats.length > 0) {
+			navigate("/snacks", {
+				state: {
+					total: price,
+					cinema: location.state.cinema,
+					date: location.state.date,
+					hour: location.state.hour,
+					movie: location.state.movie,
+					total: price,
+					seats: seats,
+					type: location.state.type
+				}
+			});
+		} else {
+			alert("you need to select a seat");
+		}
 	};
 
 	return (
@@ -156,9 +160,20 @@ const SelectSeats = props => {
 					<div className="bg-dark border rounded border-dark row">
 						<div className="col-md-5 text-light">
 							<div className=" border border-dark rounded movie my-2 mx-1 p-4" style={{ height: "95%" }}>
-								<i className="fas fa-ticket-alt fa-4x my-2 text-warning" />
-								<h2 className="my-2">Ticket price: $20</h2>
-								<div className="row">
+								<div className="text-center bg-warning  text-dark movie border border-dark rounded">
+									<div className="d-inline">
+										<i className="fas fa-ticket-alt fa-4x " />
+									</div>
+
+									<h1 className="p-3 d-inline">Ticket</h1>
+								</div>
+								<h2 className="my-2 border border-warning rounded bg-dark p-3 movie">
+									Format: {location.state.type}
+								</h2>
+								<h2 className="my-2 border border-warning rounded bg-dark p-3 movie">
+									Ticket price: {location.state.type == "2D" ? "$20" : "$30"}
+								</h2>
+								<div className="my-2 border border-warning rounded bg-dark p-3 movie">
 									<h2 className="col-md my-1">Seats: {seats.map(item => item + " ")} </h2>
 								</div>
 							</div>
@@ -166,10 +181,16 @@ const SelectSeats = props => {
 						<div className="col-md-7 text-light">
 							<div className="border border-dark rounded movie my-2 mx-1 p-4 row">
 								<div className="col-md-7">
-									<h2>Movie: {location.state.movie} </h2>
-									<h2>Time: {location.state.hour} </h2>
-									<h2>Date: {location.state.date}</h2>
-									<h2>
+									<h2 className=" border rounded border-warning p-2 movie">
+										Movie: {location.state.movie}{" "}
+									</h2>
+									<h2 className=" border rounded border-warning p-2 movie">
+										Time: {location.state.hour}{" "}
+									</h2>
+									<h2 className=" border rounded border-warning p-2 movie">
+										Date: {location.state.date}
+									</h2>
+									<h2 className=" border rounded border-warning p-2 movie">
 										Cinema:{" "}
 										{store.cinemas.map(cinema => {
 											return (
@@ -179,7 +200,7 @@ const SelectSeats = props => {
 											);
 										})}
 									</h2>
-									<h2>Total: ${price} </h2>
+									<h2 className=" border rounded border-warning p-2 movie">Total: ${price} </h2>
 								</div>
 								<div className="col-md-4 m-auto">
 									{store.movies.map(poster => {
@@ -249,14 +270,11 @@ const SelectSeats = props => {
 									<div className="col-sm-1 seatNotAvailable" />
 								</div>
 								<button
+									style={{ fontSize: "20px" }}
 									onClick={sendData}
-									className="btn btn-block btn-warning mt-3 col-md-6"
+									className="btn btn-block btn-warning mt-3 col-md-6 fw-bold hoverButton"
 									type="submit">
-									<a
-										style={{ textDecoration: "none", color: "black", fontSize: "20px" }}
-										href="/snacks">
-										Confirm
-									</a>
+									Confirm
 								</button>
 							</div>
 						</div>

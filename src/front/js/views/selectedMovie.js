@@ -42,16 +42,26 @@ export const SelectedMovie = props => {
 										/>
 									</div>
 									<div className="col-sm">
-										<div className="mt-4 text-light movie">
-											<h2 className="text-center movie bg-warning my-1 border rounded border-dark text-dark p-2 fw-bold">
+										<div className="mt-4 text-light movie border rounded border-dark">
+											<h2 className="text-center movie bg-warning mt-1 border rounded border-dark text-dark p-2 fw-bold">
 												{movie.name}
 											</h2>
-											<div className="p-2 border rounded border-dark my-3">
-												<h3 className="my-2">Synopsis: {movie.synopsis}</h3>
-												<h3 className="my-5">Genre: {movie.genre}</h3>
-												<h3 className="my-5">Release Date: {movie.release_date}</h3>
-												<h6 className="my-5">Duration: {movie.duration} mins</h6>
-												<h6 className="my-5">Director: {movie.director}</h6>
+											<div className="p-2 border rounded border-dark my-1">
+												<h3 className="my-2 border rounded border-warning p-3 movie">
+													Synopsis: {movie.synopsis}
+												</h3>
+												<h3 className="my-2 border rounded border-warning p-3 movie">
+													Genre: {movie.genre}
+												</h3>
+												<h3 className="my-2 border rounded border-warning p-3 movie">
+													Release Date: {movie.release_date}
+												</h3>
+												<p className="my-1 border rounded border-warning px-3 movie">
+													Duration: {movie.duration} mins
+												</p>
+												<p className="my-1 border rounded border-warning px-3 movie">
+													Director: {movie.director}
+												</p>
 											</div>
 										</div>
 									</div>
@@ -64,7 +74,7 @@ export const SelectedMovie = props => {
 					<div>
 						<select
 							style={{ fontSize: "25px" }}
-							className="text-center form-select my-1 col-md fw-bold bg-warning text-dark border border-dark movie"
+							className="text-center hoverButton form-select my-1 col-md fw-bold bg-warning text-dark border border-dark movie"
 							onChange={e => setCinema(e.target.value)}
 							aria-label="Default select example">
 							<option defaultValue>Cinema</option>
@@ -82,7 +92,7 @@ export const SelectedMovie = props => {
 						</select>
 						<select
 							style={{ fontSize: "25px" }}
-							className="text-center form-select my-2 col-md fw-bold bg-warning text-dark border border-dark movie"
+							className="text-center hoverButton form-select my-2 col-md fw-bold bg-warning text-dark border border-dark movie"
 							onChange={e => setType(e.target.value)}
 							aria-label="Default select example">
 							<option defaultValue>Format</option>
@@ -107,7 +117,7 @@ export const SelectedMovie = props => {
 										<button
 											style={{ fontSize: "20px" }}
 											key={date}
-											className="border movie rounded border-warning btn btn-warning mx-2 my-2 col-md-2 fw-bold"
+											className="border hoverButton movie rounded border-warning btn btn-warning mx-2 my-2 col-md-2 fw-bold"
 											onClick={e => {
 												setShowtime(true);
 												if (showtime == true) {
@@ -166,7 +176,7 @@ export const SelectedMovie = props => {
 							<button
 								style={{ fontSize: "20px" }}
 								onClick={() => dataTicket(cinema, date, hour)}
-								className="my-2 movie btn btn-warning col-md-4 fw-bold">
+								className="my-2 hoverButton movie btn btn-warning col-md-4 fw-bold">
 								<a style={{ textDecoration: "none", color: "black" }}>Select</a>
 							</button>
 						</div>

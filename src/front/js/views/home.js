@@ -9,7 +9,7 @@ export const Home = () => {
 		<div className="container user-select-none">
 			<Carousel />
 			<div className="text-light mt-3 mb-2 d-flex align-items-baseline">
-				<h1 className="me-auto">Movies</h1>
+				<h1 className="me-auto ">Movies</h1>
 				<ul className="list-group list-group-horizontal">
 					<li className="list-group">
 						<button

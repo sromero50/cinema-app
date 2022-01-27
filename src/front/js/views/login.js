@@ -88,11 +88,11 @@ const Login = () => {
 							</div>
 							<a
 								href="/recoverpassword"
-								className="text-light col-md-4"
+								className="text-warning col-md-4"
 								style={{ textDecoration: "none" }}>
 								Forgot your password?
 							</a>
-							<button style={{ fontSize: "20px" }} className="btn btn-warning mt-4 fw-bold">
+							<button style={{ fontSize: "20px" }} className="btn hoverButton btn-warning mt-4 fw-bold">
 								Enter
 							</button>
 							<div className="text-center mt-4">

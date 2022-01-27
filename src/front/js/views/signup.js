@@ -142,7 +142,7 @@ const SignUp = () => {
 											/>
 										</div>
 									</div>
-									<button className="btn btn-warning mt-4 ms-3" type="submit">
+									<button className="btn hoverButton fw-bold btn-warning mt-4 ms-3" type="submit">
 										Create account
 									</button>
 									<div className="text-center mt-4">

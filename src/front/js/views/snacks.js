@@ -14,7 +14,7 @@ const Snacks = () => {
 			{store.login && (
 				<div className="container bg-dark border border-dark rounded movie mt-4">
 					<div className="text-light text-center row m-auto p-2">
-						<div className="col-md-6 mx-1 my-4 p-2 border border-dark movie row mb-4">
+						<div className="col-md-6 mx-1 my-4 p-2 border rounded border-dark movie row mb-4">
 							<Popcorns />
 							<Drinks />
 						</div>

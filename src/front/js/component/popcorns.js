@@ -7,12 +7,12 @@ const Popcorns = () => {
 
 	return (
 		<>
-			<h2 className="bg-warning text-dark mt-5 border rounded border-warning">Popcorn</h2>
+			<h2 className="bg-warning text-dark border rounded border-warning">Popcorn</h2>
 			<div className="row m-auto">
 				<div className="col-md-6 bg-dark my-2">
 					<div className="border movie rounded border-dark">
 						<img src={popbig} className="img-fluid" alt="big popcorn" />
-						<div className="bg-warning text-dark hoverSnack p-1">
+						<div className="bg-warning text-dark hoverButton p-1">
 							<button type="button" style={{ width: "100%", background: "none", border: "none" }}>
 								<h2 id="Big size Popcorn" onClick={e => actions.addSnackToList(e.target.id, 1, 15)}>
 									Big size
@@ -25,7 +25,7 @@ const Popcorns = () => {
 				<div className="col-md-6 bg-dark my-2">
 					<div className="border movie rounded border-dark">
 						<img src={popsmall} className="img-fluid" alt="big popcorn" />
-						<div className="bg-warning text-dark hoverSnack p-1">
+						<div className="bg-warning text-dark hoverButton p-1">
 							<button style={{ width: "100%", background: "none", border: "none" }}>
 								<h2
 									className="card-title"

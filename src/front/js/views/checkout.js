@@ -1,17 +1,20 @@
 import React, { useState, useContext, useEffect } from "react";
-import InfoBuy from "../component/infoBuy";
-import { useLocation } from "react-router-dom";
+import LoadingButton from "../component/loadingButton";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import InputForm from "../component/inputForm";
-import { Navigate } from "react-router-dom";
+
 const Checkout = () => {
 	const location = useLocation();
+	const navigate = useNavigate();
+
 	const [total, setTotal] = useState(location.state.total);
 	const { store, actions } = useContext(Context);
 	const [priceTicket, setPriceTicket] = useState(location.state.ticket);
 	const [snackPrice, setSnackPrice] = useState(location.state.snacks);
 
 	const [status, setStatus] = useState();
+	const [loading, setLoading] = useState(false);
 
 	const [id_movie, setId_movie] = useState();
 	const [id_schedule, setId_schedule] = useState();
@@ -84,44 +87,52 @@ const Checkout = () => {
 				},
 				onSubmit: async event => {
 					event.preventDefault();
+					setLoading(true);
+					try {
+						const {
+							paymentMethodId: payment_method_id,
+							issuerId: issuer_id,
+							cardholderEmail: email,
+							amount,
+							token,
+							installments,
+							identificationNumber,
+							identificationType
+						} = cardForm.getCardFormData();
 
-					const {
-						paymentMethodId: payment_method_id,
-						issuerId: issuer_id,
-						cardholderEmail: email,
-						amount,
-						token,
-						installments,
-						identificationNumber,
-						identificationType
-					} = cardForm.getCardFormData();
+						var myHeaders = new Headers();
+						myHeaders.append("Content-Type", "application/json");
 
-					var myHeaders = new Headers();
-					myHeaders.append("Content-Type", "application/json");
-
-					var raw = JSON.stringify({
-						token,
-						issuer_id,
-						payment_method_id,
-						transaction_amount: Number(amount),
-						installments: Number(installments),
-						description: "Cinema " + location.state.movie,
-						payer: {
-							email,
-							identification: {
-								type: identificationType,
-								number: identificationNumber
+						var raw = JSON.stringify({
+							token,
+							issuer_id,
+							payment_method_id,
+							transaction_amount: Number(amount),
+							installments: Number(installments),
+							description: "Cinema " + location.state.movie,
+							payer: {
+								email,
+								identification: {
+									type: identificationType,
+									number: identificationNumber
+								}
 							}
+						});
+						var requestOptions = {
+							method: "POST",
+							headers: myHeaders,
+							body: raw
+						};
+						const response = await fetch("http://192.168.1.76:3001/api/process_payment", requestOptions);
+						const responseBody = await response.json();
+						if (responseBody.status_detail == "accredited") {
+							setLoading(false);
 						}
-					});
-					var requestOptions = {
-						method: "POST",
-						headers: myHeaders,
-						body: raw
-					};
-					const response = await fetch("http://192.168.1.76:3001/api/process_payment", requestOptions);
-					const responseBody = await response.json();
-					setStatus(responseBody.status_detail);
+						setStatus(responseBody.status_detail);
+					} catch (error) {
+						setLoading(false);
+						console.log(error);
+					}
 				}
 			}
 		});
@@ -151,6 +162,19 @@ const Checkout = () => {
 		},
 		[status]
 	);
+	const confirm = () => {
+		navigate("/confirmation", {
+			state: {
+				snacks: location.state.snackList,
+				cinema: location.state.cinema,
+				date: location.state.date,
+				hour: location.state.hour,
+				movie: location.state.movie,
+				seats: location.state.seats,
+				type: location.state.type
+			}
+		});
+	};
 
 	return (
 		<>
@@ -160,7 +184,7 @@ const Checkout = () => {
 						<div className="text-light row">
 							<div className="col-md mt-2 mx-1 row">
 								<div className="card p-3 bg-dark text-light movie">
-									<div className="bg-warning rounded border border-warning mb-2">
+									<div className="bg-warning rounded border border-dark movie mb-2">
 										<h1 className="text-dark my-2 text-center display-5">Confirm purchase</h1>
 									</div>
 
@@ -245,10 +269,16 @@ const Checkout = () => {
 							<div className="col-md text-light mt-2 mx-1 bg-dark">
 								<div className="row border border-dark rounded movie my-2 mx-1 p-4 ">
 									<div className="col-md-7">
-										<h2 className="my-2">Movie: {location.state.movie}</h2>
-										<h2 className="my-2">Time: {location.state.hour} </h2>
-										<h2 className="my-2">Date: {location.state.date}</h2>
-										<h2 className="my-2">
+										<h3 className="my-2 border rounded border-warning p-2 movie">
+											Movie: {location.state.movie}
+										</h3>
+										<h3 className="my-2 border rounded border-warning p-2 movie">
+											Time: {location.state.hour}{" "}
+										</h3>
+										<h3 className="my-2 border rounded border-warning p-2 movie">
+											Date: {location.state.date}
+										</h3>
+										<h3 className="my-2 border rounded border-warning p-2 movie">
 											Cinema:{" "}
 											{store.cinemas.map(cinema => {
 												return (
@@ -257,10 +287,19 @@ const Checkout = () => {
 													</React.Fragment>
 												);
 											})}
-										</h2>
-										<h2 className="my-2">Tickets: ${priceTicket} </h2>
-										<h2 className="my-2">Snacks: ${snackPrice} </h2>
-										<h2 className="my-2">Total: ${total} </h2>
+										</h3>
+										<h3 className="my-2 border rounded border-warning p-2 movie">
+											Tickets: ${priceTicket}{" "}
+										</h3>
+										{snackPrice == 0 ? null : (
+											<h3 className="my-2 border rounded border-warning p-2 movie">
+												Snacks: ${snackPrice}{" "}
+											</h3>
+										)}
+
+										<h3 className="my-2 border rounded border-warning p-2 movie">
+											Total: ${total}{" "}
+										</h3>
 									</div>
 									<div className="col-md-5 m-auto">
 										{store.movies.map(poster => {
@@ -277,21 +316,19 @@ const Checkout = () => {
 										})}
 									</div>
 								</div>
-
-								<button
-									onClick={payment}
-									// onClick={() => setStatus("accredited")}
-									id="form-checkout__submit"
-									className="btn movie col-md-12 btn-warning w-100 mt-3 fw-bold"
-									type="submit">
-									Confirm
-								</button>
+								<LoadingButton
+									disabled={loading}
+									action={payment}
+									loading={loading}
+									text={"Confirm"}
+									style={"btn hoverButton movie col-md-12 btn-warning w-100 mt-3 fw-bold"}
+								/>
 							</div>
 						</div>
 					</form>
 				</div>
 			)}
-			{store.reload && <Navigate to="/confirmation/" />}
+			{store.reload && confirm()}
 		</>
 	);
 };
