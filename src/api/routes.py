@@ -13,7 +13,10 @@ from wtforms.validators import DataRequired
 import mercadopago
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from flask_mail import Message
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
+
+
 
 api = Blueprint('api', __name__)
 
@@ -21,24 +24,23 @@ s = URLSafeTimedSerializer('cinema')
 
 @api.route("/user/login", methods=["POST"])
 def login():
-    email = request.json.get("email", None)
-    password = request.json.get("password", None)
-    user = User.query.filter_by(email=email, password=password).first()
-    
-    admin   = Administrator.query.filter_by(email=email, password=password).first()
-    if user is None:
-        if admin is None:
-            return jsonify({"msg": "Wrong email or password"}), 401
+    body = request.get_json()
+    user = User.query.filter_by(email=body['email']).first()
+    password = body['password']
+    hashed = user.password
 
+    if check_password_hash(hashed, password) != True:
+        return jsonify({"msg": "wrong password"}), 401
+
+
+    if user is None:
+        return jsonify({"msg": "Wrong email or password"}), 401
+    
     if user.is_active == True:
         access_token = create_access_token(identity=user.id)
         return jsonify({ "token": access_token, "user_id": user.id, "email": user.email,"rol":"user", "name":user.name  })
     else:
         return jsonify({"msg": "account not verified"})
-
-    # if admin: 
-    #      access_token = create_access_token(identity=admin.id)
-    #      return jsonify({ "token": access_token, "admin_id": admin.id, "email": admin.email,"rol":"admin" })
 
 @api.route("/recover", methods=['POST'])
 def recover_password():
@@ -71,7 +73,8 @@ def reset_password():
 
 
     if user:
-        user.password = new_password
+        hashed = generate_password_hash(new_password)
+        user.password = hashed
         db.session.commit()
         return jsonify({ "msg": "password changed"  }), 200
 
@@ -95,8 +98,10 @@ def add_new_usuario():
         raise APIException('You need to specify the phone', status_code=400)
 
 
+    password = body['password']
+    hashed = generate_password_hash(password)
 
-    user = User(name=body['name'], surname=body['surname'], email=body['email'], password=body['password'], date_of_birth=body['date_of_birth'], phone=body['phone'], is_active=body['is_active'])
+    user = User(name=body['name'], surname=body['surname'], email=body['email'], password=hashed, date_of_birth=body['date_of_birth'], phone=body['phone'], is_active=body['is_active'])
     db.session.add(user)
     db.session.commit()
 
@@ -110,9 +115,7 @@ def add_new_usuario():
     msg.html = f'<h3>Verify your account clicking <a href={link}>here</a></h3>'
     current_app.mail.send(msg)
 
-    users = User.query.all()
-    all_users = list(map(lambda x: x.serialize(), users))
-    return jsonify(all_users), 200
+    return jsonify({ "msg": "account created"  }), 200
 
 @api.route("/verify", methods=['PUT'])
 def verify_account(): 
@@ -127,6 +130,13 @@ def verify_account():
     
 
     return jsonify({ "msg": "account verified"  }), 200
+
+@api.route('/user', methods=['GET'])
+def get_users():
+    user = User.query.all()
+    all_users = list(map(lambda x: x.serialize(), user))
+
+    return jsonify(all_users), 200
 
 @api.route('/movie', methods=['GET'])
 def get_movie():

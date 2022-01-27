@@ -18,6 +18,7 @@ import Confirmation from "./views/confirmation";
 import NotFound from "./views/notFound";
 import RecoverPassword from "./views/recoverPassword";
 import ResetPassword from "./views/resetPassword";
+import Profile from "./views/profile";
 //create your first component
 const Layout = () => {
 	//the basename is used when your project is published in a subdirectory and not in the root of the domain
@@ -39,6 +40,7 @@ const Layout = () => {
 						<Route path="/login/" element={<Login />} />
 						<Route path="/verified/:token" element={<Verified />} />
 						<Route path="/signup/" element={<SignUp />} />
+						<Route path="/profile/" element={<Profile />} />
 						<Route path="/recoverpassword/" element={<RecoverPassword />} />
 						<Route path="/resetpassword/:token" element={<ResetPassword />} />
 						<Route path="*" element={<NotFound />} />

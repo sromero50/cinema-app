@@ -24,6 +24,7 @@ flask-wtf = "*"
 sqlalchemy-utils = "*"
 flask-mail = "*"
 itsdangerous = "*"
+bcrypt = "*"
 
 [requires]
 python_version = "3.9"
