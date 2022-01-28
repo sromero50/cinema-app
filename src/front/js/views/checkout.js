@@ -37,7 +37,9 @@ const Checkout = () => {
 	});
 
 	const payment = () => {
-		const mp = new MercadoPago(process.env.frontMercado);
+		const mp = new MercadoPago(process.env.frontMercado, {
+			locale: "en-US"
+		});
 		const cardForm = mp.cardForm({
 			amount: total.toString(),
 			autoMount: true,
@@ -125,6 +127,8 @@ const Checkout = () => {
 						};
 						const response = await fetch(process.env.BACKEND_URL+"/api/process_payment", requestOptions);
 						const responseBody = await response.json();
+						console.log(responseBody.status);
+						console.log(responseBody.status_detail);
 						if (responseBody.status_detail == "accredited") {
 							setLoading(false);
 						}
