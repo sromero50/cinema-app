@@ -2,14 +2,15 @@ import React, { useState, useContext } from "react";
 import FormProfile from "../component/formProfile";
 import PassProfile from "../component/passProfile";
 import PurchaseOrders from "../component/purchaseOrders";
-import NotFound from "./notFound";
+import { Navigate } from "react-router-dom";
 import { Context } from "../store/appContext";
+import Loading from "../component/loading";
 const Profile = () => {
 	const { store, actions } = useContext(Context);
 	const [change, setChange] = useState("profile");
 
 	return (
-		<>
+		<Loading active={store.user}>
 			{store.login && (
 				<div className="container bg-dark my-4 movie p-3 m-auto border rounded border-dark ">
 					<h1 className="text-dark bg-warning border text-center rounded border-dark p-2 display-5 movie">
@@ -68,8 +69,8 @@ const Profile = () => {
 					</div>
 				</div>
 			)}
-			{!store.login && <NotFound />}
-		</>
+			{!store.login && <Navigate to="/" />}
+		</Loading>
 	);
 };
 

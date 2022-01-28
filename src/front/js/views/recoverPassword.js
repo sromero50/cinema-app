@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext";
+import { Navigate } from "react-router-dom";
 import NotFound from "./notFound";
 const RecoverPassword = () => {
 	const { store, actions } = useContext(Context);
@@ -18,9 +19,9 @@ const RecoverPassword = () => {
 
 	return (
 		<>
-			{" "}
 			{store.login && <NotFound />}
-			{!store.login && (
+			{store.reload && <Navigate to="/login/" />}
+			{!store.reload && (
 				<div className="text-center p-5 container">
 					<div className="container col-md-6 bg-dark m-auto mt-3 p-3 border border-dark movie rounded">
 						<div className="">

@@ -30,11 +30,7 @@ def login():
     hashed = user.password
 
     if check_password_hash(hashed, password) != True:
-        return jsonify({"msg": "wrong password"}), 401
-
-
-    if user is None:
-        return jsonify({"msg": "Wrong email or password"}), 401
+        return jsonify({"msg": "Wrong password"}), 401
     
     if user.is_active == True:
         access_token = create_access_token(identity=user.id)
@@ -82,21 +78,11 @@ def reset_password():
 @api.route('/user/signup', methods=['POST'])
 def add_new_usuario():
     body = request.get_json()
+    exist = User.query.filter_by(email=body['email']).first()
     if body is None:
-        raise APIException("You need to specify the request body as a json object", status_code=400)
-    if 'name' not in body:
-        raise APIException('You need to specify the name', status_code=400)
-    if 'surname' not in body:
-        raise APIException('You need to specify the surname', status_code=400)
-    if 'email' not in body:
-        raise APIException('You need to specify the email', status_code=400)
-    if 'password' not in body:
-        raise APIException('You need to specify the password', status_code=400)
-    if 'date_of_birth' not in body:
-        raise APIException('You need to specify the date_of_birth', status_code=400)
-    if 'phone' not in body:
-        raise APIException('You need to specify the phone', status_code=400)
-
+        return APIException("You need to specify the request body as a json object", status_code=400)
+    if exist:
+        return jsonify({ "msg": "email alredy exists"  }), 400
 
     password = body['password']
     hashed = generate_password_hash(password)
@@ -419,9 +405,7 @@ def modify_schedule(id):
 def modify_user(id):
     body = request.get_json()
     user = User.query.get(id)
-    if user is None:
-        raise APIException('user not found', status_code=404)
-    
+
     user.name = body["name"]
     user.email= body["email"]
     user.surname = body["surname"]
@@ -430,7 +414,7 @@ def modify_user(id):
 
     db.session.commit()
     user = User.query.get(id)
-    user = list(map(lambda x: x.serialize(), user))
+    user = user.serialize()
     return user, 200
 
 @api.route('/password/<int:id>', methods=['PUT'])

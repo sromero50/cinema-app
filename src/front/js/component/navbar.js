@@ -5,7 +5,7 @@ export const Navbar = () => {
 	const { store, actions } = useContext(Context);
 
 	return (
-		<nav className="navbar navbar-expand-lg navbar-dark bg-dark ">
+		<nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
 			<div className="container">
 				<button
 					className="navbar-toggler"
@@ -28,11 +28,6 @@ export const Navbar = () => {
 								Movies
 							</a>
 						</li>
-						{/* <li className="nav-item">
-							<a className="nav-link" href="#">
-								Food & Drinks
-							</a>
-						</li> */}
 						<li className="nav-item">
 							<a className="nav-link" href="/cinemas">
 								Our Cinemas

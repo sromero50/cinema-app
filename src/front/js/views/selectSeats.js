@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { Context } from "../store/appContext";
 import GoLogin from "../component/goLogin";
 import allSeats from "../component/seats";
+import Swal from "sweetalert2";
 const SelectSeats = props => {
 	const { store, actions } = useContext(Context);
 
@@ -57,9 +58,11 @@ const SelectSeats = props => {
 		() => {
 			if (quantity == 8) {
 				setQuantity(8);
-				setAvailable(true);
-				alert("You can only buy 8 tickets per buy");
-				setAvailable(false);
+				Swal.fire({
+					icon: "error",
+					title: "Oops...",
+					text: "You can only select 8 seats"
+				});
 			} else if (quantity < 0) {
 				setQuantity(0);
 			}
@@ -101,7 +104,11 @@ const SelectSeats = props => {
 				}
 			});
 		} else {
-			alert("you need to select a seat");
+			Swal.fire({
+				icon: "error",
+				title: "Oops...",
+				text: "You need to select a seat"
+			});
 		}
 	};
 

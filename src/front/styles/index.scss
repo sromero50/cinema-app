@@ -10,8 +10,17 @@ body {
 
     padding:0;
     height:100%;
+    
   }
   
+#app{
+  height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+  .footer{
+    margin-top: auto;
+} 
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
       monospace;

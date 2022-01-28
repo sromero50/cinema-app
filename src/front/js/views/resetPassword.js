@@ -26,7 +26,7 @@ const ResetPassword = () => {
 		<>
 			{" "}
 			{store.login && <NotFound />}
-			{!store.login && (
+			{!store.reload && (
 				<div className="container col-md-6 bg-dark m-auto mt-3 p-5 border border-dark movie rounded">
 					<div className="text-center mt-2">
 						<h2 className="mb-5 bg-warning p-2 border rounded movie border-dark text-dark">

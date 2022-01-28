@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import PropTypes from "prop-types";
+import Swal from "sweetalert2";
 export const SelectedMovie = props => {
 	const { store, actions } = useContext(Context);
 
@@ -16,7 +17,11 @@ export const SelectedMovie = props => {
 
 	const dataTicket = (cinema, date, hour) => {
 		if (cinema === "" || date === "" || (hour === "") & (type === "")) {
-			alert("complete the selection");
+			Swal.fire({
+				icon: "error",
+				title: "Oops...",
+				text: "You need to complete the selection"
+			});
 		} else {
 			navigate("/selectseat", {
 				state: { cinema: cinema, date: date, hour: hour, movie: params.title, type: type }

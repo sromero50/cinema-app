@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -166,8 +167,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 					};
 					const response = await fetch("http://192.168.1.76:3001/api/user/signup", requestOptions);
 					const responseBody = await response.json();
-					if (responseBody) {
+					if (responseBody.msg === "account created") {
+						Swal.fire({
+							position: "center",
+							icon: "success",
+							title: "Account created, check your email to verify ",
+							showConfirmButton: true
+						});
 						setStore({ signup: true });
+					} else if (responseBody.msg === "email alredy exists") {
+						Swal.fire({
+							icon: "error",
+							title: "Email already in use ",
+							text: "Try a different one"
+						});
 					}
 				} catch (error) {
 					console.log("error", error);
@@ -205,7 +218,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					setStore({ user: true });
 					setStore({ login: true });
 				} else {
-					console.log(responseBody.msg);
+					Swal.fire({
+						icon: "error",
+						title: "Oops...",
+						text: responseBody.msg
+					});
 					setStore({ error: responseBody.msg });
 				}
 			},
@@ -330,7 +347,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const responseBody = await response.json();
 
 					if (responseBody.msg == "email sent") {
-						alert("email sent");
+						Swal.fire({
+							position: "top-end",
+							icon: "success",
+							title: "Email sent",
+							showConfirmButton: false,
+							timer: 1500
+						});
+						setStore({ reload: true });
 					}
 				} catch (error) {
 					console.log(error);
@@ -357,7 +381,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const responseBody = await response.json();
 
 					if (responseBody.msg == "password changed") {
+						Swal.fire({
+							position: "center",
+							icon: "success",
+							title: "Password changed",
+							showConfirmButton: false,
+							timer: 2000
+						});
 						setStore({ reload: true });
+					} else if (responseBody.msg == "wrong email") {
+						Swal.fire({
+							icon: "error",
+							title: "Oops...",
+							text: "Wrong email"
+						});
 					}
 				} catch (error) {
 					console.log(error);
@@ -391,6 +428,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log(responseBody);
 						localStorage.setItem("info", JSON.stringify(responseBody));
 						setStore({ info: [responseBody] });
+						Swal.fire({
+							position: "center",
+							icon: "success",
+							title: "Profile modified",
+							showConfirmButton: false,
+							timer: 1500
+						});
 						setStore({ reload: true });
 					}
 				} catch (error) {
@@ -421,10 +465,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const responseBody = await response.json();
 					console.log(responseBody);
 					if (responseBody.msg === "password modified") {
+						Swal.fire({
+							position: "center",
+							icon: "success",
+							title: "Password modified",
+							showConfirmButton: false,
+							timer: 1500
+						});
 						setStore({ reload: true });
 						setStore({ reload: false });
 					} else {
-						alert("wrong password");
+						Swal.fire({
+							icon: "error",
+							title: "Oops...",
+							text: "Wrong pasword"
+						});
 					}
 				} catch (error) {
 					console.log(error);

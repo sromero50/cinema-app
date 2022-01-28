@@ -11,7 +11,7 @@ const InputForm = props => {
 				<span className="input-group-text">
 					<i className={icon} />
 				</span>
-				<input type={type} className="form-control" placeholder={placeholder} name={name} id={id} />
+				<input type={type} required className="form-control" placeholder={placeholder} name={name} id={id} />
 			</div>
 		</>
 	);

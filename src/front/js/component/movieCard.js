@@ -15,8 +15,12 @@ const MovieCard = props => {
 								{filter === movies.released ? (
 									<div className="col">
 										<a href={"/movie/" + movies.name}>
-											<div className="card border border-rounded border-dark movie">
-												<img src={movies.poster} className="img-fluid" alt={movies.name} />
+											<div className="movie">
+												<img
+													src={movies.poster}
+													className="img-fluid border rounded border-dark"
+													alt={movies.name}
+												/>
 											</div>
 										</a>
 										<h4 className="text-center text-light mt-3">{movies.name} </h4>
@@ -34,11 +38,10 @@ const MovieCard = props => {
 							<React.Fragment key={movies.id}>
 								{filter === movies.released ? (
 									<div className="col">
-										<a href={"/movie/" + movies.name}>
-											<div className="card border border-rounded border-dark movie">
-												<img src={movies.poster} className="img-fluid" alt={movies.name} />
-											</div>
-										</a>
+										<div className="card border border-rounded border-dark movie">
+											<img src={movies.poster} className="img-fluid" alt={movies.name} />
+										</div>
+
 										<h4 className="text-center text-light mt-3">{movies.name} </h4>
 									</div>
 								) : null}
