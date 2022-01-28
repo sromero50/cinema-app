@@ -437,7 +437,7 @@ def modify_password(id):
 
 @api.route('/process_payment', methods=['POST'])
 def payment():
-    sdk = mercadopago.SDK(os.getEnv("backMercado"))
+    sdk = mercadopago.SDK(os.getenv("backMercado"))
 
     token = request.json.get("token", None)
     issuer_id = request.json.get("issuer_id", None)
