@@ -9,6 +9,7 @@ const Snacks = () => {
 	const [tickets, setTickets] = useState(location.state.total);
 	const { store, actions } = useContext(Context);
 
+	
 	return (
 		<>
 			{store.login && (
