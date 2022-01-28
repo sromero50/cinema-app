@@ -80,7 +80,10 @@ It is recomended to install the backend first, make sure you have Python 3.8, Pi
 ### Checkout:
 ![Imgur](https://imgur.com/Abb4f6x.jpg)
 
-## Test the checkout with these credit cards
+## Test the checkout with these credit cards and user
+
+User: test@hotmail.com
+Password: abcd
 
 |   Bank	|   Card Number	|   CSC	|   Expiration date	
 |---	|---	|---	|---	|
