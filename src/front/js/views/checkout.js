@@ -123,7 +123,7 @@ const Checkout = () => {
 							headers: myHeaders,
 							body: raw
 						};
-						const response = await fetch("http://192.168.1.76:3001/api/process_payment", requestOptions);
+						const response = await fetch(process.env.BACKEND_URL+"/api/process_payment", requestOptions);
 						const responseBody = await response.json();
 						if (responseBody.status_detail == "accredited") {
 							setLoading(false);
