@@ -25,7 +25,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getUsers: async () => {
 				const store = getStore();
 				try {
-					const response = await fetch("http://192.168.1.76:3001/api/user");
+					const response = await fetch(process.env.BACKEND_URL + "/api/user");
 					const responseBody = await response.json();
 
 					setStore({ users: responseBody });
@@ -36,7 +36,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getMovies: async () => {
 				const store = getStore();
 				try {
-					const response = await fetch("http://192.168.1.76:3001/api/movie");
+					const response = await fetch(process.env.BACKEND_URL + "/api/movie");
 					const responseBody = await response.json();
 
 					setStore({ movies: responseBody });
@@ -47,7 +47,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getSchedules: async () => {
 				const store = getStore();
 				try {
-					const response = await fetch("http://192.168.1.76:3001/api/schedule");
+					const response = await fetch(process.env.BACKEND_URL + "/api/schedule");
 					const responseBody = await response.json();
 
 					const scheduleOrder = responseBody.sort((a, b) => parseFloat(a.hour) - parseFloat(b.hour));
@@ -63,7 +63,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getCinemas: async () => {
 				const store = getStore();
 				try {
-					const response = await fetch("http://192.168.1.76:3001/api/cinema");
+					const response = await fetch(process.env.BACKEND_URL + "/api/cinema");
 					const responseBody = await response.json();
 
 					setStore({ cinemas: responseBody });
@@ -74,7 +74,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getTickets: async () => {
 				const store = getStore();
 				try {
-					const response = await fetch("http://192.168.1.76:3001/api/ticket");
+					const response = await fetch(process.env.BACKEND_URL + "/api/ticket");
 					const responseBody = await response.json();
 
 					setStore({ tickets: responseBody });
@@ -85,7 +85,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			getSnacks: async () => {
 				const store = getStore();
 				try {
-					const response = await fetch("http://192.168.1.76:3001/api/snack");
+					const response = await fetch(process.env.BACKEND_URL + "/api/snack");
 					const responseBody = await response.json();
 
 					setStore({ snacks: responseBody });
@@ -165,7 +165,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						body: raw,
 						redirect: "follow"
 					};
-					const response = await fetch("http://192.168.1.76:3001/api/user/signup", requestOptions);
+					const response = await fetch(process.env.BACKEND_URL + "/api/user/signup", requestOptions);
 					const responseBody = await response.json();
 					if (responseBody.msg === "account created") {
 						Swal.fire({
@@ -205,7 +205,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					redirect: "follow"
 				};
 
-				const response = await fetch("http://192.168.1.76:3001/api/user/login", requestOptions);
+				const response = await fetch(process.env.BACKEND_URL + "/api/user/login", requestOptions);
 				const responseBody = await response.json();
 
 				if (responseBody.token) {
@@ -249,7 +249,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						body: raw,
 						redirect: "follow"
 					};
-					const response = await fetch("http://192.168.1.76:3001/api/verify", requestOptions);
+					const response = await fetch(process.env.BACKEND_URL + "/api/verify", requestOptions);
 					const responseBody = await response.json();
 
 					if (responseBody.msg == "account verified") {
@@ -287,7 +287,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					redirect: "follow"
 				};
 
-				const response = await fetch("http://192.168.1.76:3001/api/ticket", requestOptions);
+				const response = await fetch(process.env.BACKEND_URL + "/api/ticket", requestOptions);
 				const responseBody = await response.json();
 				console.log(responseBody);
 				if (responseBody) {
@@ -325,7 +325,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					redirect: "follow"
 				};
 
-				const response = await fetch("http://192.168.1.76:3001/api/snack", requestOptions);
+				const response = await fetch(process.env.BACKEND_URL + "/api/snack", requestOptions);
 				const responseBody = await response.json();
 			},
 			recoverPassword: async email => {
@@ -343,7 +343,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						body: raw,
 						redirect: "follow"
 					};
-					const response = await fetch("http://192.168.1.76:3001/api/recover", requestOptions);
+					const response = await fetch(process.env.BACKEND_URL + "/api/recover", requestOptions);
 					const responseBody = await response.json();
 
 					if (responseBody.msg == "email sent") {
@@ -377,7 +377,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						body: raw,
 						redirect: "follow"
 					};
-					const response = await fetch("http://192.168.1.76:3001/api/resetpassword", requestOptions);
+					const response = await fetch(process.env.BACKEND_URL + "/api/resetpassword", requestOptions);
 					const responseBody = await response.json();
 
 					if (responseBody.msg == "password changed") {
@@ -421,7 +421,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						body: raw,
 						redirect: "follow"
 					};
-					const response = await fetch("http://192.168.1.76:3001/api/user/" + store.userID, requestOptions);
+					const response = await fetch(process.env.BACKEND_URL + "/api/user/" + store.userID, requestOptions);
 					const responseBody = await response.json();
 
 					if (responseBody) {
@@ -459,7 +459,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						redirect: "follow"
 					};
 					const response = await fetch(
-						"http://192.168.1.76:3001/api/password/" + store.userID,
+						process.env.BACKEND_URL + "/api/password/" + store.userID,
 						requestOptions
 					);
 					const responseBody = await response.json();
