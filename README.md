@@ -59,45 +59,6 @@ It is recomended to install the backend first, make sure you have Python 3.8, Pi
 ### Home:
 ![Imgur](https://imgur.com/JYmLwD5.gif)
 
-***Email: user-test-4geeks@hotmail.com***
-***Password: usuario***
-
-### Cinemas:
-![Imgur](https://imgur.com/pTP3bo8.gif)
-![Imgur](https://imgur.com/igrgUVu.gif)
-
-***Email: empresa-test-4geeks@hotmail.com***
-***Password: empresa***
-
-### Movie:
-![Imgur](https://imgur.com/kAyJLUG.gif)
-
-***Email: 	admin-test-4geeks@hotmail.com***
-***Password: admin***
-
-### Seats:
-![Imgur](https://imgur.com/kAyJLUG.gif)
-
-***Email: 	admin-test-4geeks@hotmail.com***
-***Password: admin***
-
-### Checkout:
-![Imgur](https://imgur.com/kAyJLUG.gif)
-
-***Email: 	admin-test-4geeks@hotmail.com***
-***Password: admin***
-
-### Confirmation:
-![Imgur](https://imgur.com/kAyJLUG.gif)
-
-***Email: 	admin-test-4geeks@hotmail.com***
-***Password: admin***
-
-### Profile:
-![Imgur](https://imgur.com/kAyJLUG.gif)
-
-***Email: 	admin-test-4geeks@hotmail.com***
-***Password: admin***
 
 ### Heroku:
 ### [Click Here]
