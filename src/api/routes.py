@@ -49,7 +49,7 @@ def recover_password():
     
     if user:
         tokenUser = s.dumps([email], salt='emailconfirm')
-        link = f"http://localhost:3000/resetpassword/{tokenUser}"
+        link = f"https://cinema-app-2022-sromero.herokuapp.com/resetpassword/{tokenUser}"
         msg = Message()
         msg.subject = "Recover your password"
         msg.recipients = [email]
@@ -93,7 +93,7 @@ def add_new_usuario():
 
     
     tokenUser = s.dumps(body['email'], salt='emailconfirm')
-    link = f"http://localhost:3000/verified/{tokenUser}"
+    link = f"https://cinema-app-2022-sromero.herokuapp.com/verified/{tokenUser}"
     msg = Message()
     msg.subject = "Verify your account"
     msg.recipients = body['email'].split()

@@ -326,6 +326,36 @@ const Checkout = () => {
 								/>
 							</div>
 						</div>
+						<div className="p-3 my-3 border border-success rounded col-md-6 text-light">
+							<h3>Use this credit cards to test</h3>
+							<div
+								className="
+								row">
+								<div className="col-md border border-secondary">
+									<h5>Card Number: 5031 7557 3453 0604</h5>
+									<h5>Security code: 123</h5>
+									<h5>Expiration date: 11/25</h5>
+								</div>
+							</div>
+							<div
+								className="
+								row">
+								<div className="col-md border border-secondary">
+									<h5>Card Number: 4509 9535 6623 3704</h5>
+									<h5>Security code: 123</h5>
+									<h5>Expiration date: 11/25</h5>
+								</div>
+							</div>
+							<div
+								className="
+								row">
+								<div className="col-md border border-secondary">
+									<h5>Card Number: 3711 803032 57522</h5>
+									<h5>Security code: 1234 </h5>
+									<h5>Expiration date: 11/25</h5>
+								</div>
+							</div>
+						</div>
 					</form>
 				</div>
 			)}
