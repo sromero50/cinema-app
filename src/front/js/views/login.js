@@ -61,6 +61,7 @@ const Login = () => {
 									<i className="fa fa-envelope fa-sm" />
 								</span>
 								<input
+									required
 									onChange={handleChange}
 									name="email"
 									type="text"
@@ -76,6 +77,7 @@ const Login = () => {
 									<i className="fas fa-lock fa-md" />
 								</span>
 								<input
+									required
 									onChange={handleChange}
 									name="password"
 									type={hide ? "text" : "password"}

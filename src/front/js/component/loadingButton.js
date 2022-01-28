@@ -13,7 +13,7 @@ const LoadingButton = props => {
 
 export default LoadingButton;
 LoadingButton.propTypes = {
-	action: PropTypes.string,
+	action: PropTypes.func,
 	loading: PropTypes.bool,
 	style: PropTypes.string,
 	text: PropTypes.string

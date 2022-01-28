@@ -41,6 +41,7 @@ const SignUp = () => {
 									</label>
 									<div className="form-input mb-3">
 										<input
+											required
 											onChange={handleChange}
 											name="name"
 											type="text"
@@ -55,6 +56,7 @@ const SignUp = () => {
 									</label>
 									<div className="form-input mb-3">
 										<input
+											required
 											onChange={handleChange}
 											name="surname"
 											type="text"
@@ -72,9 +74,10 @@ const SignUp = () => {
 									<i className="fa fa-envelope fa-sm" />
 								</span>
 								<input
+									required
 									onChange={handleChange}
 									name="email"
-									type="text"
+									type="email"
 									className="form-control"
 									placeholder="Email address"
 								/>
@@ -89,7 +92,8 @@ const SignUp = () => {
 											<i className="fas fa-lock fa-md" />
 										</span>
 										<input
-											type="text"
+											required
+											type="password"
 											onChange={handleChange}
 											name="password"
 											className="form-control"
@@ -106,7 +110,8 @@ const SignUp = () => {
 											<i className="fas fa-lock fa-md" />
 										</span>
 										<input
-											type="text"
+											required
+											type="password"
 											onChange={handleChange}
 											name="confirmPassword"
 											className="form-control"
@@ -121,6 +126,7 @@ const SignUp = () => {
 										</label>
 										<div className="form-input mb-3">
 											<input
+												required
 												type="date"
 												onChange={handleChange}
 												name="date_of_birth"
@@ -128,12 +134,16 @@ const SignUp = () => {
 											/>
 										</div>
 									</div>
-									<div className="col-md ms-4">
+									<div className="col-md ms-3">
 										<label className="form-label mt-3">
 											<h4>Phone Number</h4>
 										</label>
-										<div className="form-input mb-3">
+										<div className="form-input  input-group mb-3">
+											<span className="input-group-text">
+												<i className="fas fa-phone" />
+											</span>
 											<input
+												required
 												type="number"
 												onChange={handleChange}
 												name="phone"

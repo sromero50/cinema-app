@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Context } from "../store/appContext";
 import GoLogin from "../component/goLogin";
-
+import allSeats from "../component/seats";
 const SelectSeats = props => {
 	const { store, actions } = useContext(Context);
 
@@ -16,20 +16,18 @@ const SelectSeats = props => {
 
 	const [seats, setSeats] = useState([]);
 
-	let array = [];
+	let seatsFiltered = [];
 
-	let prueba = store.schedules.map(item => {
+	const filterSeats = store.schedules.map(item => {
 		if (
 			item.hour == location.state.hour &&
 			item.id_movie == idMovie &&
 			item.id_cinema == location.state.cinema &&
 			location.state.type == item.type
 		) {
-			console.log(item.seats);
 			let remove = item.seats.replace(new RegExp("'", "g"), "");
 			remove = remove.split(",");
-			console.log(remove);
-			array = remove;
+			seatsFiltered = remove;
 		}
 	});
 
@@ -41,60 +39,17 @@ const SelectSeats = props => {
 		});
 	});
 
-	const test = [
-		{ seat: "1A", available: true },
-		{ seat: "2A", available: true },
-		{ seat: "3A", available: true },
-		{ seat: "4A", available: true },
-		{ seat: "5A", available: true },
-		{ seat: "6A", available: true },
-		{ seat: "7A", available: true },
-		{ seat: "8A", available: true },
-		{ seat: "1B", available: true },
-		{ seat: "2B", available: true },
-		{ seat: "3B", available: true },
-		{ seat: "4B", available: true },
-		{ seat: "5B", available: true },
-		{ seat: "6B", available: true },
-		{ seat: "7B", available: true },
-		{ seat: "8B", available: true },
-		{ seat: "1C", available: true },
-		{ seat: "2C", available: true },
-		{ seat: "3C", available: true },
-		{ seat: "4C", available: true },
-		{ seat: "5C", available: true },
-		{ seat: "6C", available: true },
-		{ seat: "7C", available: true },
-		{ seat: "8C", available: true },
-		{ seat: "1D", available: true },
-		{ seat: "2D", available: true },
-		{ seat: "3D", available: true },
-		{ seat: "4D", available: true },
-		{ seat: "5D", available: true },
-		{ seat: "6D", available: true },
-		{ seat: "7D", available: true },
-		{ seat: "8D", available: true },
-		{ seat: "1E", available: true },
-		{ seat: "2E", available: true },
-		{ seat: "3E", available: true },
-		{ seat: "4E", available: true },
-		{ seat: "5E", available: true },
-		{ seat: "6E", available: true },
-		{ seat: "7E", available: true },
-		{ seat: "8E", available: true }
-	];
-
-	array.forEach(occupied => {
-		test.forEach(a => {
+	seatsFiltered.forEach(occupied => {
+		allSeats.forEach(a => {
 			if (occupied == a.seat) {
 				a.available = false;
 			}
 		});
 	});
 
-	const result = test
+	const result = allSeats
 		.map((x, i) => {
-			return i % 8 === 0 ? test.slice(i, i + 8) : null;
+			return i % 8 === 0 ? allSeats.slice(i, i + 8) : null;
 		})
 		.filter(x => x != null);
 
@@ -117,12 +72,10 @@ const SelectSeats = props => {
 		if (e.target.checked == true) {
 			setQuantity(quantity + 1);
 			setSeats([...seats, e.target.value]);
-			console.log(seats);
 		} else if (e.target.checked == false) {
 			setQuantity(quantity - 1);
 			const newList = seats.filter(item => item !== e.target.value);
 			setSeats(newList);
-			console.log(seats);
 		}
 	};
 
@@ -130,7 +83,6 @@ const SelectSeats = props => {
 		e.preventDefault();
 		const formData = new FormData(e.target);
 		const formProps = Object.fromEntries(formData);
-		console.log(formProps);
 		localStorage.setItem("total", price);
 	}
 

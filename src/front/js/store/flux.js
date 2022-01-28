@@ -7,8 +7,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 			schedules: [],
 			cinemas: [],
 			tickets: [],
+			snacks: [],
 			snackList: [],
+			users: [],
 			format: [],
+			userID: localStorage.getItem("id"),
 			signup: false,
 			reload: false,
 			user: localStorage.getItem("user"),
@@ -18,6 +21,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 			error: ""
 		},
 		actions: {
+			getUsers: async () => {
+				const store = getStore();
+				try {
+					const response = await fetch("http://192.168.1.76:3001/api/user");
+					const responseBody = await response.json();
+
+					setStore({ users: responseBody });
+				} catch (error) {
+					console.log(error);
+				}
+			},
 			getMovies: async () => {
 				const store = getStore();
 				try {
@@ -63,6 +77,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const responseBody = await response.json();
 
 					setStore({ tickets: responseBody });
+				} catch (error) {
+					console.log(error);
+				}
+			},
+			getSnacks: async () => {
+				const store = getStore();
+				try {
+					const response = await fetch("http://192.168.1.76:3001/api/snack");
+					const responseBody = await response.json();
+
+					setStore({ snacks: responseBody });
 				} catch (error) {
 					console.log(error);
 				}
@@ -174,6 +199,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					localStorage.setItem("user", responseBody.token);
 					localStorage.setItem("login", true);
 					localStorage.setItem("info", JSON.stringify(responseBody));
+					localStorage.setItem("id", JSON.stringify(responseBody.user_id));
+					setStore({ userID: responseBody.user_id });
 					setStore({ info: [responseBody] });
 					setStore({ user: true });
 					setStore({ login: true });
@@ -187,6 +214,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ user: localStorage.removeItem("user") });
 				setStore({ login: localStorage.removeItem("login") });
 				setStore({ info: localStorage.removeItem("info") });
+				setStore({ userID: localStorage.removeItem("id") });
 			},
 			verify: async token => {
 				const store = getStore();
@@ -244,9 +272,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				const response = await fetch("http://192.168.1.76:3001/api/ticket", requestOptions);
 				const responseBody = await response.json();
-				const snacks = responseBody;
-				if (snacks) {
-					snacks.map(item => {
+				console.log(responseBody);
+				if (responseBody) {
+					responseBody.map(item => {
+						console.log(item.id, item.id_user, id_user);
 						if (item.id_user === id_user) {
 							snack.map(snack => {
 								actions.purchaseSnacks(snack.snack, snack.quantity, id_user, item.id);
@@ -329,6 +358,73 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					if (responseBody.msg == "password changed") {
 						setStore({ reload: true });
+					}
+				} catch (error) {
+					console.log(error);
+				}
+			},
+			updateProfile: async (name, surname, email, date_of_birth, phone) => {
+				const store = getStore();
+				console.log(store.userID);
+				try {
+					var myHeaders = new Headers();
+					myHeaders.append("Content-Type", "application/json");
+					myHeaders.append("Authorization", "Bearer " + localStorage.getItem("user"));
+					var raw = JSON.stringify({
+						name: name,
+						surname: surname,
+						date_of_birth: date_of_birth,
+						phone: phone,
+						email: email
+					});
+
+					var requestOptions = {
+						method: "PUT",
+						headers: myHeaders,
+						body: raw,
+						redirect: "follow"
+					};
+					const response = await fetch("http://192.168.1.76:3001/api/user/" + store.userID, requestOptions);
+					const responseBody = await response.json();
+
+					if (responseBody) {
+						console.log(responseBody);
+						localStorage.setItem("info", JSON.stringify(responseBody));
+						setStore({ info: [responseBody] });
+						setStore({ reload: true });
+					}
+				} catch (error) {
+					console.log(error);
+				}
+			},
+			updatePassword: async (old_password, new_password) => {
+				const store = getStore();
+				try {
+					var myHeaders = new Headers();
+					myHeaders.append("Content-Type", "application/json");
+					myHeaders.append("Authorization", "Bearer " + localStorage.getItem("user"));
+					var raw = JSON.stringify({
+						old_password: old_password,
+						new_password: new_password
+					});
+
+					var requestOptions = {
+						method: "PUT",
+						headers: myHeaders,
+						body: raw,
+						redirect: "follow"
+					};
+					const response = await fetch(
+						"http://192.168.1.76:3001/api/password/" + store.userID,
+						requestOptions
+					);
+					const responseBody = await response.json();
+					console.log(responseBody);
+					if (responseBody.msg === "password modified") {
+						setStore({ reload: true });
+						setStore({ reload: false });
+					} else {
+						alert("wrong password");
 					}
 				} catch (error) {
 					console.log(error);

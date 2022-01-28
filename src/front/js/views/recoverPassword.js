@@ -38,6 +38,7 @@ const RecoverPassword = () => {
 													<i className="fas fa-envelope" />
 												</span>
 												<input
+													required
 													onChange={handleChange}
 													value={form.email}
 													id="email"

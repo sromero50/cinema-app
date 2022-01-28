@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Context } from "../store/appContext";
 import { useLocation } from "react-router-dom";
 const Confirmation = () => {
 	const location = useLocation();
-	console.log(location);
-
+	const { store, actions } = useContext(Context);
 	return (
-		<div className="mt-5 p-3 movie bg-dark border rounded border-dark m-auto text-center col-md-6">
+		<div className="my-5 p-3 movie bg-dark border rounded border-dark m-auto text-center col-md-6">
 			<h1 className="text-light">Thank you for your purchase</h1>
 			<div>
 				<i className="text-warning fas fa-check-square" />
@@ -14,7 +14,12 @@ const Confirmation = () => {
 				<h3 className="border rounded border-warning p-2">Movie: {location.state.movie}</h3>
 				<h3 className="border rounded border-warning p-2">Date: {location.state.date}</h3>
 				<h3 className="border rounded border-warning p-2">Hour: {location.state.hour}</h3>
-				<h3 className="border rounded border-warning p-2">Cinema: {location.state.cinema}</h3>
+				<h3 className="border rounded border-warning p-2">
+					Cinema:{" "}
+					{store.cinemas.map(cinema => {
+						return <>{cinema.id === parseInt(location.state.cinema) ? cinema.location : null}</>;
+					})}
+				</h3>
 				<h3 className="border rounded border-warning p-2">Format: {location.state.type}</h3>
 				<h3 className="border rounded border-warning p-2">
 					Seats: {location.state.seats.map(item => item + " ")}

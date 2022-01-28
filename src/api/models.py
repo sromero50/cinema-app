@@ -17,14 +17,20 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.email
 
+   
+    
     def serialize(self):
+      
+       ticket = ','.join(str(e) for e in self.ticket)
+      
        return {
             "id": self.id,
             "email": self.email,
             "name": self.name,
             "surname": self.surname,
             "date_of_birth": self.date_of_birth,
-            "phone": self.phone
+            "phone": self.phone,
+            "ticket": ticket
         }
 
 class Administrator(db.Model):
@@ -140,12 +146,14 @@ class Ticket(db.Model):
     id_user = db.Column(db.Integer, db.ForeignKey('user.id'))
     code = db.Column(db.String(80), unique=True, nullable=False)
     seat = db.Column(db.String(200), unique=True, nullable=False)
-    ticket = db.relationship("Snack", backref="ticket")
+    snack = db.relationship("Snack", backref="ticket")
 
     def __repr__(self):
         return '%r' % self.seat
 
     def serialize(self):
+        snack = ','.join(str(e) for e in self.snack)
+        print(snack)  
         return {
             "id": self.id,
             "id_movie": self.id_movie,
@@ -155,7 +163,8 @@ class Ticket(db.Model):
             "cinema": self.cinema,
             "id_user": self.id_user,
             "code": self.code,
-            "seat": self.seat
+            "seat": self.seat,
+            "snacks": snack
 
 
            

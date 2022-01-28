@@ -38,7 +38,7 @@ def login():
     
     if user.is_active == True:
         access_token = create_access_token(identity=user.id)
-        return jsonify({ "token": access_token, "user_id": user.id, "email": user.email,"rol":"user", "name":user.name  })
+        return jsonify({ "token": access_token, "user_id": user.id, "email": user.email,"rol":"user", "name":user.name, "surname": user.surname, "phone": user.phone, "date_of_birth": user.date_of_birth  })
     else:
         return jsonify({"msg": "account not verified"})
 
@@ -165,6 +165,13 @@ def get_ticket():
     all_tickets = list(map(lambda x: x.serialize(), ticket))
 
     return jsonify(all_tickets), 200
+
+@api.route('/snack', methods=['GET'])
+def get_snack():
+    snack = Snack.query.all()
+    all_snacks = list(map(lambda x: x.serialize(), snack))
+
+    return jsonify(all_snacks), 200
 
 @api.route("/user/<email>", methods=["GET"])
 @jwt_required()
@@ -406,6 +413,43 @@ def modify_schedule(id):
     schedule = Schedule.query.all()
     all_schedules = list(map(lambda x: x.serialize(), schedule))
     return jsonify(all_schedules), 200
+
+@api.route('/user/<int:id>', methods=['PUT'])
+@jwt_required()
+def modify_user(id):
+    body = request.get_json()
+    user = User.query.get(id)
+    if user is None:
+        raise APIException('user not found', status_code=404)
+    
+    user.name = body["name"]
+    user.email= body["email"]
+    user.surname = body["surname"]
+    user.phone = body["phone"]
+    user.date_of_birth = body["date_of_birth"]
+
+    db.session.commit()
+    user = User.query.get(id)
+    user = list(map(lambda x: x.serialize(), user))
+    return user, 200
+
+@api.route('/password/<int:id>', methods=['PUT'])
+@jwt_required()
+def modify_password(id):
+    body = request.get_json()
+    user = User.query.get(id)
+    hashed = user.password
+
+    if user is None:
+        raise APIException('user not found', status_code=404)
+    
+    if check_password_hash(hashed, body['old_password']) != True:
+        raise APIException('password does not match', status_code=404)
+
+    user.password = generate_password_hash(body["new_password"])
+    db.session.commit()
+   
+    return jsonify({"msg": "password modified"}), 200
 
 @api.route('/process_payment', methods=['POST'])
 def payment():

@@ -15,8 +15,6 @@ const Map = props => {
 		lng: longitude
 	};
 
-	console.log();
-
 	return (
 		<LoadScript googleMapsApiKey={process.env.maps}>
 			<GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>

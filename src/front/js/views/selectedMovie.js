@@ -15,9 +15,15 @@ export const SelectedMovie = props => {
 	const navigate = useNavigate();
 
 	const dataTicket = (cinema, date, hour) => {
-		navigate("/selectseat", { state: { cinema: cinema, date: date, hour: hour, movie: params.title, type: type } });
+		if (cinema === "" || date === "" || (hour === "") & (type === "")) {
+			alert("complete the selection");
+		} else {
+			navigate("/selectseat", {
+				state: { cinema: cinema, date: date, hour: hour, movie: params.title, type: type }
+			});
+		}
 	};
-	console.log(type);
+
 	useEffect(() => {
 		store.movies.map(movie => {
 			if (movie.name === params.title) {
@@ -136,7 +142,7 @@ export const SelectedMovie = props => {
 								<ul className="text-center list-group list-group-horizontal-sm my-2">
 									{store.schedules.map(schedule => {
 										return (
-											<>
+											<React.Fragment key={schedule.id}>
 												{cinema == schedule.id_cinema ? (
 													<>
 														{showtime && schedule.date == date ? (
@@ -168,7 +174,7 @@ export const SelectedMovie = props => {
 														) : null}
 													</>
 												) : null}
-											</>
+											</React.Fragment>
 										);
 									})}
 								</ul>
