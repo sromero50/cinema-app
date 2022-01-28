@@ -5,9 +5,10 @@ Cinema app is a full-stack application which enables you to:
 - Check movies that are coming soon
 - Select your seat and buy it
 - Check location of the cinemas
-- Create an account to buy tickets
+- Create an account that enables you to buy
 - Buy snacks
 - Search movies in the search bar
+- Recover your password and verify your account when created
 
 ## Tech
 
@@ -57,7 +58,45 @@ It is recomended to install the backend first, make sure you have Python 3.8, Pi
 
 ### Views
 ### Home:
-![Imgur](https://imgur.com/JYmLwD5.gif)
+![Imgur](https://imgur.com/feQccG1.jpg)
+
+
+### Cinemas:
+![Imgur](https://imgur.com/GDuSFvz.jpg)
+
+
+
+### Movie:
+![Imgur](https://imgur.com/ohagsRM.jpg)
+
+### Seats:
+![Imgur](https://imgur.com/ojCVNlt.jpg)
+
+
+### Snacks:
+![Imgur](https://imgur.com/FqdjhPl.jpg)
+
+
+### Checkout:
+![Imgur](https://imgur.com/Abb4f6x.jpg)
+
+## Test the checkout with these credit cards
+
+|   Bank	|   Card Number	|   CSC	|   Expiration date	
+|---	|---	|---	|---	|
+|   Mastercard	|   5031 7557 3453 0604	|   123	|  11/25 	|
+|   Visa	|   4509 9535 6623 3704	|   123	|   11/25	| 
+|   American Express	|   3711 803032 57522	|   1234	|   11/25	|  
+
+
+### Profile:
+![Imgur](https://imgur.com/Juanvpp.jpg)
+![Imgur](https://imgur.com/6B1KJSF.jpg)
+![Imgur](https://imgur.com/85ZKu0w.jpg)
+
+### Login and signup:
+![Imgur](https://imgur.com/TQ8HEzg.jpg)
+![Imgur](https://imgur.com/iQbaiAJ.jpg)
 
 
 ### Heroku:
@@ -78,5 +117,4 @@ It is recomended to install the backend first, make sure you have Python 3.8, Pi
    [SQLAlchemy]: <https://www.sqlalchemy.org/>
    [Google Maps API]: <https://developers.google.com/maps/documentation/javascript/overview>
    [Mercado Pago API]: <https://www.mercadopago.com.ar/developers/es/guides/online-payments/checkout-api/introduction>
-   [Click Here]: <https://final-project-smarttravel.herokuapp.com/>
-
+   [Click Here]: <https://cinema-app-2022-sromero.herokuapp.com/>
