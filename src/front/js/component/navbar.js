@@ -4,6 +4,12 @@ import SearchBar from "./searchBarj";
 export const Navbar = () => {
 	const { store, actions } = useContext(Context);
 
+	const released = store.movies.filter(item => {
+		if (item.released === true) {
+			return { name: item.name };
+		}
+	});
+
 	return (
 		<nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
 			<div className="container">
@@ -35,7 +41,7 @@ export const Navbar = () => {
 						</li>
 					</ul>
 					<ul className="navbar-nav m-start mb-2 mb-lg-0">
-						<SearchBar placeholder="Search" data={store.movies} />
+						<SearchBar placeholder="Search" data={released} />
 						<li className="nav-item">
 							<a className="nav-link" href="#">
 								<i className="fas fa-search fa-lg" />
