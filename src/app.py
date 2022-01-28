@@ -36,7 +36,7 @@ jwt = JWTManager(app)
 
 db_url = os.getenv("DATABASE_URL")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:password@localhost/cinema"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://lhrzcfesacfapb:11204199942629fefdc1a42a7f9d5cbea0ff139f6cf0d8152e7a8571a43efea4@ec2-3-222-49-168.compute-1.amazonaws.com:5432/d3b5g28rh4bi8l"
 
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
