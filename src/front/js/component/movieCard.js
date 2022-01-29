@@ -8,7 +8,7 @@ const MovieCard = props => {
 	const { filter } = props;
 
 	const [current, setCurrent] = useState(1);
-	const [posts, setPosts] = useState(8);
+	const [posts, setPosts] = useState(4);
 
 	const indexOfLastPost = current * posts;
 	const indexOfFirtPost = indexOfLastPost - posts;
