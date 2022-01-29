@@ -8,7 +8,7 @@ const MovieCard = props => {
 	const { filter } = props;
 
 	const [current, setCurrent] = useState(1);
-	const [posts, setPosts] = useState(4);
+	const [posts, setPosts] = useState(8);
 
 	const indexOfLastPost = current * posts;
 	const indexOfFirtPost = indexOfLastPost - posts;
@@ -24,7 +24,7 @@ const MovieCard = props => {
 						{currentPosts.map(movies => {
 							return (
 								<React.Fragment key={movies.id}>
-									<div className="col">
+									<div className="col-md">
 										<a href={"/movie/" + movies.name}>
 											<div className="movie">
 												<img
@@ -45,7 +45,7 @@ const MovieCard = props => {
 						{store.upcoming.map(movies => {
 							return (
 								<React.Fragment key={movies.id}>
-									<div className="col">
+									<div className="col-md">
 										<div className="card border border-rounded border-dark movie">
 											<img src={movies.poster} className="img-fluid" alt={movies.name} />
 										</div>
@@ -59,7 +59,7 @@ const MovieCard = props => {
 					</>
 				)}
 			</div>
-			<Pagination perPage={posts} total={store.movies.length} paginate={paginate} current={current} />
+			{filter && <Pagination perPage={posts} total={store.movies.length} paginate={paginate} current={current} />}
 		</div>
 	);
 };

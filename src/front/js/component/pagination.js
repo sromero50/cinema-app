@@ -10,7 +10,7 @@ const Pagination = props => {
 
 	return (
 		<nav>
-			<ul className="pagination justify-content-center pagination-lg">
+			<ul className="pagination justify-content-center pagination-lg mt-4">
 				{pageNumbers.map(number => {
 					return (
 						<li key={number} className={number == current ? "page-item mx-1 active" : "page-item mx-1"}>
