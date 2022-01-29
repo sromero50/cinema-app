@@ -1,37 +1,33 @@
-# WebApp boilerplate with React JS and Flask API
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io#https://github.com/4GeeksAcademy/react-flask-hello.git)
+# Cinema app
 
-<p align="center">
-<a href="https://www.loom.com/share/f37c6838b3f1496c95111e515e83dd9b"><img src="https://github.com/4GeeksAcademy/flask-rest-hello/blob/main/docs/assets/how-to.png?raw=true?raw=true" /></a>
-</p>
+Cinema app is a full-stack application which enables you to:
+- Check information about the movies that are playing
+- Check movies that are coming soon
+- Select your seat and buy it
+- Check location of the cinemas
+- Create an account that enables you to buy
+- Buy snacks
+- Search movies in the search bar
+- Recover your password and verify your account when created
 
-### Styles
-You can update the `styles/index.scss` or create new `.scss` files inside `styles/` and import them into your current scss or js files depending on your needs.
+## Tech
 
-### Components
-Add more files into your `./src/js/components` or styles folder as you need them and import them into your current files as needed.
+Cinema app uses technologies such as:
 
-💡Note: There is an example using the Context API inside `views/demo.js`;
+- [ReactJS]
+- [Flux]
+- [Javascript]
+- [Bootstrap]
+- [Python]
+- [Flask]
+- [JWT]
+- [Flask Mail] 
+- [PostgreSQL]
+- [SQLAlchemy]
+- [Google Maps API]
+- [Mercado Pago API]
 
-### Views (Components)
-Add more files into your `./src/js/views` and import them in `./src/js/layout.jsx`.
-
-### Context
-This boilerplate comes with a centralized general Context API. The file `./src/js/store/flux.js` has a base structure for the store, we encourage you to change it and adapt it to your needs.
-
-React Context [docs](https://reactjs.org/docs/context.html)
-BreathCode Lesson [view](https://content.breatheco.de/lesson/react-hooks-explained)
-
-The `Provider` is already set. You can consume from any component using the useContext hook to get the `store` and `actions` from the Context. Check `/views/demo.js` to see a demo.
-
-```jsx
-import { Context } from "../store/appContext";
-const MyComponentSuper = () => {
-  //here you use useContext to get store and actions
-  const { store, actions } = useContext(Context);
-  return <div>{/* you can use your actions or store inside the html */}</div>
-}
-```
+## Installation
 
 ### Back-End Manual Installation:
 
@@ -56,9 +52,72 @@ It is recomended to install the backend first, make sure you have Python 3.8, Pi
 
 - Make sure you are using node version 14+ and that you have already successfully installed and runned the backend.
 
+1. Install node: `$ nvm install 14`
 1. Install the packages: `$ npm install`
-2. Start coding! start the webpack dev server `$ npm run start`
+2. Start the server `$ npm run start`
 
-## Publish your website!
+### Views
+### Home:
+![Imgur](https://imgur.com/feQccG1.jpg)
 
-This boilerplate it's 100% integrated with Herkou, just by pushing your changes to the heroku repository it will deploy: `$ git push heroku main`
+
+### Cinemas:
+![Imgur](https://imgur.com/GDuSFvz.jpg)
+
+
+
+### Movie:
+![Imgur](https://imgur.com/ohagsRM.jpg)
+
+### Seats:
+![Imgur](https://imgur.com/ojCVNlt.jpg)
+
+
+### Snacks:
+![Imgur](https://imgur.com/FqdjhPl.jpg)
+
+
+### Checkout:
+![Imgur](https://imgur.com/Abb4f6x.jpg)
+
+## Test the checkout with these credit cards and user
+
+User: test@hotmail.com
+Password: abcd
+
+|   Bank	|   Card Number	|   CSC	|   Expiration date	
+|---	|---	|---	|---	|
+|   Mastercard	|   5031 7557 3453 0604	|   123	|  11/25 	|
+|   Visa	|   4509 9535 6623 3704	|   123	|   11/25	| 
+|   American Express	|   3711 803032 57522	|   1234	|   11/25	|  
+
+
+### Profile:
+![Imgur](https://imgur.com/Juanvpp.jpg)
+![Imgur](https://imgur.com/6B1KJSF.jpg)
+![Imgur](https://imgur.com/85ZKu0w.jpg)
+
+### Login and signup:
+![Imgur](https://imgur.com/TQ8HEzg.jpg)
+![Imgur](https://imgur.com/iQbaiAJ.jpg)
+
+
+### Heroku:
+### [Click Here]
+
+   [mariaperrone]: <https://github.com/mariaperrone>
+   [flopezcardozo]: <https://github.com/flopezcardozo>
+   [me]: <https://github.com/sromero50>
+   [ReactJS]: <https://reactjs.org/>
+   [Flux]: <https://facebook.github.io/flux/>
+   [Javascript]: <https://www.javascript.com/>
+   [Bootstrap]: <https://getbootstrap.com/>
+   [Python]: <https://www.python.org/>
+   [Flask]: <https://flask.palletsprojects.com/en/2.0.x/>
+   [JWT]: <https://jwt.io/>
+   [Flask Mail]: <https://pythonhosted.org/Flask-Mail/>
+   [PostgreSQL]: <https://www.postgresql.org/>
+   [SQLAlchemy]: <https://www.sqlalchemy.org/>
+   [Google Maps API]: <https://developers.google.com/maps/documentation/javascript/overview>
+   [Mercado Pago API]: <https://www.mercadopago.com.ar/developers/es/guides/online-payments/checkout-api/introduction>
+   [Click Here]: <https://cinema-app-2022-sromero.herokuapp.com/>
