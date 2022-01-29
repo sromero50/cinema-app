@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import PropTypes from "prop-types";
 import Swal from "sweetalert2";
+import Loading from "../component/loading";
 export const SelectedMovie = props => {
 	const { store, actions } = useContext(Context);
 
@@ -37,8 +38,30 @@ export const SelectedMovie = props => {
 		});
 	});
 
+	//  Filter Hour
+	const filterHour = store.schedules.filter(schedule => {
+		if (
+			cinema == schedule.id_cinema &&
+			schedule.id_movie == idMovie &&
+			schedule.date == date &&
+			schedule.type == type
+		) {
+			return { hour: schedule };
+		}
+	});
+
+	// Filter Date
+	const filterDate = store.schedules.filter(schedule => {
+		if (cinema == schedule.id_cinema && schedule.id_movie == idMovie && schedule.type == type) {
+			return schedule;
+		}
+	});
+
+	let dates = [...new Set(filterDate.map(schedule => schedule.date))];
+	dates = dates.sort((a, b) => parseFloat(a) - parseFloat(b));
+
 	return (
-		<div className="container bg-dark my-2 border rounded border-dark selectedMovie">
+		<div className="container bg-dark my-4 p-3 border rounded border-dark selectedMovie">
 			<div>
 				{store.movies.map(movie => {
 					return (
@@ -81,118 +104,107 @@ export const SelectedMovie = props => {
 						</div>
 					);
 				})}
-				<div className="row text-light p-2 border border-dark user-select-none mt-3">
-					<div>
-						<select
-							style={{ fontSize: "25px" }}
-							className="text-center hoverButton form-select my-1 col-md fw-bold bg-warning text-dark border border-dark movie"
-							onChange={e => setCinema(e.target.value)}
-							aria-label="Default select example">
-							<option defaultValue>Cinema</option>
-							{store.cinemas.map(cinema => {
-								return (
-									<option
-										style={{ fontSize: "25px" }}
-										className="fw-bold"
-										key={cinema.id}
-										value={cinema.id}>
-										{cinema.location}
-									</option>
-								);
-							})}
-						</select>
-						<select
-							style={{ fontSize: "25px" }}
-							className="text-center hoverButton form-select my-2 col-md fw-bold bg-warning text-dark border border-dark movie"
-							onChange={e => setType(e.target.value)}
-							aria-label="Default select example">
-							<option defaultValue>Format</option>
-							{store.format.map(format => {
-								return (
-									<option
-										style={{ fontSize: "25px" }}
-										className="fw-bold"
-										key={format}
-										value={format}>
-										{format}
-									</option>
-								);
-							})}
-						</select>
-					</div>
-					<div className="row text-center mt-4 ">
-						<div className="col-sm">
-							<div>
-								{store.dates.map(date => {
+				<Loading active={store.loadSchedule}>
+					<div className="row text-light p-2 border border-dark user-select-none mt-3">
+						<div>
+							<select
+								style={{ fontSize: "25px" }}
+								className="text-center hoverButton form-select my-1 col-md fw-bold bg-warning text-dark border border-dark movie"
+								onChange={e => setCinema(e.target.value)}
+								aria-label="Default select example">
+								<option defaultValue>Cinema</option>
+								{store.cinemas.map(cinema => {
 									return (
-										<button
-											style={{ fontSize: "20px" }}
-											key={date}
-											className="border hoverButton movie rounded border-warning btn btn-warning mx-2 my-2 col-md-2 fw-bold"
-											onClick={e => {
-												setShowtime(true);
-												if (showtime == true) {
-													setShowtime(false);
-													setShowtime(true);
-												}
-												setDate(e.target.value);
-											}}
-											value={date}>
-											{date}
-										</button>
+										<option
+											style={{ fontSize: "25px" }}
+											className="fw-bold"
+											key={cinema.id}
+											value={cinema.id}>
+											{cinema.location}
+										</option>
 									);
 								})}
-							</div>
-							<div className="m-auto text-center">
-								<ul className="text-center list-group list-group-horizontal-sm my-2">
-									{store.schedules.map(schedule => {
+							</select>
+							<select
+								style={{ fontSize: "25px" }}
+								className="text-center hoverButton form-select my-2 col-md fw-bold bg-warning text-dark border border-dark movie"
+								onChange={e => setType(e.target.value)}
+								aria-label="Default select example">
+								<option defaultValue>Format</option>
+								{store.format.map(format => {
+									return (
+										<option
+											style={{ fontSize: "25px" }}
+											className="fw-bold"
+											key={format}
+											value={format}>
+											{format}
+										</option>
+									);
+								})}
+							</select>
+						</div>
+						<div className="row text-center mt-4 ">
+							<div className="col-sm">
+								<div>
+									{dates.map(item => {
 										return (
-											<React.Fragment key={schedule.id}>
-												{cinema == schedule.id_cinema ? (
-													<>
-														{showtime && schedule.date == date ? (
-															<>
-																{schedule.id_movie == idMovie ? (
-																	<>
-																		{schedule.type == type ? (
-																			<li className="list-group-item text-light bg-dark border border-dark col-md">
-																				<input
-																					className="inputHour"
-																					id={schedule.hour}
-																					type="checkbox"
-																					name={schedule.hour}
-																					value={schedule.hour}
-																					onClick={e =>
-																						setHour(e.target.value)
-																					}
-																				/>
-																				<label
-																					className="labelHour fw-bold m-auto bg-dark list-group-item text-light border rounded border-dark movie mx-1 col-md"
-																					htmlFor={schedule.hour}>
-																					{schedule.hour}
-																				</label>
-																			</li>
-																		) : null}
-																	</>
-																) : null}
-															</>
-														) : null}
-													</>
-												) : null}
-											</React.Fragment>
+											<button
+												key={item}
+												className={
+													item == date
+														? "border movie hoverButton rounded border-warning btn btn-warning mx-2 my-2 col-md-2 fw-bold"
+														: "border hoverButton movie rounded border-dark btn btn-dark mx-2 my-2 col-md-2 fw-bold"
+												}
+												onClick={e => {
+													setShowtime(true);
+													if (showtime == true) {
+														setShowtime(false);
+														setShowtime(true);
+													}
+													setDate(e.target.value);
+												}}
+												value={item}>
+												{item}
+											</button>
 										);
 									})}
-								</ul>
+								</div>
+								<div className="m-auto text-center">
+									<ul className="text-center list-group list-group-horizontal-sm my-2">
+										{filterHour.map(hour => {
+											return (
+												<li
+													key={hour.id}
+													className="list-group-item text-light bg-dark border border-dark col-md">
+													<input
+														className="inputHour"
+														id={hour.hour}
+														type="checkbox"
+														name={hour.hour}
+														value={hour.hour}
+														onClick={e => setHour(e.target.value)}
+													/>
+													<label
+														className="labelHour fw-bold m-auto bg-dark list-group-item text-light border rounded border-dark movie mx-1 col-md"
+														htmlFor={hour.hour}>
+														{hour.hour}
+													</label>
+												</li>
+											);
+										})}
+									</ul>
+								</div>
+								<button
+									style={{ fontSize: "20px" }}
+									onClick={() => dataTicket(cinema, date, hour)}
+									className="my-2 hoverButton movie btn btn-warning col-md-4 fw-bold">
+									<a style={{ textDecoration: "none", color: "black" }}>Select</a>
+								</button>
 							</div>
-							<button
-								style={{ fontSize: "20px" }}
-								onClick={() => dataTicket(cinema, date, hour)}
-								className="my-2 hoverButton movie btn btn-warning col-md-4 fw-bold">
-								<a style={{ textDecoration: "none", color: "black" }}>Select</a>
-							</button>
 						</div>
 					</div>
-				</div>
+				</Loading>
 			</div>
 		</div>
 	);

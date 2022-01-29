@@ -118,7 +118,7 @@ const FormProfile = () => {
 				</div>
 
 				<div className="m-auto text-center">
-					<button type="submit" className="my-4 movie col-md-8 p-3 hoverButton btn btn-warning fw-bold">
+					<button type="submit" className="my-4 movie col-md-8 p-3 buttonProfile btn btn-warning fw-bold">
 						Modify information
 					</button>
 				</div>

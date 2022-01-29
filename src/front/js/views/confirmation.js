@@ -17,7 +17,11 @@ const Confirmation = () => {
 				<h3 className="border rounded border-warning p-2">
 					Cinema:{" "}
 					{store.cinemas.map(cinema => {
-						return <>{cinema.id === parseInt(location.state.cinema) ? cinema.location : null}</>;
+						return (
+							<React.Fragment key={cinema.id}>
+								{cinema.id === parseInt(location.state.cinema) ? cinema.location : null}
+							</React.Fragment>
+						);
 					})}
 				</h3>
 				<h3 className="border rounded border-warning p-2">Format: {location.state.type}</h3>

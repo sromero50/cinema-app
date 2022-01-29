@@ -7,9 +7,9 @@ import InputForm from "../component/inputForm";
 const Checkout = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
-
-	const [total, setTotal] = useState(location.state.total);
 	const { store, actions } = useContext(Context);
+	const [total, setTotal] = useState(location.state.total);
+
 	const [priceTicket, setPriceTicket] = useState(location.state.ticket);
 	const [snackPrice, setSnackPrice] = useState(location.state.snacks);
 
@@ -21,6 +21,8 @@ const Checkout = () => {
 	const [id_user, setId_user] = useState();
 
 	const user = JSON.parse(localStorage.getItem("info"));
+
+	const [show, setShow] = useState(false);
 
 	useEffect(() => {
 		store.schedules.map(id => {
@@ -37,7 +39,9 @@ const Checkout = () => {
 	});
 
 	const payment = () => {
-		const mp = new MercadoPago(process.env.frontMercado);
+		const mp = new MercadoPago(process.env.frontMercado, {
+			locale: "en-US"
+		});
 		const cardForm = mp.cardForm({
 			amount: total.toString(),
 			autoMount: true,
@@ -125,6 +129,7 @@ const Checkout = () => {
 						};
 						const response = await fetch("http://192.168.1.76:3001/api/process_payment", requestOptions);
 						const responseBody = await response.json();
+						console.log(responseBody);
 						if (responseBody.status_detail == "accredited") {
 							setLoading(false);
 						}
@@ -326,12 +331,16 @@ const Checkout = () => {
 								/>
 							</div>
 						</div>
-						<div className="p-3 my-3 border border-success rounded col-md-6 text-light">
-							<h3>Use this credit cards to test</h3>
+					</form>
+					<button className="col-md-6 btn btn-danger fw-bold mt-3 p-2" onClick={() => setShow(!show)}>
+						Click for credit cards to test
+					</button>
+					{show && (
+						<div className="p-3 my-3 border border-danger movie rounded col-md-6 text-light">
 							<div
 								className="
 								row">
-								<div className="col-md border border-secondary">
+								<div className="col-md border rounded border-secondary p-2">
 									<h5>Card Number: 5031 7557 3453 0604</h5>
 									<h5>Security code: 123</h5>
 									<h5>Expiration date: 11/25</h5>
@@ -340,7 +349,7 @@ const Checkout = () => {
 							<div
 								className="
 								row">
-								<div className="col-md border border-secondary">
+								<div className="col-md border rounded border-secondary p-2">
 									<h5>Card Number: 4509 9535 6623 3704</h5>
 									<h5>Security code: 123</h5>
 									<h5>Expiration date: 11/25</h5>
@@ -349,17 +358,17 @@ const Checkout = () => {
 							<div
 								className="
 								row">
-								<div className="col-md border border-secondary">
+								<div className="col-md border rounded border-secondary p-2">
 									<h5>Card Number: 3711 803032 57522</h5>
 									<h5>Security code: 1234 </h5>
 									<h5>Expiration date: 11/25</h5>
 								</div>
 							</div>
 						</div>
-					</form>
+					)}
 				</div>
 			)}
-			{store.reload && confirm()}
+			{store.purchaseConfirmed && confirm()}
 		</>
 	);
 };

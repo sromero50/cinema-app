@@ -153,7 +153,6 @@ class Ticket(db.Model):
 
     def serialize(self):
         snack = ','.join(str(e) for e in self.snack)
-        print(snack)  
         return {
             "id": self.id,
             "id_movie": self.id_movie,

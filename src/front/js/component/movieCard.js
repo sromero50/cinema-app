@@ -5,6 +5,7 @@ const MovieCard = props => {
 	const { store, actions } = useContext(Context);
 
 	const { filter } = props;
+
 	return (
 		<div className="row row-cols-1 row-cols-md-4 g-4">
 			{filter === true ? (
@@ -12,44 +13,40 @@ const MovieCard = props => {
 					{store.movies.map(movies => {
 						return (
 							<React.Fragment key={movies.id}>
-								{filter === movies.released ? (
-									<div className="col">
-										<a href={"/movie/" + movies.name}>
-											<div className="movie">
-												<img
-													src={movies.poster}
-													className="img-fluid border rounded border-dark"
-													alt={movies.name}
-												/>
-											</div>
-										</a>
-										<h4 className="text-center text-light mt-3">{movies.name} </h4>
-									</div>
-								) : null}
+								<div className="col">
+									<a href={"/movie/" + movies.name}>
+										<div className="movie">
+											<img
+												src={movies.poster}
+												className="img-fluid border rounded border-dark"
+												alt={movies.name}
+											/>
+										</div>
+									</a>
+									<h4 className="text-center text-light mt-3">{movies.name} </h4>
+								</div>
 							</React.Fragment>
 						);
 					})}
 				</>
-			) : null}
-			{filter === false ? (
+			) : (
 				<>
-					{store.movies.map(movies => {
+					{store.upcoming.map(movies => {
 						return (
 							<React.Fragment key={movies.id}>
-								{filter === movies.released ? (
-									<div className="col">
-										<div className="card border border-rounded border-dark movie">
-											<img src={movies.poster} className="img-fluid" alt={movies.name} />
-										</div>
-
-										<h4 className="text-center text-light mt-3">{movies.name} </h4>
+								<div className="col">
+									<div className="card border border-rounded border-dark movie">
+										<img src={movies.poster} className="img-fluid" alt={movies.name} />
 									</div>
-								) : null}
+
+									<h4 className="text-center text-light mt-3">{movies.name} </h4>
+									<h6 className="text-center text-light mt-2">{movies.release_date} </h6>
+								</div>
 							</React.Fragment>
 						);
 					})}
 				</>
-			) : null}
+			)}
 		</div>
 	);
 };

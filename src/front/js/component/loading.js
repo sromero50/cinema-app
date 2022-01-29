@@ -7,7 +7,7 @@ const Loading = props => {
 			{active ? (
 				<>{props.children}</>
 			) : (
-				<div className="d-flex justify-content-center m-auto">
+				<div className="d-flex justify-content-center m-auto p-3 my-3">
 					<div className="spinner-grow text-warning mt-3 mx-2" role="status" />
 					<div className="spinner-grow text-warning mt-3 mx-2" role="status" />
 					<div className="spinner-grow text-warning mt-3 mx-2" role="status" />

@@ -31,7 +31,7 @@ def login():
 
     if check_password_hash(hashed, password) != True:
         return jsonify({"msg": "Wrong password"}), 401
-    
+
     if user.is_active == True:
         access_token = create_access_token(identity=user.id)
         return jsonify({ "token": access_token, "user_id": user.id, "email": user.email,"rol":"user", "name":user.name, "surname": user.surname, "phone": user.phone, "date_of_birth": user.date_of_birth  })
@@ -470,4 +470,5 @@ def payment():
 
     payment_response = sdk.payment().create(payment_data)
     payment = payment_response["response"]
+    
     return jsonify(payment), 200

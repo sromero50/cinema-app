@@ -11,7 +11,7 @@
 
 .bg-warning, .btn-warning{
     background-color: #f8cc44 !important;
-    transition: 0.3s;
+    transition: 0.8s;
 }
 
 .border-warning{
@@ -21,6 +21,7 @@
 .text-warning{
     color: #f8cc44 !important;
 }
+
 
 
 .search:hover{
@@ -161,7 +162,21 @@
     background-color: rgba(241, 241, 220, 0.938) !important;
 }
 
-.hoverButton:hover{
-    background-color: #f8d773 !important;
+.hoverButton{
+    font-size: 30px;
 }
 
+.hoverButton:hover{
+    background-color: #f8d773 !important;
+    color: black;
+  
+}
+
+.buttonProfile{
+    font-size: 25px;
+   
+}
+.buttonProfile:hover{
+    background-color: #f8d773 !important;
+    color: black;
+}

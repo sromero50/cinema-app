@@ -4,6 +4,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		store: {
 			message: null,
 			movies: [],
+			upcoming: [],
 			dates: [],
 			schedules: [],
 			cinemas: [],
@@ -12,9 +13,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 			snackList: [],
 			users: [],
 			format: [],
+			purchaseConfirmed: false,
 			userID: localStorage.getItem("id"),
 			signup: false,
 			reload: false,
+			loadSchedule: false,
+			loadProfile: false,
 			user: localStorage.getItem("user"),
 			login: JSON.parse(localStorage.getItem("login")),
 			info: [JSON.parse(localStorage.getItem("info"))],
@@ -29,6 +33,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const responseBody = await response.json();
 
 					setStore({ users: responseBody });
+					setStore({ loadProfile: true });
 				} catch (error) {
 					console.log(error);
 				}
@@ -38,8 +43,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const response = await fetch(process.env.BACKEND_URL + "/api/movie");
 					const responseBody = await response.json();
-
-					setStore({ movies: responseBody });
+					responseBody.filter(item => {
+						if (item.released === true) {
+							return setStore({ movies: [...store.movies, item] });
+						} else if (item.released === false) {
+							return setStore({ upcoming: [...store.upcoming, item] });
+						}
+					});
+					setStore({ reload: true });
 				} catch (error) {
 					console.log(error);
 				}
@@ -52,10 +63,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					const scheduleOrder = responseBody.sort((a, b) => parseFloat(a.hour) - parseFloat(b.hour));
 					setStore({ schedules: scheduleOrder });
-					let dates = [...new Set(store.schedules.map(schedule => schedule.date))];
-					dates = dates.sort((a, b) => parseFloat(a) - parseFloat(b));
-					setStore({ dates: dates });
 					setStore({ format: [...new Set(store.schedules.map(format => format.type))] });
+					setStore({ loadSchedule: true });
 				} catch (error) {
 					console.log(error);
 				}
@@ -67,6 +76,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const responseBody = await response.json();
 
 					setStore({ cinemas: responseBody });
+					setStore({ reload: true });
 				} catch (error) {
 					console.log(error);
 				}
@@ -299,7 +309,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							});
 						}
 					});
-					setStore({ reload: true });
+					setStore({ purchaseConfirmed: true });
 				} else {
 					console.log(responseBody);
 					setStore({ error: responseBody });

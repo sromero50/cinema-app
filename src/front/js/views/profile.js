@@ -33,7 +33,7 @@ const Profile = () => {
 													: "profile"
 									}
 									onClick={e => setChange(e.target.value)}
-									className="my-4 movie col-md-12 p-3 hoverButton btn btn-warning fw-bold">
+									className="my-4 movie col-md-12 p-3 buttonProfile btn btn-warning fw-bold">
 									{change === "orders"
 										? "Profile"
 										: change === "password"
@@ -55,7 +55,7 @@ const Profile = () => {
 													: "password"
 									}
 									onClick={e => setChange(e.target.value)}
-									className="my-4 movie col-md-12 p-3 hoverButton btn btn-warning fw-bold">
+									className="my-4 movie col-md-12 p-3 buttonProfile btn btn-warning fw-bold">
 									{change === "profile"
 										? "Change Password"
 										: change === "orders"

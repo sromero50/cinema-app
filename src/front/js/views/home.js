@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Context } from "../store/appContext";
 import Carousel from "../component/carousel";
+import Loading from "../component/loading";
 import MovieCard from "../component/movieCard";
 
 export const Home = () => {
 	const [released, setReleased] = useState(true);
-
+	const { store, actions } = useContext(Context);
 	return (
 		<div className="container user-select-none">
 			<Carousel />
@@ -43,7 +45,12 @@ export const Home = () => {
 					</li>
 				</ul>
 			</div>
-			<MovieCard filter={released} />
+			<div className="mb-4">
+				{" "}
+				<Loading active={store.reload}>
+					<MovieCard filter={released} />
+				</Loading>
+			</div>
 		</div>
 	);
 };

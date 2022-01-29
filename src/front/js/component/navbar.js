@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
 import SearchBar from "./searchBarj";
 export const Navbar = () => {
 	const { store, actions } = useContext(Context);
+	const [search, setSearch] = useState([]);
 
 	return (
 		<nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">

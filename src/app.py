@@ -32,12 +32,15 @@ app.mail = mail
 app.config["JWT_SECRET_KEY"] = "cinema" 
 jwt = JWTManager(app)
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////tmp/test.db"
+
 
 db_url = os.getenv("DATABASE_URL")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://lhrzcfesacfapb:11204199942629fefdc1a42a7f9d5cbea0ff139f6cf0d8152e7a8571a43efea4@ec2-3-222-49-168.compute-1.amazonaws.com:5432/d3b5g28rh4bi8l"
+# app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://gkzwiwzpfbkhpx:d30a30c9878427b34f849a4f191eab8e2183df95c5c6073b479ceb4ff170b647@ec2-3-222-49-168.compute-1.amazonaws.com:5432/d5m49legvf0en6"
+# app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:password@localhost/cinema"
 
+if db_url is not None:
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace("postgres://", "postgresql://")
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 MIGRATE = Migrate(app, db)

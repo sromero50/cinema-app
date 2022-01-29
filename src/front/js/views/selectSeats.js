@@ -5,6 +5,7 @@ import { Context } from "../store/appContext";
 import GoLogin from "../component/goLogin";
 import allSeats from "../component/seats";
 import Swal from "sweetalert2";
+import Loading from "../component/loading";
 const SelectSeats = props => {
 	const { store, actions } = useContext(Context);
 
@@ -12,10 +13,12 @@ const SelectSeats = props => {
 	const location = useLocation();
 
 	const [quantity, setQuantity] = useState(0);
-	const [price, setPrice] = useState(location.state.type == "2D" ? 20 : 30);
+	const [price, setPrice] = useState(0);
 	const [idMovie, setIdMovie] = useState("");
 
 	const [seats, setSeats] = useState([]);
+
+	// Filter seats to get availables
 
 	let seatsFiltered = [];
 
@@ -48,37 +51,43 @@ const SelectSeats = props => {
 		});
 	});
 
+	// Seats already filtered get ordered to display in 8 per row
 	const result = allSeats
 		.map((x, i) => {
 			return i % 8 === 0 ? allSeats.slice(i, i + 8) : null;
 		})
 		.filter(x => x != null);
 
+	// Set price depending format and multiply per quantity
 	useEffect(
 		() => {
-			if (quantity == 8) {
+			if (quantity < 0) {
+				setQuantity(0);
+			}
+			if (quantity > 8) {
 				setQuantity(8);
 				Swal.fire({
 					icon: "error",
 					title: "Oops...",
-					text: "You can only select 8 seats"
+					text: "You can only buy 8 seats"
 				});
-			} else if (quantity < 0) {
-				setQuantity(0);
+			} else {
+				setPrice((location.state.type == "2D" ? 20 : 30) * seats.length);
 			}
-			setPrice((location.state.type == "2D" ? 20 : 30) * quantity);
 		},
 		[quantity]
 	);
 
 	const handleQuantity = e => {
-		if (e.target.checked == true) {
-			setQuantity(quantity + 1);
-			setSeats([...seats, e.target.value]);
-		} else if (e.target.checked == false) {
-			setQuantity(quantity - 1);
-			const newList = seats.filter(item => item !== e.target.value);
-			setSeats(newList);
+		if (quantity >= 0) {
+			if (e.target.checked == true) {
+				setQuantity(quantity + 1);
+				setSeats([...seats, e.target.value]);
+			} else if (e.target.checked == false) {
+				setQuantity(quantity - 1);
+				const newList = seats.filter(item => item !== e.target.value);
+				setSeats(newList);
+			}
 		}
 	};
 
@@ -89,8 +98,9 @@ const SelectSeats = props => {
 		localStorage.setItem("total", price);
 	}
 
+	// Send information to next page
 	const sendData = () => {
-		if (seats.length > 0) {
+		if (seats.length <= 8) {
 			navigate("/snacks", {
 				state: {
 					total: price,
@@ -102,6 +112,12 @@ const SelectSeats = props => {
 					seats: seats,
 					type: location.state.type
 				}
+			});
+		} else if (seats.length > 8) {
+			Swal.fire({
+				icon: "error",
+				title: "Oops...",
+				text: "You can only buy 8 seats"
 			});
 		} else {
 			Swal.fire({
@@ -115,7 +131,7 @@ const SelectSeats = props => {
 	return (
 		<>
 			{store.login ? (
-				<div className="container  border rounded border-dark bg-dark movie my-2 p-3">
+				<div className="container  border rounded border-dark bg-dark movie my-4 p-3">
 					<div className="bg-dark border rounded border-dark row">
 						<div className="col-md-5 text-light">
 							<div className=" border border-dark rounded movie my-2 mx-1 p-4" style={{ height: "95%" }}>
@@ -180,62 +196,64 @@ const SelectSeats = props => {
 					</div>
 					<form onSubmit={handleSubmit}>
 						<div className="bg-dark text-light text-center movie border rounded border-dark mt-1 mb-2 p-4 d-flex justify-content-center user-select-none">
-							<div className="container">
-								<div className="row mt-2 mb-4 divScreen d-flex justify-content-center">
-									<div className="col-sm-6 screen">A</div>
-								</div>
-								<div className="row d-flex justify-content-center">
-									<div>
-										{result.map((result, index) => {
-											return (
-												<section key={index}>
-													{result.map(item => (
-														<span key={item.seat}>
-															<input
-																className={
-																	item.available
-																		? "inputSeat col-sm-1"
-																		: "inputSeat col-sm-1"
-																}
-																id={item.seat}
-																type="checkbox"
-																name={item.seat}
-																disabled={item.available == true ? false : true}
-																value={item.seat}
-																onChange={handleQuantity}
-															/>
-															<label
-																className={
-																	item.available == true
-																		? "labelSeat col"
-																		: "labelSeatDisable col"
-																}
-																htmlFor={item.seat}>
-																{item.seat}
-															</label>
-														</span>
-													))}
-												</section>
-											);
-										})}
+							<Loading active={store.loadSchedule}>
+								<div className="container">
+									<div className="row mt-2 mb-4 divScreen d-flex justify-content-center">
+										<div className="col-sm-6 screen">A</div>
 									</div>
+									<div className="row d-flex justify-content-center">
+										<div>
+											{result.map((result, index) => {
+												return (
+													<section key={index}>
+														{result.map(item => (
+															<span key={item.seat}>
+																<input
+																	className={
+																		item.available
+																			? "inputSeat col-sm-1"
+																			: "inputSeat col-sm-1"
+																	}
+																	id={item.seat}
+																	type="checkbox"
+																	name={item.seat}
+																	disabled={item.available == true ? false : true}
+																	value={item.seat}
+																	onChange={handleQuantity}
+																/>
+																<label
+																	className={
+																		item.available == true
+																			? "labelSeat col"
+																			: "labelSeatDisable col"
+																	}
+																	htmlFor={item.seat}>
+																	{item.seat}
+																</label>
+															</span>
+														))}
+													</section>
+												);
+											})}
+										</div>
+									</div>
+									<div className="row d-flex justify-content-center mt-5 p-2 border-top border-secondary">
+										<div className="col-sm-2">Your selection</div>
+										<div className="col-sm-1 seatSelected" />
+										<div className="col-sm-2">Available</div>
+										<div className="col-sm-1 seat" />
+										<div className="col-sm-2">Not Available</div>
+										<div className="col-sm-1 seatNotAvailable" />
+									</div>
+									<button
+										style={{ fontSize: "20px" }}
+										onClick={sendData}
+										className="btn btn-block btn-warning mt-3 col-md-6 fw-bold hoverButton"
+										type="submit">
+										Confirm
+									</button>
 								</div>
-								<div className="row d-flex justify-content-center mt-5 p-2 border-top border-secondary">
-									<div className="col-sm-2">Your selection</div>
-									<div className="col-sm-1 seatSelected" />
-									<div className="col-sm-2">Available</div>
-									<div className="col-sm-1 seat" />
-									<div className="col-sm-2">Not Available</div>
-									<div className="col-sm-1 seatNotAvailable" />
-								</div>
-								<button
-									style={{ fontSize: "20px" }}
-									onClick={sendData}
-									className="btn btn-block btn-warning mt-3 col-md-6 fw-bold hoverButton"
-									type="submit">
-									Confirm
-								</button>
-							</div>
+							</Loading>
 						</div>
 					</form>
 				</div>
