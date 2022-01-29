@@ -127,7 +127,7 @@ const Checkout = () => {
 							headers: myHeaders,
 							body: raw
 						};
-						const response = await fetch(process.env.BACKEND_URL+"/api/process_payment", requestOptions);
+						const response = await fetch(process.env.BACKEND_URL + "/api/process_payment", requestOptions);
 						const responseBody = await response.json();
 						console.log(responseBody);
 						if (responseBody.status_detail == "accredited") {

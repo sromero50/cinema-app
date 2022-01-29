@@ -180,3 +180,13 @@
     background-color: #f8d773 !important;
     color: black;
 }
+
+.page-item.active .page-link{
+    border-color: #f8d773 !important;
+
+}
+
+.page-item.active .page-link:focus{
+    border-color: #f8d773 !important;
+    box-shadow: 0 3px 10px rgba(250, 241, 109, 0.938);
+}
