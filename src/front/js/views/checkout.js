@@ -41,7 +41,7 @@ const Checkout = () => {
 			) {
 				setId_movie(id.id_movie);
 				setId_schedule(id.id);
-				setId_user(user.user_id);
+				setId_user(user);
 			}
 		});
 	});
