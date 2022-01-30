@@ -1,14 +1,16 @@
-import React, { useContext } from "react";
-import { Context } from "../store/appContext";
+import React from "react";
+import { useSelector } from "react-redux";
 import Map from "../component/map";
 import Loading from "../component/loading";
 const Cinemas = () => {
-	const { store, actions } = useContext(Context);
+	const cinemas = useSelector(state => state.cinemas);
+	const loadCinema = useSelector(state => state.loadCinema);
+
 	return (
 		<div className="container text-center border rounded border-dark bg-dark movie my-4 p-3">
 			<h1 className="text-dark bg-warning movie mx-3 border rounded border-dark title">Cinemas</h1>
-			<Loading active={store.reload}>
-				{store.cinemas.map(cinema => {
+			<Loading active={loadCinema}>
+				{cinemas.map(cinema => {
 					return (
 						<div key={cinema.id}>
 							<div className="row p-3 m-3 movie">

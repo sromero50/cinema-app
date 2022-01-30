@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import Drinks from "../component/drinks";
 import Popcorns from "../component/popcorns";
 import InfoBuy from "../component/infoBuy";
-import { Context } from "../store/appContext";
+import { useSelector } from "react-redux";
 const Snacks = () => {
 	const location = useLocation();
 	const [tickets, setTickets] = useState(location.state.total);
-	const { store, actions } = useContext(Context);
+	const login = useSelector(state => state.login);
 
 	return (
 		<>
-			{store.login && (
+			{login && (
 				<div className="container bg-dark border border-dark rounded movie my-4 p-3">
 					<div className="text-light text-center row m-auto p-2">
 						<div className="col-md-6 mx-1 my-4 p-2 border rounded border-dark movie row mb-4">

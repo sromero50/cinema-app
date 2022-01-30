@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
-import { Context } from "../store/appContext";
+import React from "react";
+import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 const Confirmation = () => {
 	const location = useLocation();
-	const { store, actions } = useContext(Context);
+	const cinemas = useSelector(state => state.cinemas);
+
 	return (
 		<div className="my-5 p-3 movie bg-dark border rounded border-dark m-auto text-center col-md-6">
 			<h1 className="text-light">Thank you for your purchase</h1>
@@ -16,7 +17,7 @@ const Confirmation = () => {
 				<h3 className="border rounded border-warning p-2">Hour: {location.state.hour}</h3>
 				<h3 className="border rounded border-warning p-2">
 					Cinema:{" "}
-					{store.cinemas.map(cinema => {
+					{cinemas.map(cinema => {
 						return (
 							<React.Fragment key={cinema.id}>
 								{cinema.id === parseInt(location.state.cinema) ? cinema.location : null}

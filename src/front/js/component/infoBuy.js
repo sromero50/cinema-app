@@ -1,26 +1,33 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Context } from "../store/appContext";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addSnackToList, sumPrice, substractPrice, deleteSnack } from "../redux/actions";
 import { useNavigate } from "react-router-dom";
 const InfoBuy = props => {
 	const navigate = useNavigate();
-	const { store, actions } = useContext(Context);
+
+	const dispatch = useDispatch();
+
+	const total = useSelector(state => state.total);
+	const snackList = useSelector(state => state.snackList);
+	const movies = useSelector(state => state.movies);
+	const cinemas = useSelector(state => state.cinemas);
 
 	const { tickets, movie, hour, date, cinema, price, seats, type } = props;
 
-	const [total, setTotal] = useState();
+	const [totalPrice, setTotalPrice] = useState();
 	const [priceTicket, setPriceTicket] = useState(tickets);
-	const [snackPrice, setSnackPrice] = useState(store.total);
+	const [snackPrice, setSnackPrice] = useState(total);
 
 	useEffect(
 		() => {
-			setSnackPrice(store.total);
+			setSnackPrice(total);
 		},
-		[store.total]
+		[total]
 	);
 
 	useEffect(
 		() => {
-			setTotal(priceTicket + snackPrice);
+			setTotalPrice(priceTicket + snackPrice);
 		},
 		[snackPrice]
 	);
@@ -28,7 +35,7 @@ const InfoBuy = props => {
 	const sendData = () => {
 		navigate("/checkout", {
 			state: {
-				total: total,
+				total: totalPrice,
 				ticket: priceTicket,
 				snacks: snackPrice,
 				cinema: cinema,
@@ -36,7 +43,7 @@ const InfoBuy = props => {
 				hour: hour,
 				movie: movie,
 				seats: seats,
-				snackList: store.snackList,
+				snackList: snackList,
 				type: type
 			}
 		});
@@ -51,7 +58,7 @@ const InfoBuy = props => {
 					<h3 className="border rounded border-warning p-2 movie">Date: {date}</h3>
 					<h3 className="border rounded border-warning p-2 movie">
 						Cinema:{" "}
-						{store.cinemas.map(item => {
+						{cinemas.map(item => {
 							return (
 								<React.Fragment key={item.id}>
 									{cinema == item.id ? item.location : null}
@@ -59,19 +66,25 @@ const InfoBuy = props => {
 							);
 						})}
 					</h3>
-					{store.snackList.map(product => {
+					{snackList.map((product, index) => {
 						return (
-							<h3 key={product.id} className="border rounded border-warning p-2 movie">
+							<h3 key={index} className="border rounded border-warning p-2 movie">
 								{product.snack}: {product.quantity}{" "}
 								<button
 									style={{ color: "white", background: "none", border: "none" }}
-									onClick={() => actions.addSnack(product.snack)}
+									onClick={() => {
+										dispatch(addSnackToList(product.snack, product.quantity, product.price));
+										dispatch(sumPrice());
+									}}
 									className="fas fa-plus"
 								/>{" "}
 								<button
 									style={{ color: "white", background: "none", border: "none" }}
 									onClick={() => {
-										actions.deleteSnack(product.snack);
+										{
+											dispatch(deleteSnack(product.snack));
+											dispatch(substractPrice());
+										}
 									}}
 									className="fas fa-minus"
 								/>
@@ -79,10 +92,10 @@ const InfoBuy = props => {
 						);
 					})}
 					<h3 className="border rounded border-warning p-2 movie">Tickets: ${priceTicket} </h3>
-					<h2 className="border rounded border-warning p-2 movie">Total: ${total} </h2>
+					<h2 className="border rounded border-warning p-2 movie">Total: ${totalPrice} </h2>
 				</div>
 				<div className="col-md-5 m-auto">
-					{store.movies.map(poster => {
+					{movies.map(poster => {
 						return (
 							<React.Fragment key={poster.id}>
 								{movie == poster.name ? (

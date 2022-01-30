@@ -1,13 +1,21 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import LoadingButton from "../component/loadingButton";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Context } from "../store/appContext";
 import InputForm from "../component/inputForm";
-
+import { useDispatch, useSelector } from "react-redux";
+import { purchaseTicket } from "../redux/actions";
 const Checkout = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const { store, actions } = useContext(Context);
+
+	const dispatch = useDispatch();
+
+	const schedules = useSelector(state => state.schedules);
+	const login = useSelector(state => state.login);
+	const cinemas = useSelector(state => state.cinemas);
+	const movies = useSelector(state => state.movies);
+	const purchaseConfirmed = useSelector(state => state.purchaseConfirmed);
+
 	const [total, setTotal] = useState(location.state.total);
 
 	const [priceTicket, setPriceTicket] = useState(location.state.ticket);
@@ -25,7 +33,7 @@ const Checkout = () => {
 	const [show, setShow] = useState(false);
 
 	useEffect(() => {
-		store.schedules.map(id => {
+		schedules.map(id => {
 			if (
 				id.hour == location.state.hour &&
 				id.date === location.state.date &&
@@ -150,16 +158,18 @@ const Checkout = () => {
 	useEffect(
 		() => {
 			if (status === "accredited") {
-				actions.purchaseTicket(
-					id_movie,
-					id_schedule,
-					location.state.type,
-					location.state.hour,
-					location.state.date,
-					location.state.cinema,
-					id_user,
-					location.state.seats,
-					location.state.snackList
+				dispatch(
+					purchaseTicket(
+						id_movie,
+						id_schedule,
+						location.state.type,
+						location.state.hour,
+						location.state.date,
+						location.state.cinema,
+						id_user,
+						location.state.seats,
+						location.state.snackList
+					)
 				);
 			} else if (status !== "accredited" && status !== undefined) {
 				alert(status);
@@ -183,7 +193,7 @@ const Checkout = () => {
 
 	return (
 		<>
-			{store.login && (
+			{login && (
 				<div className="container  border rounded border-dark bg-dark movie my-2 p-3">
 					<form id="form-checkout">
 						<div className="text-light row">
@@ -285,7 +295,7 @@ const Checkout = () => {
 										</h3>
 										<h3 className="my-2 border rounded border-warning p-2 movie">
 											Cinema:{" "}
-											{store.cinemas.map(cinema => {
+											{cinemas.map(cinema => {
 												return (
 													<React.Fragment key={cinema.id}>
 														{location.state.cinema == cinema.id ? cinema.location : null}
@@ -307,7 +317,7 @@ const Checkout = () => {
 										</h3>
 									</div>
 									<div className="col-md-5 m-auto">
-										{store.movies.map(poster => {
+										{movies.map(poster => {
 											return (
 												<React.Fragment key={poster.id}>
 													{location.state.movie == poster.name ? (
@@ -321,7 +331,6 @@ const Checkout = () => {
 										})}
 									</div>
 								</div>
-
 								<LoadingButton
 									disabled={loading}
 									action={payment}
@@ -368,7 +377,7 @@ const Checkout = () => {
 					)}
 				</div>
 			)}
-			{store.purchaseConfirmed && confirm()}
+			{purchaseConfirmed && confirm()}
 		</>
 	);
 };

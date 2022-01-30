@@ -1,11 +1,15 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Context } from "../store/appContext";
+import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import Swal from "sweetalert2";
 import Loading from "../component/loading";
 export const SelectedMovie = props => {
-	const { store, actions } = useContext(Context);
+	const movies = useSelector(state => state.movies);
+	const schedules = useSelector(state => state.schedules);
+	const loadSchedule = useSelector(state => state.loadSchedule);
+	const cinemas = useSelector(state => state.cinemas);
+	const format = useSelector(state => state.format);
 
 	const [showtime, setShowtime] = useState(false);
 	const [cinema, setCinema] = useState("");
@@ -31,7 +35,7 @@ export const SelectedMovie = props => {
 	};
 
 	useEffect(() => {
-		store.movies.map(movie => {
+		movies.map(movie => {
 			if (movie.name === params.title) {
 				return setIdMovie(movie.id);
 			}
@@ -39,7 +43,7 @@ export const SelectedMovie = props => {
 	});
 
 	//  Filter Hour
-	const filterHour = store.schedules.filter(schedule => {
+	const filterHour = schedules.filter(schedule => {
 		if (
 			cinema == schedule.id_cinema &&
 			schedule.id_movie == idMovie &&
@@ -51,7 +55,7 @@ export const SelectedMovie = props => {
 	});
 
 	// Filter Date
-	const filterDate = store.schedules.filter(schedule => {
+	const filterDate = schedules.filter(schedule => {
 		if (cinema == schedule.id_cinema && schedule.id_movie == idMovie && schedule.type == type) {
 			return schedule;
 		}
@@ -63,7 +67,7 @@ export const SelectedMovie = props => {
 	return (
 		<div className="container bg-dark my-4 p-3 border rounded border-dark selectedMovie">
 			<div>
-				{store.movies.map(movie => {
+				{movies.map(movie => {
 					return (
 						<div key={movie.id} className="row">
 							{movie.name == params.title ? (
@@ -104,7 +108,7 @@ export const SelectedMovie = props => {
 						</div>
 					);
 				})}
-				<Loading active={store.loadSchedule}>
+				<Loading active={loadSchedule}>
 					<div className="row text-light p-2 border border-dark user-select-none mt-3">
 						<div>
 							<select
@@ -113,7 +117,7 @@ export const SelectedMovie = props => {
 								onChange={e => setCinema(e.target.value)}
 								aria-label="Default select example">
 								<option defaultValue>Cinema</option>
-								{store.cinemas.map(cinema => {
+								{cinemas.map(cinema => {
 									return (
 										<option
 											style={{ fontSize: "25px" }}
@@ -131,7 +135,7 @@ export const SelectedMovie = props => {
 								onChange={e => setType(e.target.value)}
 								aria-label="Default select example">
 								<option defaultValue>Format</option>
-								{store.format.map(format => {
+								{format.map(format => {
 									return (
 										<option
 											style={{ fontSize: "25px" }}

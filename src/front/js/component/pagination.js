@@ -31,5 +31,5 @@ Pagination.propTypes = {
 	perPage: PropTypes.number,
 	total: PropTypes.number,
 	paginate: PropTypes.func,
-	current: PropTypes.string
+	current: PropTypes.number
 };

@@ -1,18 +1,20 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Context } from "../store/appContext";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/actions";
 const Login = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const { store, actions } = useContext(Context);
+	const dispatch = useDispatch();
+
+	const loginConfirmed = useSelector(state => state.login);
 
 	const [form, setForm] = useState({ email: "", password: "" });
 	const [hide, setHide] = useState(false);
 
 	const handleSubmit = event => {
 		event.preventDefault();
-		actions.login(form.email, form.password);
+		dispatch(login(form.email, form.password));
 	};
 
 	const handleChange = event => {
@@ -39,11 +41,11 @@ const Login = () => {
 
 	useEffect(
 		() => {
-			if (store.login === true) {
+			if (loginConfirmed === true) {
 				saveData();
 			}
 		},
-		[store.login]
+		[loginConfirmed]
 	);
 
 	return (

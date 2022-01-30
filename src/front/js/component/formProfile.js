@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Context } from "../store/appContext";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { updateProfile } from "../redux/actions";
 const FormProfile = () => {
-	const { store, actions } = useContext(Context);
-
 	const userData = JSON.parse(localStorage.getItem("info"));
 
 	const style = {
 		fontSize: "20px"
 	};
+
+	const dispatch = useDispatch();
 
 	const [form, setForm] = useState({
 		name: userData.name,
@@ -19,7 +20,7 @@ const FormProfile = () => {
 
 	const handleSubmit = event => {
 		event.preventDefault();
-		actions.updateProfile(form.name, form.surname, form.email, form.date_of_birth, form.phone);
+		dispatch(updateProfile(form.name, form.surname, form.email, form.date_of_birth, form.phone));
 	};
 
 	const handleChange = event => {

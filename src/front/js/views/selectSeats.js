@@ -1,13 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
-import { Context } from "../store/appContext";
+import { useSelector } from "react-redux";
 import GoLogin from "../component/goLogin";
 import allSeats from "../component/seats";
 import Swal from "sweetalert2";
 import Loading from "../component/loading";
 const SelectSeats = props => {
-	const { store, actions } = useContext(Context);
+	const schedules = useSelector(state => state.schedules);
+	const movies = useSelector(state => state.movies);
+	const login = useSelector(state => state.login);
+	const cinemas = useSelector(state => state.cinemas);
+	const loadSchedule = useSelector(state => state.loadSchedule);
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -22,7 +26,7 @@ const SelectSeats = props => {
 
 	let seatsFiltered = [];
 
-	const filterSeats = store.schedules.map(item => {
+	let filterSeats = schedules.map(item => {
 		if (
 			item.hour == location.state.hour &&
 			item.id_movie == idMovie &&
@@ -30,13 +34,15 @@ const SelectSeats = props => {
 			location.state.type == item.type
 		) {
 			let remove = item.seats.replace(new RegExp("'", "g"), "");
-			remove = remove.split(",");
-			seatsFiltered = remove;
+			let filter = remove.split(",");
+			for (let i of filter) i && seatsFiltered.push(i);
 		}
 	});
 
+	console.log(seatsFiltered);
+
 	useEffect(() => {
-		store.movies.map(movie => {
+		movies.map(movie => {
 			if (movie.name === location.state.movie) {
 				return setIdMovie(movie.id);
 			}
@@ -100,7 +106,13 @@ const SelectSeats = props => {
 
 	// Send information to next page
 	const sendData = () => {
-		if (seats.length <= 8) {
+		if (seats.length === 0) {
+			Swal.fire({
+				icon: "error",
+				title: "Oops...",
+				text: "You need to select a seat"
+			});
+		} else if (seats.length <= 8) {
 			navigate("/snacks", {
 				state: {
 					total: price,
@@ -119,18 +131,14 @@ const SelectSeats = props => {
 				title: "Oops...",
 				text: "You can only buy 8 seats"
 			});
-		} else {
-			Swal.fire({
-				icon: "error",
-				title: "Oops...",
-				text: "You need to select a seat"
-			});
 		}
 	};
 
+	console.log(seats.length);
+
 	return (
 		<>
-			{store.login ? (
+			{login ? (
 				<div className="container  border rounded border-dark bg-dark movie my-4 p-3">
 					<div className="bg-dark border rounded border-dark row">
 						<div className="col-md-5 text-light">
@@ -167,7 +175,7 @@ const SelectSeats = props => {
 									</h2>
 									<h2 className=" border rounded border-warning p-2 movie">
 										Cinema:{" "}
-										{store.cinemas.map(cinema => {
+										{cinemas.map(cinema => {
 											return (
 												<React.Fragment key={cinema.id}>
 													{location.state.cinema == cinema.id ? cinema.location : null}
@@ -178,7 +186,7 @@ const SelectSeats = props => {
 									<h2 className=" border rounded border-warning p-2 movie">Total: ${price} </h2>
 								</div>
 								<div className="col-md-4 m-auto">
-									{store.movies.map(poster => {
+									{movies.map(poster => {
 										return (
 											<React.Fragment key={poster.id}>
 												{location.state.movie == poster.name ? (
@@ -196,7 +204,7 @@ const SelectSeats = props => {
 					</div>
 					<form onSubmit={handleSubmit}>
 						<div className="bg-dark text-light text-center movie border rounded border-dark mt-1 mb-2 p-4 d-flex justify-content-center user-select-none">
-							<Loading active={store.loadSchedule}>
+							<Loading active={loadSchedule}>
 								<div className="container">
 									<div className="row mt-2 mb-4 divScreen d-flex justify-content-center">
 										<div className="col-sm-6 screen">A</div>

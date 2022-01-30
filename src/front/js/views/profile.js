@@ -1,17 +1,19 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import FormProfile from "../component/formProfile";
 import PassProfile from "../component/passProfile";
 import PurchaseOrders from "../component/purchaseOrders";
 import { Navigate } from "react-router-dom";
-import { Context } from "../store/appContext";
 import Loading from "../component/loading";
+import { useSelector } from "react-redux";
 const Profile = () => {
-	const { store, actions } = useContext(Context);
 	const [change, setChange] = useState("profile");
 
+	const login = useSelector(state => state.login);
+	const user = useSelector(state => state.user);
+
 	return (
-		<Loading active={store.user}>
-			{store.login && (
+		<Loading active={login}>
+			{login && (
 				<div className="container bg-dark my-4 movie p-3 m-auto border rounded border-dark ">
 					<h1 className="text-dark bg-warning border text-center rounded border-dark p-2 display-5 movie">
 						Profile
@@ -69,7 +71,7 @@ const Profile = () => {
 					</div>
 				</div>
 			)}
-			{!store.login && <Navigate to="/" />}
+			{!login && <Navigate to="/" />}
 		</Loading>
 	);
 };

@@ -2,9 +2,10 @@ import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
 import Pagination from "./pagination";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 const MovieCard = props => {
-	const { store, actions } = useContext(Context);
-
+	const movies = useSelector(state => state.movies);
+	const upcoming = useSelector(state => state.upcoming);
 	const { filter } = props;
 
 	const [current, setCurrent] = useState(1);
@@ -12,7 +13,7 @@ const MovieCard = props => {
 
 	const indexOfLastPost = current * posts;
 	const indexOfFirtPost = indexOfLastPost - posts;
-	const currentPosts = store.movies.slice(indexOfFirtPost, indexOfLastPost);
+	const currentPosts = movies.slice(indexOfFirtPost, indexOfLastPost);
 
 	const paginate = number => setCurrent(number);
 
@@ -42,7 +43,7 @@ const MovieCard = props => {
 					</>
 				) : (
 					<>
-						{store.upcoming.map(movies => {
+						{upcoming.map(movies => {
 							return (
 								<React.Fragment key={movies.id}>
 									<div className="col-md">
@@ -59,7 +60,7 @@ const MovieCard = props => {
 					</>
 				)}
 			</div>
-			{filter && <Pagination perPage={posts} total={store.movies.length} paginate={paginate} current={current} />}
+			{filter && <Pagination perPage={posts} total={movies.length} paginate={paginate} current={current} />}
 		</div>
 	);
 };

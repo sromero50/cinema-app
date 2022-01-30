@@ -1,9 +1,14 @@
-import React, { useState, useContext } from "react";
-import { Context } from "../store/appContext";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { signup } from "../redux/actions";
 import { Navigate } from "react-router-dom";
 import Swal from "sweetalert2";
+
 const SignUp = () => {
-	const { store, actions } = useContext(Context);
+	const dispatch = useDispatch();
+	const login = useSelector(state => state.login);
+	const success = useSelector(state => state.signup);
+
 	const [form, setForm] = useState({
 		email: "",
 		password: "",
@@ -17,7 +22,7 @@ const SignUp = () => {
 	const handleSubmit = event => {
 		event.preventDefault();
 		if (form.password === form.confirmPassword) {
-			actions.signup(form.name, form.surname, form.email, form.password, form.date_of_birth, form.phone);
+			dispatch(signup(form.name, form.surname, form.email, form.password, form.date_of_birth, form.phone));
 		} else {
 			Swal.fire({
 				icon: "error",
@@ -35,8 +40,8 @@ const SignUp = () => {
 
 	return (
 		<>
-			{store.login && <Navigate to="/" />}
-			{!store.signup && (
+			{login && <Navigate to="/" />}
+			{!success && (
 				<form onSubmit={handleSubmit}>
 					<div className="container mt-5 mb-5">
 						<div className="row d-flex align-items-center justify-content-center">
@@ -180,7 +185,7 @@ const SignUp = () => {
 					</div>
 				</form>
 			)}
-			{store.signup && <Navigate to="/login" />}
+			{success && <Navigate to="/login" />}
 		</>
 	);
 };

@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Context } from "../store/appContext";
-
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { updatePassword } from "../redux/actions";
 const PassProfile = () => {
-	const { store, actions } = useContext(Context);
+	const dispatch = useDispatch();
+
+	const reloadPassword = useSelector(state => state.reloadPassword);
 
 	const style = {
 		fontSize: "20px"
@@ -22,13 +24,13 @@ const PassProfile = () => {
 				confirm_password: ""
 			});
 		},
-		[store.reload]
+		[reloadPassword]
 	);
 
 	const handleSubmit = event => {
 		event.preventDefault();
 		if (form.new_password === form.confirm_password) {
-			actions.updatePassword(form.old_password, form.new_password);
+			dispatch(updatePassword(form.old_password, form.new_password));
 		} else {
 			alert("password does not match");
 		}

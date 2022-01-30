@@ -1,14 +1,19 @@
-import React, { useState, useContext } from "react";
-import { Context } from "../store/appContext";
+import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { recoverPassword } from "../redux/actions";
 import NotFound from "./notFound";
 const RecoverPassword = () => {
-	const { store, actions } = useContext(Context);
+	const dispatch = useDispatch();
+
+	const emailSent = useSelector(state => state.recoverPassword);
+	const login = useSelector(state => state.login);
+
 	const [form, setForm] = useState({ email: "" });
 
 	const handleSubmit = event => {
 		event.preventDefault();
-		actions.recoverPassword(form.email);
+		dispatch(recoverPassword(form.email));
 	};
 
 	const handleChange = event => {
@@ -19,9 +24,9 @@ const RecoverPassword = () => {
 
 	return (
 		<>
-			{store.login && <NotFound />}
-			{store.reload && <Navigate to="/login/" />}
-			{!store.reload && (
+			{login && <NotFound />}
+			{emailSent && <Navigate to="/login/" />}
+			{!emailSent && (
 				<div className="text-center p-5 container">
 					<div className="container col-md-6 bg-dark m-auto mt-3 p-3 border border-dark movie rounded">
 						<div className="">

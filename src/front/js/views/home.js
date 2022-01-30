@@ -1,12 +1,14 @@
-import React, { useState, useContext } from "react";
-import { Context } from "../store/appContext";
+import React, { useState } from "react";
+
 import Carousel from "../component/carousel";
 import Loading from "../component/loading";
 import MovieCard from "../component/movieCard";
+import { useSelector } from "react-redux";
 
 export const Home = () => {
 	const [released, setReleased] = useState(true);
-	const { store, actions } = useContext(Context);
+	const reload = useSelector(state => state.reload);
+
 	return (
 		<div className="container user-select-none">
 			<Carousel />
@@ -47,7 +49,7 @@ export const Home = () => {
 			</div>
 			<div className="mb-4">
 				{" "}
-				<Loading active={store.reload}>
+				<Loading active={reload}>
 					<MovieCard filter={released} />
 				</Loading>
 			</div>

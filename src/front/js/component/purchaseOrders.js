@@ -1,15 +1,22 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Context } from "../store/appContext";
+import React, { useState, useEffect } from "react";
 import Loading from "./loading";
+import { useSelector } from "react-redux";
 const PurchaseOrders = () => {
-	const { store, actions } = useContext(Context);
-	const id = parseInt(store.userID);
+	const userID = useSelector(state => state.userID);
+	const users = useSelector(state => state.users);
+	const loadProfile = useSelector(state => state.loadProfile);
+	const tickets = useSelector(state => state.tickets);
+	const movies = useSelector(state => state.movies);
+	const cinemas = useSelector(state => state.cinemas);
+	const snacks = useSelector(state => state.snacks);
+
+	const id = parseInt(userID);
 
 	const [has, setHas] = useState();
 
 	useEffect(
 		() => {
-			store.users.map(item => {
+			users.map(item => {
 				if (id === item.id) {
 					if (item.ticket !== "") {
 						setHas(true);
@@ -19,23 +26,23 @@ const PurchaseOrders = () => {
 				}
 			});
 		},
-		[store.loadProfile]
+		[loadProfile]
 	);
 
 	return (
 		<div className="col-md m-auto border rounded border-dark movie my-1">
 			<div className="text-light">
-				<Loading active={store.loadProfile}>
+				<Loading active={loadProfile}>
 					{has && (
 						<>
-							{store.tickets.map(item => {
+							{tickets.map(item => {
 								return (
 									<React.Fragment key={item.id}>
 										{id === item.id_user ? (
 											<div className="row movie p-3 border rounded border-dark">
 												<div className="col-md">
 													<div className="col-md border border-warning rounded movie p-2">
-														{store.movies.map(movie => {
+														{movies.map(movie => {
 															return (
 																<React.Fragment key={movie.id}>
 																	{movie.id === item.id_movie ? (
@@ -46,7 +53,7 @@ const PurchaseOrders = () => {
 														})}
 													</div>
 													<div className="col-md border border-warning rounded movie p-2">
-														{store.cinemas.map(cinema => {
+														{cinemas.map(cinema => {
 															return (
 																<React.Fragment key={cinema.id}>
 																	{cinema.id === parseInt(item.cinema) ? (
@@ -74,7 +81,7 @@ const PurchaseOrders = () => {
 													<h2>Snacks:</h2>
 													{item.snacks !== "" ? (
 														<>
-															{store.snacks.map(snack => {
+															{snacks.map(snack => {
 																return (
 																	<React.Fragment key={snack.id}>
 																		{" "}

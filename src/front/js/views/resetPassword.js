@@ -1,19 +1,24 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import NotFound from "./notFound";
-import { Context } from "../store/appContext";
+import { useDispatch, useSelector } from "react-redux";
+import { resetPassword } from "../redux/actions";
 import { useParams } from "react-router";
 import { Navigate } from "react-router-dom";
 
 const ResetPassword = () => {
 	const params = useParams();
-	const { store, actions } = useContext(Context);
+
+	const dispatch = useDispatch();
+
+	const reseted = useSelector(state => state.resetPassword);
+	const login = useSelector(state => state.login);
 
 	const [hide, setHide] = useState(false);
 	const [form, setForm] = useState({ new_password: "" });
 
 	const handleSubmit = event => {
 		event.preventDefault();
-		actions.resetPassword(params.token, form.new_password);
+		dispatch(resetPassword(params.token, form.new_password));
 	};
 
 	const handleChange = event => {
@@ -25,8 +30,8 @@ const ResetPassword = () => {
 	return (
 		<>
 			{" "}
-			{store.login && <NotFound />}
-			{!store.reload && (
+			{login && <NotFound />}
+			{!reseted && (
 				<div className="container col-md-6 bg-dark m-auto mt-3 p-5 border border-dark movie rounded">
 					<div className="text-center mt-2">
 						<h2 className="mb-5 bg-warning p-2 border rounded movie border-dark text-dark">
@@ -59,7 +64,7 @@ const ResetPassword = () => {
 					</div>
 				</div>
 			)}
-			{store.reload && <Navigate to="/login" />}
+			{reseted && <Navigate to="/login" />}
 		</>
 	);
 };
