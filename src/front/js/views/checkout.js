@@ -348,7 +348,7 @@ const Checkout = () => {
 										})}
 									</div>
 								</div>
-								<button onClick={() => setStatus("accredited")}>preaf</button>
+								
 								<LoadingButton
 									disabled={loading}
 									action={payment}
