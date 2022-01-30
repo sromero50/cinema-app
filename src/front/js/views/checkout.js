@@ -28,7 +28,7 @@ const Checkout = () => {
 	const [id_schedule, setId_schedule] = useState();
 	const [id_user, setId_user] = useState();
 
-	const user = JSON.parse(localStorage.getItem("info"));
+	const user = JSON.parse(localStorage.getItem("id"));
 
 	const [show, setShow] = useState(false);
 

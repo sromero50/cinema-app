@@ -39,7 +39,7 @@ const SelectSeats = props => {
 		}
 	});
 
-	console.log(seatsFiltered);
+
 
 	useEffect(() => {
 		movies.map(movie => {
@@ -134,7 +134,7 @@ const SelectSeats = props => {
 		}
 	};
 
-	console.log(seats.length);
+
 
 	return (
 		<>
