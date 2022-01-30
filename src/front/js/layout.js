@@ -1,4 +1,4 @@
-import React, {  useEffect } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import "../styles/home.scss";
@@ -18,7 +18,6 @@ import RecoverPassword from "./views/recoverPassword";
 import ResetPassword from "./views/resetPassword";
 import Profile from "./views/profile";
 import { Provider } from "react-redux";
-
 
 import { useDispatch } from "react-redux";
 import { getMovies, getCinemas, getSchedules, getSnacks, getTickets, getUsers } from "./redux/actions";

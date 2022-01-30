@@ -1,5 +1,4 @@
-import React, { useContext, useState } from "react";
-import { Context } from "../store/appContext";
+import React, { useState } from "react";
 import Pagination from "./pagination";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
