@@ -145,7 +145,7 @@ class Ticket(db.Model):
     cinema = db.Column(db.String(80), unique=False, nullable=False)
     id_user = db.Column(db.Integer, db.ForeignKey('user.id'))
     code = db.Column(db.String(80), unique=True, nullable=False)
-    seat = db.Column(db.String(200), unique=True, nullable=False)
+    seat = db.Column(db.String(200), unique=False, nullable=False)
     snack = db.relationship("Snack", backref="ticket")
 
     def __repr__(self):

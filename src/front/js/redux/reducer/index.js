@@ -138,7 +138,7 @@ export default function rootReducer(state = initialState, action) {
 			}
 		case "SUM_PRICE":
 			let itemPrice = state.snackList.reduce((a, c) => a + c.price * c.quantity, 0);
-			
+
 			return {
 				...state,
 				total: itemPrice

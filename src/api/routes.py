@@ -26,8 +26,15 @@ s = URLSafeTimedSerializer('cinema')
 def login():
     body = request.get_json()
     user = User.query.filter_by(email=body['email']).first()
+    
+    if user is None:
+        return jsonify({"msg":"email does not exist"})
+
     password = body['password']
     hashed = user.password
+
+    if user is None:
+        return jsonify({"msg":"Email does not exist"})
 
     if check_password_hash(hashed, password) != True:
         return jsonify({"msg": "Wrong password"}), 401

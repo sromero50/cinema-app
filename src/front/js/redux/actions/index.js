@@ -43,7 +43,7 @@ export function getSchedules() {
 		try {
 			const response = await fetch(process.env.BACKEND_URL + "/api/schedule");
 			const responseBody = await response.json();
-			console.log(responseBody);
+
 			const scheduleOrder = responseBody.sort((a, b) => parseFloat(a.hour) - parseFloat(b.hour));
 			const format = [...new Set(scheduleOrder.map(format => format.type))];
 			dispatch({ type: "GET_SCHEDULES", payload: { scheduleOrder, format, reload } });
@@ -444,7 +444,7 @@ export function purchaseTicket(id_movie, id_schedule, type, hour, date, cinema, 
 		const response = await fetch(process.env.BACKEND_URL + "/api/ticket", requestOptions);
 		const responseBody = await response.json();
 		console.log(responseBody);
-		if (responseBody) {
+		if (response.status === 200) {
 			responseBody.map(item => {
 				console.log(item.id, item.id_user, id_user);
 				if (item.id_user === id_user) {
@@ -454,9 +454,12 @@ export function purchaseTicket(id_movie, id_schedule, type, hour, date, cinema, 
 				}
 			});
 			dispatch({ type: "PURCHASE_TICKET", payload: true });
-		} else {
-			console.log(responseBody);
-			setStore({ error: responseBody });
+		} else if (responseBody.msg == "Token has expired") {
+			Swal.fire({
+				icon: "error",
+				title: "Oops...",
+				text: "Relog your account, token has expired"
+			});
 		}
 	};
 }

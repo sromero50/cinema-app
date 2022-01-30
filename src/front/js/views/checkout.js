@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import InputForm from "../component/inputForm";
 import { useDispatch, useSelector } from "react-redux";
 import { purchaseTicket } from "../redux/actions";
+import Swal from "sweetalert2";
 const Checkout = () => {
 	const location = useLocation();
 	const navigate = useNavigate();
@@ -33,18 +34,27 @@ const Checkout = () => {
 	const [show, setShow] = useState(false);
 
 	useEffect(() => {
+		movies.map(id => {
+			if (id.name === location.state.movie) {
+				setId_movie(id.id);
+			}
+		});
 		schedules.map(id => {
 			if (
 				id.hour == location.state.hour &&
 				id.date === location.state.date &&
-				parseInt(location.state.cinema) === id.id_cinema
+				parseInt(location.state.cinema) === id.id_cinema &&
+				id_movie === id.id_movie &&
+				id.type === location.state.type
 			) {
-				setId_movie(id.id_movie);
+				console.log(id.id, id.hour, id.date, id.id_movie, id.type, id.id_cinema);
 				setId_schedule(id.id);
 				setId_user(user);
 			}
 		});
 	});
+
+	console.log(id_schedule);
 
 	const payment = () => {
 		const mp = new MercadoPago(process.env.frontMercado, {
@@ -94,7 +104,14 @@ const Checkout = () => {
 			},
 			callbacks: {
 				onFormMounted: error => {
-					if (error) return console.warn("Form Mounted handling error: ", error);
+					if (error) {
+						Swal.fire({
+							icon: "error",
+							title: "Oops...",
+							text: error
+						});
+						return console.warn("Form Mounted handling error: ", error);
+					}
 					console.log("Form mounted");
 				},
 				onSubmit: async event => {
@@ -331,6 +348,7 @@ const Checkout = () => {
 										})}
 									</div>
 								</div>
+								<button onClick={() => setStatus("accredited")}>preaf</button>
 								<LoadingButton
 									disabled={loading}
 									action={payment}

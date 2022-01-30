@@ -33,13 +33,13 @@ const SelectSeats = props => {
 			item.id_cinema == location.state.cinema &&
 			location.state.type == item.type
 		) {
+			console.log(item);
 			let remove = item.seats.replace(new RegExp("'", "g"), "");
 			let filter = remove.split(",");
+
 			for (let i of filter) i && seatsFiltered.push(i);
 		}
 	});
-
-
 
 	useEffect(() => {
 		movies.map(movie => {
@@ -133,8 +133,6 @@ const SelectSeats = props => {
 			});
 		}
 	};
-
-
 
 	return (
 		<>
