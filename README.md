@@ -109,7 +109,7 @@ Password: abcd
    [flopezcardozo]: <https://github.com/flopezcardozo>
    [me]: <https://github.com/sromero50>
    [ReactJS]: <https://reactjs.org/>
-   [Flux]: <https://es.redux.js.org/>
+   [Redux]: <https://es.redux.js.org/>
    [Javascript]: <https://www.javascript.com/>
    [Bootstrap]: <https://getbootstrap.com/>
    [Python]: <https://www.python.org/>
