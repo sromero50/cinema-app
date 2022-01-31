@@ -176,23 +176,24 @@ export const SelectedMovie = props => {
 								</div>
 								<div className="m-auto text-center">
 									<ul className="text-center list-group list-group-horizontal-sm my-2">
-										{filterHour.map(hour => {
+										{filterHour.map(item => {
 											return (
 												<li
-													key={hour.id}
+													key={item.id}
 													className="list-group-item text-light bg-dark border border-dark col-md">
 													<input
 														className="inputHour"
-														id={hour.hour}
+														id={item.hour}
 														type="checkbox"
-														name={hour.hour}
-														value={hour.hour}
-														onClick={e => setHour(e.target.value)}
+														name={item.hour}
+														value={item.hour}
+														onChange={e => setHour(e.target.value)}
+														checked={hour == item.hour ? true : false}
 													/>
 													<label
 														className="labelHour fw-bold m-auto bg-dark list-group-item text-light border rounded border-dark movie mx-1 col-md"
-														htmlFor={hour.hour}>
-														{hour.hour}
+														htmlFor={item.hour}>
+														{item.hour}
 													</label>
 												</li>
 											);

@@ -12,6 +12,7 @@
 .bg-warning, .btn-warning{
     background-color: #f8cc44 !important;
     transition: 0.8s;
+    
 }
 
 .border-warning{
@@ -189,4 +190,9 @@
 .page-item.active .page-link:focus{
     border-color: #f8d773 !important;
     box-shadow: 0 3px 10px rgba(250, 241, 109, 0.938);
+}
+
+
+.profileTicket:hover{
+    background-color: rgba(0, 0, 0, 0.5);
 }

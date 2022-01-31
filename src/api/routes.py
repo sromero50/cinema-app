@@ -479,3 +479,16 @@ def payment():
     payment = payment_response["response"]
     
     return jsonify(payment), 200
+
+@api.route('/ticket/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_ticket(id):
+    ticket = Ticket.query.get(id)
+
+    if ticket is None:
+        raise APIException('ticket not found', status_code=404)
+
+    db.session.delete(ticket)
+    db.session.commit()
+
+    return jsonify({"msg": "ticket deleted"}), 200

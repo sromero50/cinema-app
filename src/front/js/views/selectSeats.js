@@ -31,9 +31,9 @@ const SelectSeats = props => {
 			item.hour == location.state.hour &&
 			item.id_movie == idMovie &&
 			item.id_cinema == location.state.cinema &&
-			location.state.type == item.type && item.date === location.state.date
+			location.state.type == item.type &&
+			item.date === location.state.date
 		) {
-			console.log(item);
 			let remove = item.seats.replace(new RegExp("'", "g"), "");
 			let filter = remove.split(",");
 

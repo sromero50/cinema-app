@@ -24,6 +24,7 @@ const initialState = {
 	resetPassword: false,
 	reloadProfile: false,
 	reloadPassword: false,
+	deleteTicket: false,
 	user: localStorage.getItem("user"),
 	login: JSON.parse(localStorage.getItem("login")),
 	info: [JSON.parse(localStorage.getItem("info"))],
@@ -170,6 +171,11 @@ export default function rootReducer(state = initialState, action) {
 			};
 		case "PURCHASE_SNACKS":
 			return console.log("success");
+		case "DELETE_TICKET":
+			return {
+				...state,
+				deleteTicket: action.payload
+			};
 		default:
 			return state;
 	}

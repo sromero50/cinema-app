@@ -463,3 +463,35 @@ export function purchaseTicket(id_movie, id_schedule, type, hour, date, cinema, 
 		}
 	};
 }
+export function deletePurchase(id_ticket) {
+	return dispatch => {
+		Swal.fire({
+			title: "Do you want delete this purchase?",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			cancelButtonText: "Cancel",
+			confirmButtonText: "Confirm"
+		}).then(async result => {
+			if (result.isConfirmed) {
+				var myHeaders = new Headers();
+				myHeaders.append("Authorization", "Bearer " + localStorage.getItem("user"));
+				myHeaders.append("Content-Type", "application/json");
+
+				var requestOptions = {
+					method: "DELETE",
+					headers: myHeaders,
+					redirect: "follow"
+				};
+
+				const response = await fetch(process.env.BACKEND_URL + "/api/ticket/" + id_ticket, requestOptions);
+				const responseBody = await response.json();
+				console.log(responseBody);
+				if (response.status === 200) {
+					dispatch({ type: "DELETE_TICKET", payload: true });
+				}
+			}
+		});
+	};
+}

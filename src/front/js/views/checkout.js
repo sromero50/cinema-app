@@ -54,8 +54,6 @@ const Checkout = () => {
 		});
 	});
 
-	console.log(id_schedule);
-
 	const payment = () => {
 		const mp = new MercadoPago(process.env.frontMercado, {
 			locale: "en-US"
@@ -154,11 +152,19 @@ const Checkout = () => {
 						};
 						const response = await fetch(process.env.BACKEND_URL + "/api/process_payment", requestOptions);
 						const responseBody = await response.json();
-						console.log(responseBody);
+
 						if (responseBody.status_detail == "accredited") {
 							setLoading(false);
+							setStatus(responseBody.status_detail);
+						} else {
+							Swal.fire({
+								icon: "error",
+								title: "Oops...",
+								text: responseBody.message
+							});
+
+							setLoading(false);
 						}
-						setStatus(responseBody.status_detail);
 					} catch (error) {
 						setLoading(false);
 						console.log(error);
@@ -348,7 +354,7 @@ const Checkout = () => {
 										})}
 									</div>
 								</div>
-								
+
 								<LoadingButton
 									disabled={loading}
 									action={payment}

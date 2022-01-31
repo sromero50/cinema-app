@@ -36,6 +36,7 @@ jwt = JWTManager(app)
 
 db_url = os.getenv("DATABASE_URL")
 
+# app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:password@localhost/cinema"
 
 if db_url is not None:
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace("postgres://", "postgresql://")

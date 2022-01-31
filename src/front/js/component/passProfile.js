@@ -84,7 +84,7 @@ const PassProfile = () => {
 						<label style={style} htmlFor={form.confirm_password} className="col-md-4 col-form-label">
 							Confirm password
 						</label>
-						<div className="col-md-6">
+						<div className="col-md">
 							<input
 								name="confirm_password"
 								onChange={handleChange}
