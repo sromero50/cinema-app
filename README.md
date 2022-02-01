@@ -15,7 +15,7 @@ Cinema app is a full-stack application which enables you to:
 Cinema app uses technologies such as:
 
 - [ReactJS]
-- [Flux]
+- [Redux]
 - [Javascript]
 - [Bootstrap]
 - [Python]
@@ -109,7 +109,7 @@ Password: abcd
    [flopezcardozo]: <https://github.com/flopezcardozo>
    [me]: <https://github.com/sromero50>
    [ReactJS]: <https://reactjs.org/>
-   [Flux]: <https://facebook.github.io/flux/>
+   [Redux]: <https://es.redux.js.org/>
    [Javascript]: <https://www.javascript.com/>
    [Bootstrap]: <https://getbootstrap.com/>
    [Python]: <https://www.python.org/>
