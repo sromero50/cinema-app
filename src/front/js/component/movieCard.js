@@ -26,7 +26,7 @@ const MovieCard = props => {
 								<React.Fragment key={movies.id}>
 									<div className="col-md">
 										<a href={"/movie/" + movies.name}>
-											<div className="movie">
+											<div className="movie posterHover">
 												<img
 													src={movies.poster}
 													className="img-fluid border rounded border-dark"

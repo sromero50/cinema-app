@@ -45,6 +45,11 @@
     box-shadow: rgb(0, 0, 0) 0px 2px 4px 0px, rgb(0, 0, 0) 0px 2px 16px 0px;
 }
 
+.posterHover:hover{
+    box-shadow: rgba(252, 249, 249, 0.479) 0px 2px 4px 0px, rgba(252, 249, 249, 0.479) 0px 2px 16px 0px;
+    transition: 1s;
+}
+
 .selectedMovie{
     box-shadow: rgb(0, 0, 0) 0px 3px 12px;
 }

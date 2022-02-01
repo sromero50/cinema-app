@@ -34,10 +34,17 @@ export const SelectedMovie = props => {
 		}
 	};
 
+	const [hasSchedule, setHasSchedule] = useState(false);
+
 	useEffect(() => {
 		movies.map(movie => {
 			if (movie.name === params.title) {
 				return setIdMovie(movie.id);
+			}
+		});
+		schedules.filter(item => {
+			if (item.id_movie == idMovie) {
+				setHasSchedule(true);
 			}
 		});
 	});
@@ -54,7 +61,6 @@ export const SelectedMovie = props => {
 		}
 	});
 
-	// Filter Date
 	const filterDate = schedules.filter(schedule => {
 		if (cinema == schedule.id_cinema && schedule.id_movie == idMovie && schedule.type == type) {
 			return schedule;
@@ -109,106 +115,112 @@ export const SelectedMovie = props => {
 					);
 				})}
 				<Loading active={loadSchedule}>
-					<div className="row text-light p-2 border border-dark user-select-none mt-3">
-						<div>
-							<select
-								style={{ fontSize: "25px" }}
-								className="text-center hoverButton form-select my-1 col-md fw-bold bg-warning text-dark border border-dark movie"
-								onChange={e => setCinema(e.target.value)}
-								aria-label="Default select example">
-								<option defaultValue>Cinema</option>
-								{cinemas.map(cinema => {
-									return (
-										<option
-											style={{ fontSize: "25px" }}
-											className="fw-bold"
-											key={cinema.id}
-											value={cinema.id}>
-											{cinema.location}
-										</option>
-									);
-								})}
-							</select>
-							<select
-								style={{ fontSize: "25px" }}
-								className="text-center hoverButton form-select my-2 col-md fw-bold bg-warning text-dark border border-dark movie"
-								onChange={e => setType(e.target.value)}
-								aria-label="Default select example">
-								<option defaultValue>Format</option>
-								{format.map(format => {
-									return (
-										<option
-											style={{ fontSize: "25px" }}
-											className="fw-bold"
-											key={format}
-											value={format}>
-											{format}
-										</option>
-									);
-								})}
-							</select>
-						</div>
-						<div className="row text-center mt-4 ">
-							<div className="col-sm">
-								<div>
-									{dates.map(item => {
+					{hasSchedule ? (
+						<div className="row text-light p-2 border border-dark user-select-none mt-3">
+							<div>
+								<select
+									style={{ fontSize: "25px" }}
+									className="text-center hoverButton form-select my-1 col-md fw-bold bg-warning text-dark border border-dark movie"
+									onChange={e => setCinema(e.target.value)}
+									aria-label="Default select example">
+									<option defaultValue>Cinema</option>
+									{cinemas.map(cinema => {
 										return (
-											<button
-												key={item}
-												className={
-													item == date
-														? "border movie hoverButton rounded border-warning btn btn-warning mx-2 my-2 col-md-2 fw-bold"
-														: "border hoverButton movie rounded border-dark btn btn-dark mx-2 my-2 col-md-2 fw-bold"
-												}
-												onClick={e => {
-													setShowtime(true);
-													if (showtime == true) {
-														setShowtime(false);
-														setShowtime(true);
-													}
-													setDate(e.target.value);
-												}}
-												value={item}>
-												{item}
-											</button>
+											<option
+												style={{ fontSize: "25px" }}
+												className="fw-bold"
+												key={cinema.id}
+												value={cinema.id}>
+												{cinema.location}
+											</option>
 										);
 									})}
-								</div>
-								<div className="m-auto text-center">
-									<ul className="text-center list-group list-group-horizontal-sm my-2">
-										{filterHour.map(item => {
+								</select>
+								<select
+									style={{ fontSize: "25px" }}
+									className="text-center hoverButton form-select my-2 col-md fw-bold bg-warning text-dark border border-dark movie"
+									onChange={e => setType(e.target.value)}
+									aria-label="Default select example">
+									<option defaultValue>Format</option>
+									{format.map(format => {
+										return (
+											<option
+												style={{ fontSize: "25px" }}
+												className="fw-bold"
+												key={format}
+												value={format}>
+												{format}
+											</option>
+										);
+									})}
+								</select>
+							</div>
+							<div className="row text-center mt-4 ">
+								<div className="col-sm">
+									<div>
+										{dates.map(item => {
 											return (
-												<li
-													key={item.id}
-													className="list-group-item text-light bg-dark border border-dark col-md">
-													<input
-														className="inputHour"
-														id={item.hour}
-														type="checkbox"
-														name={item.hour}
-														value={item.hour}
-														onChange={e => setHour(e.target.value)}
-														checked={hour == item.hour ? true : false}
-													/>
-													<label
-														className="labelHour fw-bold m-auto bg-dark list-group-item text-light border rounded border-dark movie mx-1 col-md"
-														htmlFor={item.hour}>
-														{item.hour}
-													</label>
-												</li>
+												<button
+													key={item}
+													className={
+														item == date
+															? "border movie hoverButton rounded border-warning btn btn-warning mx-2 my-2 col-md-2 fw-bold"
+															: "border hoverButton movie rounded border-dark btn btn-dark mx-2 my-2 col-md-2 fw-bold"
+													}
+													onClick={e => {
+														setShowtime(true);
+														if (showtime == true) {
+															setShowtime(false);
+															setShowtime(true);
+														}
+														setDate(e.target.value);
+													}}
+													value={item}>
+													{item}
+												</button>
 											);
 										})}
-									</ul>
+									</div>
+									<div className="m-auto text-center">
+										<ul className="text-center list-group list-group-horizontal-sm my-2">
+											{filterHour.map(item => {
+												return (
+													<li
+														key={item.id}
+														className="list-group-item text-light bg-dark border border-dark col-md">
+														<input
+															className="inputHour"
+															id={item.hour}
+															type="checkbox"
+															name={item.hour}
+															value={item.hour}
+															onChange={e => setHour(e.target.value)}
+															checked={hour == item.hour ? true : false}
+														/>
+														<label
+															className="labelHour fw-bold m-auto bg-dark list-group-item text-light border rounded border-dark movie mx-1 col-md"
+															htmlFor={item.hour}>
+															{item.hour}
+														</label>
+													</li>
+												);
+											})}
+										</ul>
+									</div>
+									<button
+										style={{ fontSize: "20px" }}
+										onClick={() => dataTicket(cinema, date, hour)}
+										className="my-2 hoverButton movie btn btn-warning col-md-4 fw-bold">
+										<a style={{ textDecoration: "none", color: "black" }}>Select</a>
+									</button>
 								</div>
-								<button
-									style={{ fontSize: "20px" }}
-									onClick={() => dataTicket(cinema, date, hour)}
-									className="my-2 hoverButton movie btn btn-warning col-md-4 fw-bold">
-									<a style={{ textDecoration: "none", color: "black" }}>Select</a>
-								</button>
 							</div>
 						</div>
-					</div>
+					) : (
+						<div className="movie bg-dark border rounded border-warning text-light text-center mt-4 mb-2 p-2">
+							<h1>There are no schedules available</h1>
+						</div>
+					)}
 				</Loading>
 			</div>
 		</div>
