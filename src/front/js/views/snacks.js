@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import Drinks from "../component/drinks";
-import Popcorns from "../component/popcorns";
+import SnackList from "../component/snackList";
 import InfoBuy from "../component/infoBuy";
 import { useSelector } from "react-redux";
 const Snacks = () => {
@@ -15,8 +14,7 @@ const Snacks = () => {
 				<div className="container bg-dark border border-dark rounded movie my-4 p-3">
 					<div className="text-light text-center row m-auto p-2">
 						<div className="col-md-6 mx-1 my-4 p-2 border rounded border-dark movie row mb-4">
-							<Popcorns />
-							<Drinks />
+							<SnackList />
 						</div>
 						<div className="col-md mx-1 text-light text-start p-2 my-2 m-auto bg-dark">
 							<InfoBuy
